@@ -1,0 +1,23 @@
+export JAVA_HOME="`/usr/libexec/java_home`"
+export LC_ALL=en_GB.UTF-8
+export LANG=en_GB.UTF-8
+# more memory to ant for compiles
+export ANT_OPTS="-Xmx1024m -XX:MaxPermSize=256m"
+if [ -f /sw/bin/init.sh ] ; then
+ . /sw/bin/init.sh
+fi
+
+export PATH=/opt/local/bin:$PATH
+export PATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/:$PATH
+export FOMMIL="ubuntu@fommil.me.uk"
+export RMATE="-R 52698:127.0.0.1:52698"
+ulimit -n 1000
+
+export IDEA_JDK=$JAVA_HOME
+export MAVEN_OPTS="-Djava.awt.headless=true -Xmx2g"
+export VLC_PLUGIN_PATH=/opt/local/lib/vlc/plugins/
+export PATH=$PATH:/opt/crosstool/bin
+
+# enable/disable Spotlight
+# sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist
+# sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist
