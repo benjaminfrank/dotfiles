@@ -11,19 +11,19 @@
 [mergetool]
 	keepBackup = true
 [alias]
-	l = log --pretty=format:'%h : %an, %ar : %s' --graph
-	pick = cherry-pick
-#	up = !"git fetch origin -v; git fetch upstream -v; git rebase upstream/master"
-	up = !"git fetch origin -v; git rebase origin/master"
-	undo = stash
+        l = log --pretty=format:'%h : %an, %ar : %s' --graph
+        pick = cherry-pick
+#       up = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
+#       up = !"git fetch origin ; git fetch upstream ; git rebase upstream/master"
+        undo = reset --soft 'HEAD^'
 [color]
-	branch = auto
-	diff = auto
-	status = auto
-	interactive = auto
-	ui = auto
+        branch = auto
+        diff = auto
+        status = auto
+        interactive = auto
+        ui = auto
 [apply]
-	whitespace = nowarn
+        whitespace = warn
 #[http]
-#        sslCAInfo=/Users/samuel/.fommil.crt
-
+#       sslCAInfo=/home/hallisam/.traf.crt
+#git update-index --assume-unchanged
