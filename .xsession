@@ -9,6 +9,6 @@
 
 #xscreensaver -no-splash &
 # top right corner stops screen lock
-xautolock -locker "i3lock -c000000" -time 5 -corners 0-00
+xautolock -locker "i3lock -c000000" -time 5 -corners 0-00 &
 
 exec xmonad
