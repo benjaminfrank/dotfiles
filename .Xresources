@@ -1,0 +1,49 @@
+!------------------------------------------------------------------------------!
+! defaults !
+!------------------------------------------------------------------------------!
+Xft.antialias: 1
+Xft.dpi: 96
+Xft.hinting: 1
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcddefault
+Xft.rgba: rgb
+Xcursor.size: 18
+Xcursor.theme: Human
+Xcursor.theme_core: true
+
+!------------------------------------------------------------------------------!
+! rxvt unicode !
+!------------------------------------------------------------------------------!
+urxvt*iconName: terminal
+urxvt*depth: 32
+urxvt*geometry: 80x45
+urxvt*letterSpace: -1
+urxvt*cursorUnderline: true
+urxvt*saveLines: 65535
+urxvt*scrollBar: true
+urxvt*scrollBar_right: true
+urxvt*scrollBar_floating: true
+urxvt*scrollstyle: plain
+urxvt*font: xft:Consolas:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
+urxvt*boldFont: xft:Consolas:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
+urxvt.perl-ext-common: default,matcher,tabbedex
+urxvt.url-launcher: /usr/bin/xdg-open
+urxvt.matcher.button: 1
+URxvt.fading: 0
+URxvt.perl-lib: /home/hallisam/.urxvt
+!URxvt.tabbed.new-button: true
+URxvt.tabbed.autohide: true
+URxvt.keysym.Control-t: perl:tabbedex:new_tab
+URxvt.keysym.Control-Right: perl:tabbedex:next_tab
+URxvt.keysym.Control-Left: perl:tabbedex:prev_tab
+urxvt.background:  #000000
+urxvt.foreground:  #00CC00
+urxvt.color0:      #000000
+urxvt.color1:      #00CC00
+urxvt.color2:      #333333
+urxvt.color3:      #008800
+URxvt.tabbed.tabbar-fg: 3
+URxvt.tabbed.tabbar-bg: 0
+URxvt.tabbed.tab-fg:    3
+URxvt.tabbed.tab-bg:    2
+
