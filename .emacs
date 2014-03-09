@@ -1,6 +1,9 @@
 (setq inhibit-startup-screen t
       show-paren-delay 0
-      create-lockfiles nil)
+      create-lockfiles nil
+      make-backup-files nil
+      x-select-enable-clipboard t
+      interprogram-paste-function 'x-cut-buffer-or-selection-value)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
