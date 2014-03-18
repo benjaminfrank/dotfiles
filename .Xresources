@@ -16,39 +16,39 @@ Xcursor.theme_core: true
 !------------------------------------------------------------------------------!
 ! rxvt unicode !
 !------------------------------------------------------------------------------!
-urxvt*iconName: terminal
-urxvt*depth: 32
-urxvt*geometry: 80x45
-urxvt*letterSpace: -1
-urxvt*cursorUnderline: true
-urxvt*saveLines: 65535
-urxvt*scrollBar: true
-urxvt*scrollBar_right: true
-urxvt*scrollBar_floating: true
-urxvt*scrollstyle: plain
-urxvt*font: xft:Consolas:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
-urxvt*boldFont: xft:Consolas:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
-urxvt.perl-ext-common: default,matcher,tabbedex
-urxvt.url-launcher: /usr/bin/xdg-open
-urxvt.matcher.button: 1
+URxvt*iconName: terminal
+URxvt*depth: 32
+URxvt*geometry: 80x45
+URxvt*letterSpace: -1
+URxvt*cursorUnderline: true
+URxvt*saveLines: 65535
+URxvt*scrollBar: true
+URxvt*scrollBar_right: true
+URxvt*scrollBar_floating: true
+URxvt*scrollstyle: plain
+URxvt*font: xft:Inconsolata:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
+URxvt*boldFont: xft:Inconsolata:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
 URxvt.fading: 0
-URxvt.perl-lib: /home/hallisam/.urxvt
-!URxvt.tabbed.new-button: true
-URxvt.tabbed.autohide: true
-URxvt.keysym.Control-t: perl:tabbedex:new_tab
-URxvt.keysym.Control-Right: perl:tabbedex:next_tab
-URxvt.keysym.Control-Left: perl:tabbedex:prev_tab
-urxvt.background:  #000000
-urxvt.foreground:  #00CC00
-urxvt.color0:      #000000
-urxvt.color1:      #00CC00
-urxvt.color2:      #333333
-urxvt.color3:      #008800
+URxvt.background:  #000000
+URxvt.foreground:  #00CC00
+URxvt.color0:      #000000
+URxvt.color1:      #00CC00
+URxvt.color2:      #333333
+URxvt.color3:      #008800
 URxvt.tabbed.tabbar-fg: 3
 URxvt.tabbed.tabbar-bg: 0
 URxvt.tabbed.tab-fg:    3
 URxvt.tabbed.tab-bg:    2
-
+URxvt.perl-lib: /home/fommil/.urxvt
+URxvt.perl-ext-common: default,matcher,tabbedex,clipboard
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
+URxvt.tabbed.autohide: true
+URxvt.tabbed.no-tabbedex-keys: true
+URxvt.keysym.Control-t: perl:tabbedex:new_tab
+URxvt.keysym.Control-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.clipboard.autocopy: true
 
 !!SOLARIZED HEX     16/8 TERMCOL  XTERM/HEX   L*A*B      RGB         HSB
 !!--------- ------- ---- -------  ----------- ---------- ----------- -----------
