@@ -45,10 +45,12 @@ URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1
 URxvt.tabbed.autohide: true
 URxvt.tabbed.no-tabbedex-keys: true
+URxvt.keysym.Shift-Left: perl:tabbedex:prev_tab
+URxvt.keysym.Shift-Right: perl:tabbedex:next_tab
 URxvt.keysym.Control-t: perl:tabbedex:new_tab
+URxvt.clipboard.autocopy: true
 URxvt.keysym.Control-v:   perl:clipboard:paste
 URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
-URxvt.clipboard.autocopy: true
 
 !!SOLARIZED HEX     16/8 TERMCOL  XTERM/HEX   L*A*B      RGB         HSB
 !!--------- ------- ---- -------  ----------- ---------- ----------- -----------
