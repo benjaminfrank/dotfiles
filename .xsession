@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -f ~/.xinitrc ] ; then
+  . ~/.xinitrc
+fi
+
 # top right corner stops screen lock
 xautolock -locker "i3lock -c000000" -time 15 -corners 0-00 &
 
