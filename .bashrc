@@ -65,6 +65,9 @@ if [ "$PS1" ] ; then
     fi
 fi
 
+if [ -f ~/.bashrc.local ] ; then
+    . ~/.bashrc.local
+fi
 if [ -f ~/.aliases ] ; then
     . ~/.aliases
 fi
