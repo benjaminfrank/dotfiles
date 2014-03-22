@@ -1,7 +1,15 @@
 #!/bin/bash
 
-if [ -f ~/.xinitrc ] ; then
-  . ~/.xinitrc
+# Some distributions (e.g. Ubuntu) need to have a lightdm
+# menu entry to be able to login with this script. Add the
+# following (without comments) to /usr/share/xsessions/Xsession.desktop
+#  [Desktop Entry]
+#  Name=Xsession
+#  Exec=/etc/X11/Xsession
+
+if [ -f ~/.Xresources ] ; then
+  echo "URxvt.perl-lib:$HOME/.urxvt" | xrdb -merge -
+  xrdb -merge ~/.Xresources
 fi
 
 # top right corner stops screen lock
