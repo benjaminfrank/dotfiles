@@ -1,13 +1,19 @@
 #!/bin/bash
 
 # touchpad on a Dell XPS 13
+# `man synaptics` for descriptions 
 # use evtest to calibrate for your hands
-xmodmap ~/.Xmodmap
+# especially PalmMinWidth, PalmMinZ, FingerLow and FingerHigh 
+#synclient PalmDetect=1
 synclient MaxSpeed=3
 synclient TapButton1=1
 synclient TapButton2=3
 synclient TapButton3=2
-#synclient PalmDetect=1
-synclient FingerLow=30
+synclient FingerLow=20
 synclient FingerHigh=50
+synclient VertScrollDelta=-111
+synclient HorizScrollDelta=-111
+synclient TapAndDragGesture=false
+synclient HorizTwoFingerScroll=true
+
 syndaemon -t -k -i 2 &
