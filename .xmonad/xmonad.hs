@@ -10,13 +10,14 @@ myFocusedBorderColor = "#000000"
 -- don't forget to follow http://youtrack.jetbrains.com/issue/IDEA-101072
 
 main = xmonad $ defaultConfig {
-	      terminal = "urxvt",
-              startupHook = setWMName "LG3D",
-              logHook = takeTopFocus,
-              normalBorderColor  = myNormalBorderColor,
-              focusedBorderColor = myFocusedBorderColor
+	      terminal = "urxvt"
+              , startupHook = setWMName "LG3D"
+              , logHook = takeTopFocus
+              , normalBorderColor  = myNormalBorderColor
+              , focusedBorderColor = myFocusedBorderColor
+              , modMask = mod4Mask
 	    } `additionalKeys` [ 
-          ((mod1Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
-        , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
+          ((mod4Mask, xK_z), spawn "i3lock -c000000")
+        , ((mod4Mask, xK_Print), spawn "sleep 0.2; scrot -s")
         , ((0, xK_Print), spawn "scrot")
         ]
