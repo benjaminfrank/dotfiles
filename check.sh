@@ -1,11 +1,16 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LOCAL="$DIR/$HOSTNAME"
+LOCAL="${DIR}/Profiles/${HOSTNAME}"
 
-diff -ru --exclude .git --exclude check.sh "$DIR" "$HOME" | grep -v "Only in $HOME"
+function fdiff {
+    diff -ru --exclude .git --exclude check.sh --exclude Profiles "$1" "$2" | sed -e "s|Only in ${1}|No equivalent|" | grep -v "Only in"
+}
+
+fdiff "$DIR" "$HOME"
+
 if [ -d "$LOCAL" ] ; then
-    diff -ru "$LOCAL" "$HOME" | grep -v "Only in $HOME"
+    fdiff "$LOCAL" "$HOME"
 else
     echo "no local settings backup in $LOCAL"
 fi
