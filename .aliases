@@ -33,3 +33,6 @@ alias rm="rm -i"
 alias nano="nano -w"
 alias emacs="emacs -nw"
 alias please="sudo"
+
+
+alias fommil-defaults="diff -ru --exclude .git $HOME/.fommil-defaults $HOME | grep -v \"Only in $HOME\""
