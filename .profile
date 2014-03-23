@@ -2,6 +2,8 @@
 # Sam's universal UNIX shell ~/.profile            #
 ####################################################
 
+export PATH=$HOME/.fommil/bin:$PATH
+
 # place local system fixes in here
 if [ -f $HOME/.profile.local ] ; then
     . $HOME/.profile.local
