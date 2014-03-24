@@ -30,7 +30,7 @@
     (delete-trailing-whitespace)
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
-(global-set-key (kbd "C-S-f") 'indent-buffer)
+(global-set-key (kbd "C-M-f") 'indent-buffer)
 
                                         ; TODO: go to beginning/end of buffer with page up/down when they are visible
                                         ; TODO: hungry backspace

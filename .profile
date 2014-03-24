@@ -1,6 +1,4 @@
-####################################################
-# Sam's universal UNIX shell ~/.profile            #
-####################################################
+#!/bin/sh
 
 export PATH=$HOME/.fommil/bin:$PATH
 
@@ -14,16 +12,7 @@ if [ ! -f ~/.inputrc ] && [ -f /etc/inputrc ] ; then
 fi
 
 export HISTCONTROL=ignoredups
-export BROWSER=chromium
 export EDITOR="emacs -nw"
-
-if [ ! -z ${SSH_CLIENT} ] ; then
-    export PS1COLOUR="0;31"
-elif [ ${USER} = "root" ] ; then
-    export PS1COLOUR="1;31"
-else
-    export PS1COLOUR="0;37"
-fi
 
 if [ "$PS1" ] && [ "$BASH" ]; then
     if [ -f $HOME/.bashrc ] ; then

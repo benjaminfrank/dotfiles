@@ -1,70 +1,78 @@
-# Sam's universal GNU bash ~/.bashrc
+#!/bin/bash
 
-if [ "$PS1" ] ; then
-    # for the Emacs shell
-    if [ "$TERM" = "dumb" ] ; then
-        PS1="\u@\h:\w:"
-    elif [ "$BASH" ] ; then
-        if [ `uname` = "SunOS" ] ; then
-            export id=`/usr/xpg4/bin/id -u`
-        else
-            export id=`id -u`
-        fi
-        if [ $id = 0 ] ; then
-            PS1="\[\\033[1;31m\]\u@\[\\033[${PS1COLOUR}m\]\h\[\\033[1;31m\]:\w:\[\\033[0;39m\]"
-        else
-            PS1="\[\\033[${PS1COLOUR}m\]\u@\h:\w:\[\\033[0;39m\]"
-        fi
-    elif [ $id = 0 ] ; then
-        PS1='# '
-    else
-        PS1='$ '
-    fi
+# exit early if not interactive
+if [ "$PS1" = "" ] ; then return ; fi
 
-# DISABLED
-# if the current bash shell is not the locally installed one
-# then exec the local one
-#    if [ -x $LOCALROOT/bin/bash ] &&
-#        [ ! "$BASH_VERSION" = "`$LOCALROOT/bin/bash --version | grep version \
-#     | sed 's|^.*version ||' | sed 's| .*$||'`" ] ; then
-#        if [ -x ~/scripts/x-bender ] ; then x-bender ; fi
-#        if [ $0 = "-bash" ] ; then
-#            exec $LOCALROOT/bin/bash --login $*
-#        else
-#            exec $LOCALROOT/bin/bash $*
-#        fi
-#    fi
-
-# load the completion table if it exists
-    if [ -z "$BASH_COMPLETION" ] ; then
-        if [ -f /etc/bash_completion ] ; then
-            . /etc/bash_completion
-        elif [ -f $LOCALROOT/etc/bash_completion ] ; then
-            BASH_COMPLETION=$LOCALROOT/etc/bash_completion
-            . $BASH_COMPLETION
-        fi
-    fi
-
-# we can now start bash interactively
-    TTYTEMP=`tty`
-    if [ ! "`echo $TTYTEMP | grep 'not a tty'`" ] ; then
-        # using a tty
-        #   clear
-        if [ -x "`which dircolors 2>/dev/null`" ] ; then
-            if [ -f ~/.dircolours ] ; then
-                eval `dircolors ~/.dircolours`
-            elif [ -f /etc/dircolors ] ; then 
-                eval `dircolors /etc/dircolors`
-            else
-                eval `dircolors`
-            fi
-        fi
-        if [ -x "`which fortune 2>/dev/null`" ] ; then fortune ; fi
-        if [ -x ~/.login.scripts ] ; then ~/.login.scripts ; fi
-        if [ -f ~/.reminders ] ; then cat ~/.reminders ; fi
+if [ -z "$BASH_COMPLETION" ] ; then
+    if [ -f /etc/bash_completion ] ; then
+        . /etc/bash_completion
     fi
 fi
 
+if [ -x "`which dircolors 2>/dev/null`" ] ; then
+    if [ -f ~/.dircolours ] ; then
+        eval `dircolors ~/.dircolours`
+    elif [ -f /etc/dircolors ] ; then
+        eval `dircolors /etc/dircolors`
+    else
+        eval `dircolors`
+    fi
+fi
+if [ -x "`which fortune 2>/dev/null`" ] ; then fortune ; fi
+
+# PS1 Colours
+Black="\[\033[0;30m\]"
+Red="\[\033[0;31m\]"
+Green="\[\033[0;32m\]"
+Yellow="\[\033[0;33m\]"
+Blue="\[\033[0;34m\]"
+Purple="\[\033[0;35m\]"
+Cyan="\[\033[0;36m\]"
+White="\[\033[0;37m\]"
+# Bold
+BBlack="\[\033[1;30m\]"
+BRed="\[\033[1;31m\]"
+BGreen="\[\033[1;32m\]"
+BYellow="\[\033[1;33m\]"
+BBlue="\[\033[1;34m\]"
+BPurple="\[\033[1;35m\]"
+BCyan="\[\033[1;36m\]"
+BWhite="\[\033[1;37m\]"
+# High Intensty
+IBlack="\[\033[0;90m\]"
+IRed="\[\033[0;91m\]"
+IGreen="\[\033[0;92m\]"
+IYellow="\[\033[0;93m\]"
+IBlue="\[\033[0;94m\]"
+IPurple="\[\033[0;95m\]"
+ICyan="\[\033[0;96m\]"
+IWhite="\[\033[0;97m\]"
+# Reset
+Color_Off="\[\033[0m\]"
+
+if [ "$SSH_CLIENT" != "" ] ; then
+    PS1PREFIX="$White\h$Color_Off "
+fi
+
+# TODO: can this be factored out into a clean function?
+export PS1=$PS1PREFIX'$(git branch &>/dev/null;\
+if [ $? -eq 0 ]; then \
+  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
+  if [ "$?" -eq "0" ]; then \
+    # @4 - Clean repository - nothing to commit
+    echo "'$IGreen'"$(__git_ps1 "%s "); \
+  else \
+    # @5 - Changes to working tree
+    echo "'$IRed'"$(__git_ps1 "%s"); \
+  fi) "
+fi)'"$IBlack\\w$Color_Off "
+
+# workaround for the Emacs shell
+if [ "$TERM" = "dumb" ] ; then
+    export PS1="\u@\h:\w:"
+fi
+
+# Local settings and overrides
 if [ -f ~/.bashrc.local ] ; then
     . ~/.bashrc.local
 fi
