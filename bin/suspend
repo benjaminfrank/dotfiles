@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# must have something like the following in /etc/sudoers.d/pmsuspend 
-#fommil  ALL = NOPASSWD: /usr/sbin/pm-hibernate
-#fommil  ALL = NOPASSWD: /usr/sbin/pm-suspend
-
-i3lock -c000000 && sudo pm-suspend
