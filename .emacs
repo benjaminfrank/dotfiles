@@ -31,6 +31,8 @@
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
 (global-set-key (kbd "C-M-f") 'indent-buffer)
+;(package-install 'hungry-delete)
+(global-set-key (kbd "M-\d") 'hungry-delete-backward)
 
                                         ; TODO: go to beginning/end of buffer with page up/down when they are visible
                                         ; TODO: hungry backspace

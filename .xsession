@@ -15,7 +15,7 @@ if [ -f ~/.Xresources ] ; then
 fi
 
 # top right corner stops screen lock
-xautolock -locker "i3lock -c000000" -time 15 -corners 0-00 &
+xautolock -locker "i3lock -c000000" -time 15 -corners ++++ &
 
 # clipboard
 autocutsel &

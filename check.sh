@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LOCAL="${DIR}/Profiles/${HOSTNAME}"
 
 function fdiff {
-    diff -ru --exclude .git --exclude check.sh --exclude Profiles --exclude bin "$1" "$2" | sed -e "s|Only in ${1}|No equivalent|" | grep -v "Only in"
+    diff -ru --exclude .git --exclude check.sh --exclude Profiles --exclude bin --exclude etc "$1" "$2" | sed -e "s|Only in ${1}|No equivalent|" | grep -v "Only in"
 }
 
 fdiff "$DIR" "$HOME"

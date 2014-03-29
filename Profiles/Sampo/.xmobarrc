@@ -1,5 +1,5 @@
 Config {
-	 font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
+         font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
         -- font = "xft:Envy Code R:size=8"
        , borderColor = "black"
        , border = TopB
@@ -11,10 +11,15 @@ Config {
        , hideOnStart = False
        , commands = [ Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
                     , Run Memory ["-t","Mem: <usedratio>%"] 10
-    		    , Run Date "%a %b %_d %Y %H:%M" "date" 10
+                    , Run Date "%a %b %_d %Y %H:%M" "date" 10
+		    , Run BatteryP ["BAT0"]
+                  ["-t", "<acstatus>"
+                  , "-L", "10", "-H", "80"
+                  , "-l", "red", "-h", "green"
+                  , "--", "-O", "Charging", "-o", "Battery: <left>%"
+                  ] 10
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%cpu% %memory% }{ <fc=#ee9a00>%date%</fc>"
+       , template = "%cpu% %memory% %battery% }{ <fc=#ee9a00>%date%</fc>"
        }
-

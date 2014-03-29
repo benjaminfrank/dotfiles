@@ -18,5 +18,6 @@ synclient HorizTwoFingerScroll=true
 
 syndaemon -t -k -i 2 &
 
-
 xfce4-power-manager
+
+xmobar &
