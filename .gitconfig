@@ -1,6 +1,6 @@
 [user]
-	name = Samuel Halliday
-	email = samuel.halliday@trafigura.com
+	name = Sam Halliday
+	email = sam.halliday@gmail.com
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
