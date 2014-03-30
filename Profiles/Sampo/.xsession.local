@@ -13,11 +13,14 @@ synclient FingerLow=15
 synclient FingerHigh=25
 synclient VertScrollDelta=-111
 synclient HorizScrollDelta=-111
-synclient TapAndDragGesture=false
-synclient HorizTwoFingerScroll=true
+synclient TapAndDragGesture=1
+synclient HorizTwoFingerScroll=1
 
 syndaemon -t -k -i 2 &
 
 xfce4-power-manager
 
 xmobar &
+
+# Google Drive
+google-drive-ocamlfuse $HOME/Drive
