@@ -13,3 +13,11 @@ fi
 
 export HISTCONTROL=ignoredups
 export EDITOR="emacs -nw"
+
+if [ "$PS1" ] && [ "$BASH" ]; then
+    if [ -f $HOME/.bashrc ] ; then
+        . $HOME/.bashrc
+    elif [ -f /etc/bashrc ] ; then
+        . /etc/bashrc
+    fi
+fi
