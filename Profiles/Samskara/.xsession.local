@@ -10,4 +10,7 @@ xmodmap -e "pointer = 1 2 3 5 4 7 6 8 9 10 11 12"
 xrandr --output DP-2 --brightness 0.7
 
 # Google Drive
-google-drive-ocamlfuse $HOME/Drive
+google-drive-ocamlfuse $HOME/Google/Drive
+
+# IDEA
+export IDEA_JDK=/opt/jdk1.8.0

@@ -17,7 +17,7 @@ main = xmonad $ defaultConfig {
               , focusedBorderColor = myFocusedBorderColor
               , modMask = mod4Mask
 	    } `additionalKeys` [ 
-          ((mod4Mask, xK_z), spawn "i3lock -c000000")
+          ((mod4Mask .|. shiftMask, xK_z), spawn "i3lock -c000000")
         , ((mod4Mask, xK_Print), spawn "sleep 0.2; scrot -s")
         , ((0, xK_Print), spawn "scrot")
         ]
