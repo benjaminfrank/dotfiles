@@ -7,7 +7,7 @@
 #  Name=Xsession
 #  Exec=/etc/X11/Xsession
 
-export PATH=$HOME/.fommil/bin:$PATH
+. ~/.profile
 
 if [ -f ~/.Xresources ] ; then
   echo "URxvt.perl-lib:$HOME/.urxvt" | xrdb -merge -

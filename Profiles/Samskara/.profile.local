@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export JAVA_HOME=/opt/jdk1.8.0
+export PATH=$JAVA_HOME/bin:/opt/apache-maven-3.2.1/bin/:$PATH
+
+. $HOME/.opam/opam-init/init.sh
