@@ -6,6 +6,7 @@
       interprogram-paste-function 'x-cut-buffer-or-selection-value
       tab-width 2
       indent-tabs-mode nil
+      scroll-error-top-bottom t
       show-trailing-whitespace t)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
