@@ -33,8 +33,20 @@
     (untabify (point-min) (point-max))))
 (global-set-key (kbd "C-M-f") 'indent-buffer)
 ;(package-install 'hungry-delete)
-(global-set-key (kbd "M-\d") 'hungry-delete-backward)
+(global-set-key (kbd "<C-backspace>") 'hungry-delete-backward)
+;(global-set-key (kbd "C-M-h") 'backward-kill-word)
 
-                                        ; TODO: go to beginning/end of buffer with page up/down when they are visible
-                                        ; TODO: hungry backspace
-                                        ; TODO Darcula theme
+; TODO enter should enter and indent
+; TODO backspace should go back one tab level
+; TODO control-backspace should go back all whitespace or one word
+; TODO Darcula theme
+
+
+;; load the ensime lisp code...
+(add-to-list 'load-path "ENSIME_ROOT/src/main/elisp/")
+(require 'ensime)
+
+;; This step causes the ensime-mode to be started whenever
+;; scala-mode is started for a buffer. You may have to customize this step
+;; if you're not using the standard scala mode.
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
