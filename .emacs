@@ -40,10 +40,13 @@
 ; TODO backspace should go back one tab level
 ; TODO control-backspace should go back all whitespace or one word
 ; TODO Darcula theme
+; TODO file search by substring (IntelliJ's C-S-n)
 
 
 ;; load the ensime lisp code...
-(add-to-list 'load-path "ENSIME_ROOT/src/main/elisp/")
+;(add-to-list 'load-path "/home/hallisam/ensime/dist/elisp/")
+(add-to-list 'load-path "/home/hallisam/.emacs.d/ensime_2.9.2-0.9.8.1/elisp/")
+;(add-to-list 'load-path "ENSIME_ROOT/src/main/elisp/")
 (require 'ensime)
 
 ;; This step causes the ensime-mode to be started whenever
@@ -53,3 +56,6 @@
 
 
 (setq ispell-dictionary "british")
+
+
+(define-key global-map (kbd "RET") 'newline-and-indent)
