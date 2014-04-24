@@ -7,22 +7,31 @@
       tab-width 2
       indent-tabs-mode nil
       scroll-error-top-bottom t
-      show-trailing-whitespace t)
+      show-trailing-whitespace t
+      ispell-dictionary "british")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
-
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
 (set-default-font "Inconsolata-16")
 
+(add-to-list 'load-path (concat user-emacs-directory "ensime/dist"))
+
+(require 'package)
+
+
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
+
 (load-theme 'solarized-dark 'NO-CONFIRM)
 
-(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
+(require 'git-gutter)
+(require 'magit)
+
+(require 'scala-mode2)
+(require 'ensime)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
 (defun indent-buffer ()
   "Indent (format) the buffer"
@@ -31,37 +40,16 @@
     (delete-trailing-whitespace)
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
-(global-set-key (kbd "C-M-f") 'indent-buffer)
-;(package-install 'hungry-delete)
-(global-set-key (kbd "<C-backspace>") 'hungry-delete-backward)
-;(global-set-key (kbd "C-M-h") 'backward-kill-word)
-
-; TODO enter should enter and indent
-; TODO backspace should go back one tab level
-; TODO control-backspace should go back all whitespace or one word
-; TODO Darcula theme
-; TODO file search by substring (IntelliJ's C-S-n)
-
-
-;; load the ensime lisp code...
-;(add-to-list 'load-path "/home/hallisam/ensime/dist/elisp/")
-(add-to-list 'load-path "/home/hallisam/.emacs.d/ensime_2.9.2-0.9.8.1/elisp/")
-;(add-to-list 'load-path "ENSIME_ROOT/src/main/elisp/")
-(require 'ensime)
-
-;; This step causes the ensime-mode to be started whenever
-;; scala-mode is started for a buffer. You may have to customize this step
-;; if you're not using the standard scala mode.
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-
-(setq ispell-dictionary "british")
 
 
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
+(global-set-key (kbd "<C-backspace>") 'hungry-delete-backward)
 
 ; new bindings
+(global-set-key (kbd "<C-tab>") 'dabbrev-expand)
 (global-set-key (kbd "s-f") 'find-name-dired)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
+(global-set-key (kbd "S-s-n") 'rgrep)
