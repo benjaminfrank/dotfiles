@@ -54,8 +54,14 @@
 ;; if you're not using the standard scala mode.
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
-
 (setq ispell-dictionary "british")
 
 
-(define-key global-map (kbd "RET") 'newline-and-indent)
+; modified commands
+(global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-x k") 'kill-buffer-and-window)
+
+; new bindings
+(global-set-key (kbd "s-f") 'find-name-dired)
+(global-set-key (kbd "s-s") 'replace-string)
+(global-set-key (kbd "s-g") 'magit-status)
