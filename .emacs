@@ -28,6 +28,7 @@
 
 (require 'git-gutter)
 (require 'magit)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (require 'scala-mode2)
 (require 'ensime)

@@ -7,6 +7,7 @@ import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 import System.Exit
 
+
 myNormalBorderColor  = "#7a7a7a"
 myFocusedBorderColor = "#000000"
 
@@ -20,7 +21,18 @@ main = xmonad $ defaultConfig {
               , focusedBorderColor = myFocusedBorderColor
               , modMask = mod4Mask
               , keys = keys'
+              , manageHook = manageHook'
 	    }
+
+manageHook' :: ManageHook
+manageHook' = composeAll 
+              [ className =? "Xmessage" --> doFloat
+              , className =? "Gimp" --> doFloat
+              , className =? "Ediff" --> doFloat
+	      , title     =? "Downloads" --> doFloat
+              , title     =? "Save As..." --> doFloat
+              , title     =? "Open" --> doFloat
+              ]
 
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
