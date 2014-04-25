@@ -33,6 +33,11 @@
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
+(require 'helm-config)
+(helm-mode 1)
+
+(require 'helm-ls-git)
+
 (defun indent-buffer ()
   "Indent (format) the buffer"
   (interactive)
@@ -45,11 +50,17 @@
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
-(global-set-key (kbd "<C-backspace>") 'hungry-delete-backward)
+(global-set-key (kbd "C-<backspace>") 'hungry-delete-backward)
+(global-set-key (kbd "M-x") 'helm-M-x)
 
 ; new bindings
-(global-set-key (kbd "<C-tab>") 'dabbrev-expand)
-(global-set-key (kbd "s-f") 'find-name-dired)
+(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
+;(global-set-key (kbd "s-f") 'find-name-dired)
+;(global-set-key (kbd "s-f") 'helm-locate)
+(global-set-key (kbd "s-f") 'helm-browse-project)
+(global-set-key (kbd "s-F") 'rgrep)
+(global-set-key (kbd "s-b") 'helm-mini)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
-(global-set-key (kbd "S-s-n") 'rgrep)
+(global-set-key (kbd "s-n") 'ensime-search)
+
