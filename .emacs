@@ -34,10 +34,8 @@
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
-(require 'helm-config)
-(helm-mode 1)
-
-(require 'helm-ls-git)
+;(require 'helm-config)
+;(helm-mode 1)
 
 (defun indent-buffer ()
   "Indent (format) the buffer"
@@ -46,6 +44,12 @@
     (delete-trailing-whitespace)
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
+
+(defun git-grep (search)
+  ; https://www.ogre.com/node/447
+  "git-grep the entire current repo"
+  (interactive (list (completing-read "Search for: " nil nil nil (current-word))))
+  (grep-find (concat "git --no-pager grep -P -n " search " `git rev-parse --show-toplevel`")))
 
 
 ; modified commands
@@ -57,11 +61,9 @@
 ; new bindings
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;(global-set-key (kbd "s-f") 'find-name-dired)
-;(global-set-key (kbd "s-f") 'helm-locate)
-(global-set-key (kbd "s-f") 'helm-browse-project)
-(global-set-key (kbd "s-F") 'rgrep)
+(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
+(global-set-key (kbd "s-F") 'git-grep)
 (global-set-key (kbd "s-b") 'helm-mini)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-n") 'ensime-search)
-
