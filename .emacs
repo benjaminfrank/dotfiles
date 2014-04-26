@@ -16,10 +16,11 @@
 (set-default-font "Inconsolata-16")
 
 (add-to-list 'load-path (concat user-emacs-directory "ensime/dist"))
+; latest helm is incompatible with one of my older machines
+(if (file-exists-p (concat user-emacs-directory "helm"))
+    (add-to-list 'load-path (concat user-emacs-directory "helm")))
 
 (require 'package)
-
-
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
@@ -34,8 +35,8 @@
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
-;(require 'helm-config)
-;(helm-mode 1)
+(require 'helm-config)
+(helm-mode 1)
 
 (defun indent-buffer ()
   "Indent (format) the buffer"
@@ -70,6 +71,7 @@
 
 (require 'rmail) ; offlineimap grabs the mail
 (require 'google-contacts)
+(require 'google-contacts-message)
 (setq mail-user-agent 'message-user-agent
       user-mail-address "sam.halliday@gmail.com"
       user-full-name "Sam Halliday"
@@ -77,7 +79,4 @@
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 465
       send-mail-function 'smtpmail-send-it
-      rmail-primary-inbox-list '(expand-file-name "~/Mail")
-;      rmail-file-name "~/.rmail"
-      rmail-primary-inbox-list '("maildir://~/Mail")
       google-contacts-user 'user-mail-address)
