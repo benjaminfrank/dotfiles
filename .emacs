@@ -59,14 +59,15 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
 (global-set-key (kbd "C-<backspace>") 'hungry-delete-backward)
-;(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-c") (lambda() (interactive)
+				  (message-box "use 'M-x save-buffers-kill-terminal'")))
 
 ; new bindings
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;(global-set-key (kbd "s-f") 'find-name-dired)
 (global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-F") 'git-grep)
-;(global-set-key (kbd "s-b") 'helm-mini)
+(global-set-key (kbd "s-b") 'helm-mini)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-n") 'ensime-search)
