@@ -19,6 +19,8 @@
 ; latest helm is incompatible with one of my older machines
 (if (file-exists-p (concat user-emacs-directory "helm"))
     (add-to-list 'load-path (concat user-emacs-directory "helm")))
+(if (file-exists-p "/usr/local/share/emacs/site-lisp")
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -72,6 +74,7 @@
 (require 'rmail) ; offlineimap grabs the mail
 (require 'google-contacts)
 (require 'google-contacts-message)
+;(require 'notmuch-labeler)
 (setq mail-user-agent 'message-user-agent
       user-mail-address "sam.halliday@gmail.com"
       user-full-name "Sam Halliday"
@@ -79,4 +82,9 @@
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 465
       send-mail-function 'smtpmail-send-it
-      google-contacts-user 'user-mail-address)
+      google-contacts-user 'user-mail-address
+      notmuch-fcc-dirs nil
+      notmuch-saved-searches '((:name "inbox" :query "tag:inbox")
+			       (:name "unread" :query "tag:unread")
+			       (:name "flagged" :query "tag:flagged")))
+(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
