@@ -78,6 +78,6 @@
       smtpmail-smtp-service 465
       send-mail-function 'smtpmail-send-it
       rmail-primary-inbox-list '(expand-file-name "~/Mail")
+;      rmail-file-name "~/.rmail"
+      rmail-primary-inbox-list '("maildir://~/Mail")
       google-contacts-user 'user-mail-address)
-
-
