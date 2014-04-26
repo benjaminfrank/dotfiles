@@ -56,14 +56,28 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
 (global-set-key (kbd "C-<backspace>") 'hungry-delete-backward)
-(global-set-key (kbd "M-x") 'helm-M-x)
+;(global-set-key (kbd "M-x") 'helm-M-x)
 
 ; new bindings
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;(global-set-key (kbd "s-f") 'find-name-dired)
 (global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-F") 'git-grep)
-(global-set-key (kbd "s-b") 'helm-mini)
+;(global-set-key (kbd "s-b") 'helm-mini)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-n") 'ensime-search)
+
+(require 'rmail) ; offlineimap grabs the mail
+(require 'google-contacts)
+(setq mail-user-agent 'message-user-agent
+      user-mail-address "sam.halliday@gmail.com"
+      user-full-name "Sam Halliday"
+      smtpmail-stream-type 'ssl
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 465
+      send-mail-function 'smtpmail-send-it
+      rmail-primary-inbox-list '(expand-file-name "~/Mail")
+      google-contacts-user 'user-mail-address)
+
+

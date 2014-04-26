@@ -1,0 +1,22 @@
+[general]
+accounts = Gmail
+
+[Account Gmail]
+localrepository = Local
+remoterepository = Remote
+autorefresh = 1
+postsynchook = notmuch new
+
+[Repository Local]
+type = Maildir
+localfolders = ~/Mail
+
+[Repository Remote]
+type = Gmail
+maxconnections=1
+remoteuser = sam.halliday@gmail.com
+realdelete=no
+folderfilter = lambda foldername: foldername in ['[Gmail]/All Mail', '[Gmail]/Sent Mail']
+nametrans = lambda foldername: re.sub('^\[Gmail\]/All Mail$', 'all', re.sub('^\[Gmail\]/Sent Mail$', 'sent', foldername))
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+

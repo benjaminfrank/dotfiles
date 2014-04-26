@@ -1,0 +1,9 @@
+[database]
+path=Mail
+
+[new]
+tags=unread;inbox
+ignore=
+
+[search]
+exclude_tags=deleted;spam
