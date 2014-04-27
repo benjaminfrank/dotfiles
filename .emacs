@@ -53,7 +53,7 @@
 (defun contextual-backspace ()
   "Hungry whitespace or delete word depending on context"
   (interactive)
-  (if (looking-back "[[:space:]\n]")
+  (if (looking-back "[[:space:]\n]{2}+")
       (hungry-delete-backward)
     (backward-kill-word 1)))
 
@@ -81,7 +81,7 @@
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-n") 'ensime-search)
 
-(require 'rmail) ; offlineimap grabs the mail
+(require 'notmuch)
 (require 'google-contacts)
 (require 'google-contacts-message)
 (setq mail-user-agent 'message-user-agent
