@@ -14,7 +14,3 @@ google-drive-ocamlfuse $HOME/Google/Drive
 
 # IDEA
 export IDEA_JDK=/opt/jdk1.8.0
-
-# email
-offlineimap &
-

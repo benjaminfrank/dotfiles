@@ -8,7 +8,23 @@
       indent-tabs-mode nil
       scroll-error-top-bottom t
       show-trailing-whitespace t
-      ispell-dictionary "british")
+      ispell-dictionary "british"
+      sentence-end-double-space nil
+      ; email
+      mail-user-agent 'message-user-agent
+      user-mail-address "Sam.Halliday@gmail.com"
+      user-full-name "Sam Halliday"
+      smtpmail-stream-type 'ssl
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 465
+      send-mail-function 'smtpmail-send-it
+      notmuch-fcc-dirs nil
+      message-auto-save-directory (concat user-emacs-directory "drafts")
+      notmuch-search-oldest-first nil
+      notmuch-address-command "google-contacts"
+      notmuch-saved-searches '(("inbox" . "tag:inbox")
+			       ("unread" . "tag:unread")
+			       ("flagged" . "tag:flagged")))
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -53,7 +69,7 @@
 (defun contextual-backspace ()
   "Hungry whitespace or delete word depending on context"
   (interactive)
-  (if (looking-back "[[:space:]\n]{2}+")
+  (if (looking-back "[\t\s\n\r]\\{2,\\}" (- (point) 3))
       (hungry-delete-backward)
     (backward-kill-word 1)))
 
@@ -84,21 +100,7 @@
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
 (require 'notmuch)
-(require 'google-contacts)
-(require 'google-contacts-message)
-(setq mail-user-agent 'message-user-agent
-      user-mail-address "sam.halliday@gmail.com"
-      user-full-name "Sam Halliday"
-      smtpmail-stream-type 'ssl
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 465
-      send-mail-function 'smtpmail-send-it
-      google-contacts-user 'user-mail-address
-      notmuch-fcc-dirs nil
-      message-auto-save-directory (concat user-emacs-directory "drafts")
-      notmuch-search-oldest-first nil
-      notmuch-saved-searches '(("inbox" . "tag:inbox")
-			       ("unread" . "tag:unread")
-			       ("flagged" . "tag:flagged")))
 (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
 
+(require 'notmuch-address)
+(notmuch-address-message-insinuate)

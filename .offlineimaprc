@@ -5,7 +5,6 @@ ui = quiet
 [Account Gmail]
 localrepository = Local
 remoterepository = Remote
-autorefresh = 1
 postsynchook = notmuch new
 
 [Repository Local]
