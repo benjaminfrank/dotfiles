@@ -36,17 +36,26 @@
 (require 'scala-mode2)
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook (lambda()(flyspell-prog-mode)))
+
 
 (require 'helm-config)
 (helm-mode 1)
 
 (defun indent-buffer ()
-  "Indent (format) the buffer"
+  "Indent the entire buffer"
   (interactive)
   (save-excursion
     (delete-trailing-whitespace)
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
+
+(defun contextual-backspace ()
+  "Hungry whitespace or delete word depending on context"
+  (interactive)
+  (if (looking-back "[[:space:]\n]")
+      (hungry-delete-backward)
+    (backward-kill-word 1)))
 
 (defun git-grep (search)
   ; https://www.ogre.com/node/447
@@ -58,7 +67,7 @@
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
-(global-set-key (kbd "C-<backspace>") 'hungry-delete-backward)
+(global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "C-x C-c") (lambda() (interactive)
 				  (message-box "use 'M-x save-buffers-kill-terminal'")))
 
@@ -75,7 +84,6 @@
 (require 'rmail) ; offlineimap grabs the mail
 (require 'google-contacts)
 (require 'google-contacts-message)
-;(require 'notmuch-labeler)
 (setq mail-user-agent 'message-user-agent
       user-mail-address "sam.halliday@gmail.com"
       user-full-name "Sam Halliday"
@@ -85,7 +93,10 @@
       send-mail-function 'smtpmail-send-it
       google-contacts-user 'user-mail-address
       notmuch-fcc-dirs nil
+      message-auto-save-directory (concat user-emacs-directory "drafts")
       notmuch-saved-searches '((:name "inbox" :query "tag:inbox")
 			       (:name "unread" :query "tag:unread")
 			       (:name "flagged" :query "tag:flagged")))
 (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+
+(add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
