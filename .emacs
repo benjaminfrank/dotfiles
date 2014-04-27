@@ -81,6 +81,8 @@
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-n") 'ensime-search)
 
+(add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
+
 (require 'notmuch)
 (require 'google-contacts)
 (require 'google-contacts-message)
@@ -94,9 +96,9 @@
       google-contacts-user 'user-mail-address
       notmuch-fcc-dirs nil
       message-auto-save-directory (concat user-emacs-directory "drafts")
-      notmuch-saved-searches '((:name "inbox" :query "tag:inbox")
-			       (:name "unread" :query "tag:unread")
-			       (:name "flagged" :query "tag:flagged")))
+      notmuch-search-oldest-first nil
+      notmuch-saved-searches '(("inbox" . "tag:inbox")
+			       ("unread" . "tag:unread")
+			       ("flagged" . "tag:flagged")))
 (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
 
-(add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
