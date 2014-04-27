@@ -48,7 +48,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,               xK_equal ), sendMessage Expand) -- %! Expand the master area
     , ((modMask,               xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
     , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
-    , ((modMask              , xK_q     ), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
+    , ((modMask .|. shiftMask, xK_r     ), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
   ]
     ++
     -- workspaces

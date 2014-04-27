@@ -1,20 +1,23 @@
 [general]
 accounts = Gmail
-ui = quiet
+#ui = quiet
+#https://github.com/aroig/offlineimap
+synclabels = True
 
 [Account Gmail]
 localrepository = Local
 remoterepository = Remote
-postsynchook = notmuch new
+#postsynchook = notmuch new
+postsynchook = mu index --maildir=~/Gmail
 
 [Repository Local]
-type = Maildir
-localfolders = ~/Mail
+type = GmailMaildir
+localfolders = ~/Gmail
 
 [Repository Remote]
 type = Gmail
 maxconnections=1
-remoteuser = sam.halliday@gmail.com
+remoteuser = Sam.Halliday@gmail.com
 realdelete=no
 folderfilter = lambda foldername: foldername in ['[Gmail]/All Mail']
 nametrans = lambda foldername: re.sub('^\[Gmail\]/All Mail$', 'all', foldername)

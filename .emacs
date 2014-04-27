@@ -17,9 +17,11 @@
       smtpmail-stream-type 'ssl
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 465
-      send-mail-function 'smtpmail-send-it
-      notmuch-fcc-dirs nil
+      send-mail-function 'smtpmail-send-it      
       message-auto-save-directory (concat user-emacs-directory "drafts")
+      message-kill-buffer-on-exit t
+      message-signature "Best regards,\nSam\n"
+      notmuch-fcc-dirs nil
       notmuch-search-oldest-first nil
       notmuch-address-command "google-contacts"
       notmuch-saved-searches '(("inbox" . "tag:inbox")
@@ -96,6 +98,7 @@
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-n") 'ensime-search)
+(global-set-key (kbd "s-q") 'describe-foo-at-point)
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
@@ -104,3 +107,46 @@
 
 (require 'notmuch-address)
 (notmuch-address-message-insinuate)
+
+(require 'mu4e)
+(setq mu4e-mu-home "~/.mu")
+(setq mu4e-maildir "~/Gmail")
+(setq mu4e-attachment-dir "~/Downloads")
+
+(setq mu4e-sent-messages-behavior 'delete)
+(setq mu4e-drafts-folder "/drafts")
+(setq mu4e-sent-folder   "/all")
+(setq mu4e-trash-folder  "/trash")
+
+(setq mu4e-change-filenames-when-moving nil)
+(setq mu4e-get-mail-command nil)
+(setq mu4e-action-tags-header "X-Keywords")
+(setq mu4e-get-mail-command "offlineimap")
+
+(add-to-list 'mu4e-headers-actions '("tRetag message" . mu4e-action-retag-message) t)
+(add-to-list 'mu4e-view-actions '("tRetag message" . mu4e-action-retag-message) t)
+(add-to-list 'mu4e-view-actions '("bView in browser" . mu4e-action-view-in-browser) t)
+
+(defun describe-foo-at-point ()
+  ;;; http://www.emacswiki.org/emacs/DescribeThingAtPoint
+  "Show the documentation of the Elisp function and variable near point.
+	This checks in turn:
+	-- for a function name where point is
+	-- for a variable name where point is
+	-- for a surrounding function call
+	"
+  (interactive)
+  (let (sym)
+    (cond ((setq sym (ignore-errors
+		       (with-syntax-table emacs-lisp-mode-syntax-table
+			 (save-excursion
+			   (or (not (zerop (skip-syntax-backward "_w")))
+			       (eq (char-syntax (char-after (point))) ?w)
+			       (eq (char-syntax (char-after (point))) ?_)
+			       (forward-sexp -1))
+			   (skip-chars-forward "`'")
+			   (let ((obj (read (current-buffer))))
+			     (and (symbolp obj) (fboundp obj) obj))))))
+	   (describe-function sym))
+	  ((setq sym (variable-at-point)) (describe-variable sym))
+	  ((setq sym (function-at-point)) (describe-function sym)))))
