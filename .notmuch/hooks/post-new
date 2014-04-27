@@ -1,0 +1,4 @@
+#!/bin/bash
+
+notmuch search -new -- from:sam.halliday@gmail.com tag:new
+notmuch search -new +inbox -- tag:new

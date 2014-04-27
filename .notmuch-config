@@ -6,7 +6,7 @@ name=Sam Halliday
 primary_email=sam.halliday@gmail.com
 
 [new]
-tags=unread;inbox
+tags=new
 ignore=
 
 [search]
