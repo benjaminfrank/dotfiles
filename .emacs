@@ -81,13 +81,27 @@
   (interactive (list (completing-read "Search for: " nil nil nil (current-word))))
   (grep-find (concat "git --no-pager grep -P -n " search " `git rev-parse --show-toplevel`")))
 
+(defun count-buffers (&optional display-anyway)
+  ;http://www.cb1.com/~john/computing/emacs/lisp/startup/buffer-misc.el
+  "Display or return the number of buffers."
+  (interactive)
+  (let ((buf-count (length (buffer-list))))
+    (if (or (interactive-p) display-anyway)
+    (message "%d buffers in this Emacs" buf-count)) buf-count))
+
+(defun safe-kill-emacs ()
+  "Only exit emacs if this is a small sesssion"
+  (interactive)
+  (if (< (count-buffers) 10)
+      (save-buffers-kill-emacs)
+    (message-box "use 'M-x save-buffers-kill-emacs'")))
+
 
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-window)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
-(global-set-key (kbd "C-x C-c") (lambda() (interactive)
-				  (message-box "use 'M-x save-buffers-kill-terminal'")))
+(global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 
 ; new bindings
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
@@ -109,6 +123,7 @@
 (notmuch-address-message-insinuate)
 
 (require 'mu4e)
+(require 'mu4e-actions)
 (setq mu4e-mu-home "~/.mu")
 (setq mu4e-maildir "~/Gmail")
 (setq mu4e-attachment-dir "~/Downloads")
