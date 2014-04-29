@@ -2,17 +2,19 @@
 accounts = Gmail
 #ui = quiet
 #https://github.com/aroig/offlineimap
-synclabels = True
+#synclabels = True
 
 [Account Gmail]
 localrepository = Local
 remoterepository = Remote
-#postsynchook = notmuch new
-postsynchook = mu index --maildir=~/Gmail
+postsynchook = notmuch new
+#postsynchook = mu index --maildir=~/Gmail
 
 [Repository Local]
-type = GmailMaildir
+#type = GmailMaildir
 localfolders = ~/Gmail
+type = Maildir
+localfolders = ~/Mail
 
 [Repository Remote]
 type = Gmail

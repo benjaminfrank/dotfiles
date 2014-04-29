@@ -122,25 +122,22 @@
 (require 'notmuch-address)
 (notmuch-address-message-insinuate)
 
-(require 'mu4e)
-(require 'mu4e-actions)
-(setq mu4e-mu-home "~/.mu")
-(setq mu4e-maildir "~/Gmail")
-(setq mu4e-attachment-dir "~/Downloads")
-
-(setq mu4e-sent-messages-behavior 'delete)
-(setq mu4e-drafts-folder "/drafts")
-(setq mu4e-sent-folder   "/all")
-(setq mu4e-trash-folder  "/trash")
-
-(setq mu4e-change-filenames-when-moving nil)
-(setq mu4e-get-mail-command nil)
-(setq mu4e-action-tags-header "X-Keywords")
-(setq mu4e-get-mail-command "offlineimap")
-
-(add-to-list 'mu4e-headers-actions '("tRetag message" . mu4e-action-retag-message) t)
-(add-to-list 'mu4e-view-actions '("tRetag message" . mu4e-action-retag-message) t)
-(add-to-list 'mu4e-view-actions '("bView in browser" . mu4e-action-view-in-browser) t)
+; mu4e is not as good as notmuch, but might have to do for gmail syncing
+;; (require 'mu4e)
+;; (setq mu4e-mu-home "~/.mu"
+;;       mu4e-maildir "~/Gmail"
+;;       mu4e-attachment-dir "~/Downloads"
+;;       mu4e-sent-messages-behavior 'delete
+;;       mu4e-drafts-folder "/drafts"
+;;       mu4e-sent-folder   "/all"
+;;       mu4e-trash-folder  "/trash"
+;;       mu4e-change-filenames-when-moving nil
+;;       mu4e-get-mail-command nil
+;;       mu4e-action-tags-header "X-Keywords"
+;;       mu4e-get-mail-command "offlineimap")
+;; (add-to-list 'mu4e-headers-actions '("tRetag message" . mu4e-action-retag-message) t)
+;; (add-to-list 'mu4e-view-actions '("tRetag message" . mu4e-action-retag-message) t)
+;; (add-to-list 'mu4e-view-actions '("bView in browser" . mu4e-action-view-in-browser) t)
 
 (defun describe-foo-at-point ()
   ;;; http://www.emacswiki.org/emacs/DescribeThingAtPoint
