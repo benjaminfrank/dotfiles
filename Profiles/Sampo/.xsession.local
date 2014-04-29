@@ -24,4 +24,4 @@ xmobar &
 
 # Google Drive
 . /home/fommil/.opam/opam-init/init.sh
-google-drive-ocamlfuse $HOME/Drive
+google-drive-ocamlfuse $HOME/Google/Drive
