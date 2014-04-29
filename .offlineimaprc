@@ -1,6 +1,6 @@
 [general]
 accounts = Gmail
-#ui = quiet
+ui = quiet
 #https://github.com/aroig/offlineimap
 #synclabels = True
 
