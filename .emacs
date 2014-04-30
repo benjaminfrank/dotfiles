@@ -54,8 +54,8 @@
 (require 'scala-mode2)
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-(add-hook 'scala-mode-hook (lambda()(flyspell-prog-mode)))
-
+;(add-hook 'scala-mode-hook 'flyspell-prog-mode-hook)
+(add-hook 'scala-mode-hook 'highlight-symbol-at-point-hook)
 
 (require 'helm-config)
 (helm-mode 1)
@@ -113,6 +113,7 @@
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-n") 'ensime-search)
 (global-set-key (kbd "s-q") 'describe-foo-at-point)
+(global-set-key (kbd "s-h") 'highlight-symbol-at-point)
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
@@ -162,3 +163,5 @@
 	   (describe-function sym))
 	  ((setq sym (variable-at-point)) (describe-variable sym))
 	  ((setq sym (function-at-point)) (describe-function sym)))))
+
+(require 'highlight-symbol)
