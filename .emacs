@@ -114,6 +114,7 @@
 (global-set-key (kbd "s-n") 'ensime-search)
 (global-set-key (kbd "s-q") 'describe-foo-at-point)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
+(global-set-key (kbd "s-c") 'helm-etags-select)
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
@@ -166,4 +167,5 @@
 
 (require 'highlight-symbol)
 (require 'ctags)
-
+(require 'auto-complete-exuberant-ctags)
+(ac-exuberant-ctags-setup)
