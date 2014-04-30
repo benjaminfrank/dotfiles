@@ -165,3 +165,5 @@
 	  ((setq sym (function-at-point)) (describe-function sym)))))
 
 (require 'highlight-symbol)
+(require 'ctags)
+
