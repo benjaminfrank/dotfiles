@@ -26,4 +26,7 @@ if [ -f ~/.xsession.local ] ; then
   . ~/.xsession.local
 fi
 
+# stops problems with virtual windows not re-rendering
+compton -b
+
 exec xmonad

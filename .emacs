@@ -57,8 +57,8 @@
 ;(add-hook 'scala-mode-hook 'flyspell-prog-mode-hook)
 (add-hook 'scala-mode-hook 'highlight-symbol-at-point-hook)
 
-(require 'helm-config)
-(helm-mode 1)
+;(require 'helm-config)
+;(helm-mode 1)
 
 (defun indent-buffer ()
   "Indent the entire buffer"
