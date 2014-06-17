@@ -55,7 +55,10 @@
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 ;(add-hook 'scala-mode-hook 'flyspell-prog-mode-hook)
-(add-hook 'scala-mode-hook 'highlight-symbol-at-point-hook)
+(add-hook 'scala-mode-hook (lambda()(highlight-symbol-mode)))
+
+(require 'autopair)
+(autopair-global-mode)
 
 ;(require 'helm-config)
 ;(helm-mode 1)

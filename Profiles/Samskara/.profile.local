@@ -1,6 +1,14 @@
 #!/bin/bash
 
-export JAVA_HOME=/opt/jdk1.8.0
+export JAVA_HOME=/opt/jdk1.7.0_51
 export PATH=$JAVA_HOME/bin:/opt/apache-maven-3.2.1/bin/:$PATH
 
 . $HOME/.opam/opam-init/init.sh
+
+# iMacs require some TLC for various drivers to work:
+# 1. sudo apt-get install nvidia-glx nvidia-kernel-dkms nvidia-xconfig
+#    (version 304.116 known to work)
+# 2. sudo m-a a-i broadcom-sta
+#    (but prefer an ethernet connection)
+# 3. iSight firmware is in
+#    /System/Library/Extensions/IOUSBFamilyekext/Contents/PlugIns/AppleUSBVideoSupport.kext/Contents/MacOS/AppleUSBVideoSupport
