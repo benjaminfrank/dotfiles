@@ -10,6 +10,8 @@
       show-trailing-whitespace t
       ispell-dictionary "british"
       sentence-end-double-space nil
+      ; ensime
+      ensime-typecheck-when-idle nil
       ; email
       mail-user-agent 'message-user-agent
       user-mail-address "Sam.Halliday@gmail.com"
@@ -78,12 +80,6 @@
       (hungry-delete-backward)
     (backward-kill-word 1)))
 
-(defun git-grep (search)
-  ; https://www.ogre.com/node/447
-  "git-grep the entire current repo"
-  (interactive (list (completing-read "Search for: " nil nil nil (current-word))))
-  (grep-find (concat "git --no-pager grep -P -n " search " `git rev-parse --show-toplevel`")))
-
 (defun count-buffers (&optional display-anyway)
   ;http://www.cb1.com/~john/computing/emacs/lisp/startup/buffer-misc.el
   "Display or return the number of buffers."
@@ -110,7 +106,7 @@
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;(global-set-key (kbd "s-f") 'find-name-dired)
 (global-set-key (kbd "s-f") 'magit-find-file-completing-read)
-(global-set-key (kbd "s-F") 'git-grep)
+(global-set-key (kbd "s-F") 'vc-git-grep)
 (global-set-key (kbd "s-b") 'helm-mini)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)

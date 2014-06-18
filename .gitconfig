@@ -1,6 +1,7 @@
 [user]
 	name = Sam Halliday
 	email = sam.halliday@gmail.com
+	# git config user.email REPO_SPECIFIC_EMAIL
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
@@ -32,3 +33,7 @@
 #[http]
 #	sslCAInfo=/home/hallisam/.traf.crt
 #git update-index --assume-unchanged
+
+# for repos that use HTTPS, this stores passwords in a cache (1 hour)
+#git config credential.helper cache
+#git config credential.helper "cache --timeout=3600"
