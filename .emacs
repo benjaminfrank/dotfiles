@@ -10,8 +10,6 @@
       show-trailing-whitespace t
       ispell-dictionary "british"
       sentence-end-double-space nil
-      ; ensime
-      ensime-typecheck-when-idle nil
       ; email
       mail-user-agent 'message-user-agent
       user-mail-address "Sam.Halliday@gmail.com"
@@ -35,10 +33,7 @@
 (show-paren-mode 1)
 (set-default-font "Inconsolata-16")
 
-(add-to-list 'load-path (concat user-emacs-directory "ensime/dist"))
-; latest helm is incompatible with one of my older machines
-(if (file-exists-p (concat user-emacs-directory "helm"))
-    (add-to-list 'load-path (concat user-emacs-directory "helm")))
+(add-to-list 'load-path (concat user-emacs-directory "ensime/elisp"))
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
 
@@ -54,10 +49,6 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (require 'scala-mode2)
-(require 'ensime)
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-;(add-hook 'scala-mode-hook 'flyspell-prog-mode-hook)
-(add-hook 'scala-mode-hook (lambda()(highlight-symbol-mode)))
 
 (require 'autopair)
 (autopair-global-mode)
@@ -80,6 +71,13 @@
       (hungry-delete-backward)
     (backward-kill-word 1)))
 
+(defun git-grep (search)
+  ; https://www.ogre.com/node/447
+  "git-grep the entire current repo"
+  (interactive (list (completing-read "Search for: " nil nil nil (current-word))))
+  (grep-find (concat "git --no-pager grep -P -n " search " `git rev-parse --show-toplevel`"))
+  (other-window 1))
+
 (defun count-buffers (&optional display-anyway)
   ;http://www.cb1.com/~john/computing/emacs/lisp/startup/buffer-misc.el
   "Display or return the number of buffers."
@@ -95,6 +93,14 @@
       (save-buffers-kill-emacs)
     (message-box "use 'M-x save-buffers-kill-emacs'")))
 
+(defun close-and-kill-next-pane ()
+  ;; http://www.emacswiki.org/emacs/KillingBuffers
+  "If there are multiple windows, then close the other pane and kill the buffer in it also."
+  (interactive)
+  (other-window 1)
+  (kill-this-buffer)
+  (if (not (one-window-p))
+      (delete-window)))
 
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -106,14 +112,14 @@
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;(global-set-key (kbd "s-f") 'find-name-dired)
 (global-set-key (kbd "s-f") 'magit-find-file-completing-read)
-(global-set-key (kbd "s-F") 'vc-git-grep)
+(global-set-key (kbd "s-F") 'git-grep)
 (global-set-key (kbd "s-b") 'helm-mini)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
-(global-set-key (kbd "s-n") 'ensime-search)
 (global-set-key (kbd "s-q") 'describe-foo-at-point)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
-(global-set-key (kbd "s-c") 'helm-etags-select)
+(global-set-key (kbd "s-o") 'close-and-kill-next-pane)
+
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
@@ -122,23 +128,6 @@
 
 (require 'notmuch-address)
 (notmuch-address-message-insinuate)
-
-; mu4e is not as good as notmuch, but might have to do for gmail syncing
-;; (require 'mu4e)
-;; (setq mu4e-mu-home "~/.mu"
-;;       mu4e-maildir "~/Gmail"
-;;       mu4e-attachment-dir "~/Downloads"
-;;       mu4e-sent-messages-behavior 'delete
-;;       mu4e-drafts-folder "/drafts"
-;;       mu4e-sent-folder   "/all"
-;;       mu4e-trash-folder  "/trash"
-;;       mu4e-change-filenames-when-moving nil
-;;       mu4e-get-mail-command nil
-;;       mu4e-action-tags-header "X-Keywords"
-;;       mu4e-get-mail-command "offlineimap")
-;; (add-to-list 'mu4e-headers-actions '("tRetag message" . mu4e-action-retag-message) t)
-;; (add-to-list 'mu4e-view-actions '("tRetag message" . mu4e-action-retag-message) t)
-;; (add-to-list 'mu4e-view-actions '("bView in browser" . mu4e-action-view-in-browser) t)
 
 (defun describe-foo-at-point ()
   ;;; http://www.emacswiki.org/emacs/DescribeThingAtPoint
@@ -168,3 +157,23 @@
 (require 'ctags)
 (require 'auto-complete-exuberant-ctags)
 (ac-exuberant-ctags-setup)
+
+(setq debug-on-error t)
+(require 'ensime)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook
+	  '(lambda ()
+	     (highlight-symbol-mode)
+	     (local-set-key (kbd "s-n") 'ensime-search)
+	     (local-set-key (kbd "RET") '(lambda ()
+					   (interactive)
+					   (newline-and-indent)
+					   (scala-indent:insert-asterisk-on-multiline-comment)))
+	     
+	     (local-set-key (kbd "<backtab>") 'scala-indent:indent-with-reluctant-strategy)
+))
+
+
+;; HACK: for ensime dev
+;;(find-file "~/Projects/ensime/src/main/elisp/ensime.el")
+;;(ensime)

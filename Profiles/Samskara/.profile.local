@@ -3,7 +3,9 @@
 export JAVA_HOME=/opt/jdk1.7.0_51
 export PATH=$JAVA_HOME/bin:/opt/apache-maven-3.2.1/bin/:$PATH
 
-. $HOME/.opam/opam-init/init.sh
+. ~/.travis/travis.sh
+
+#. $HOME/.opam/opam-init/init.sh
 
 # iMacs require some TLC for various drivers to work:
 # 1. sudo apt-get install nvidia-glx nvidia-kernel-dkms nvidia-xconfig

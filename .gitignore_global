@@ -2,3 +2,7 @@ target/
 .idea/
 .idea_modules/
 lib_managed/
+
+.ensime*
+
+TAGS

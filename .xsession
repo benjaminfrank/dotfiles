@@ -27,6 +27,7 @@ if [ -f ~/.xsession.local ] ; then
 fi
 
 # stops problems with virtual windows not re-rendering
+# https://github.com/chjj/compton/wiki/perf-guide
 compton -b
 
 exec xmonad
