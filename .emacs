@@ -10,7 +10,8 @@
       show-trailing-whitespace t
       ispell-dictionary "british"
       sentence-end-double-space nil
-      ; email
+      ensime-typecheck-when-idle nil
+					; email
       mail-user-agent 'message-user-agent
       user-mail-address "Sam.Halliday@gmail.com"
       user-full-name "Sam Halliday"
