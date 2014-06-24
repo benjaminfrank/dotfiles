@@ -92,7 +92,7 @@
   (interactive)
   (if (< (count-buffers) 10)
       (save-buffers-kill-emacs)
-    (message-box "use 'M-x save-buffers-kill-emacs'")))
+    (message-box "use 'M-x kill-emacs'")))
 
 (defun close-and-kill-next-pane ()
   ;; http://www.emacswiki.org/emacs/KillingBuffers
@@ -103,9 +103,11 @@
   (if (not (one-window-p))
       (delete-window)))
 
+(require 'misc-cmds)
+
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "C-x k") 'kill-buffer-and-window)
+(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 
