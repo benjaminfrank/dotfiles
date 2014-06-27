@@ -18,7 +18,7 @@
       smtpmail-stream-type 'ssl
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 465
-      send-mail-function 'smtpmail-send-it      
+      send-mail-function 'smtpmail-send-it
       message-auto-save-directory (concat user-emacs-directory "drafts")
       message-kill-buffer-on-exit t
       message-signature "Best regards,\nSam\n"
@@ -34,13 +34,13 @@
 (show-paren-mode 1)
 (set-default-font "Inconsolata-16")
 
-(add-to-list 'load-path (concat user-emacs-directory "ensime/elisp"))
+(add-to-list 'load-path (concat user-emacs-directory "ensime"))
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
 
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
 (load-theme 'solarized-dark 'NO-CONFIRM)
@@ -87,12 +87,17 @@
     (if (or (interactive-p) display-anyway)
     (message "%d buffers in this Emacs" buf-count)) buf-count))
 
+(defun exit ()
+  "short hand for death to all buffers"
+  (interactive)
+  (save-buffers-kill-emacs))
+
 (defun safe-kill-emacs ()
   "Only exit emacs if this is a small sesssion"
   (interactive)
   (if (< (count-buffers) 10)
       (save-buffers-kill-emacs)
-    (message-box "use 'M-x kill-emacs'")))
+    (message-box "use 'M-x exit'")))
 
 (defun close-and-kill-next-pane ()
   ;; http://www.emacswiki.org/emacs/KillingBuffers
@@ -105,9 +110,14 @@
 
 (require 'misc-cmds)
 
+(defun kill-current-buffer-and-its-windows ()
+  "Slight modification of Drew Adam's great function"
+  (interactive)
+  (kill-buffer-and-its-windows (current-buffer)))
+
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
+(global-set-key (kbd "C-x k") 'kill-current-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 
@@ -163,6 +173,7 @@
 
 (setq debug-on-error t)
 (require 'ensime)
+;(require 'whitespace)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (add-hook 'scala-mode-hook
 	  '(lambda ()
@@ -172,7 +183,7 @@
 					   (interactive)
 					   (newline-and-indent)
 					   (scala-indent:insert-asterisk-on-multiline-comment)))
-	     
+
 	     (local-set-key (kbd "<backtab>") 'scala-indent:indent-with-reluctant-strategy)
 ))
 
