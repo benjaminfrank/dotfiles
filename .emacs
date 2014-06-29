@@ -11,6 +11,7 @@
       ispell-dictionary "british"
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
+      erc-hide-list '("JOIN" "PART" "QUIT")
 					; email
       mail-user-agent 'message-user-agent
       user-mail-address "Sam.Halliday@gmail.com"
@@ -32,9 +33,8 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
-(set-default-font "Inconsolata-16")
+(set-frame-font "Inconsolata-16")
 
-(add-to-list 'load-path (concat user-emacs-directory "ensime"))
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
 
@@ -111,13 +111,13 @@
 (require 'misc-cmds)
 
 (defun kill-current-buffer-and-its-windows ()
-  "Slight modification of Drew Adam's great function"
+  "Kill without confirm"
   (interactive)
   (kill-buffer-and-its-windows (current-buffer)))
 
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "C-x k") 'kill-current-buffer-and-its-windows)
+(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 
@@ -171,7 +171,17 @@
 (require 'auto-complete-exuberant-ctags)
 (ac-exuberant-ctags-setup)
 
+
+(require 'erc)
+
+(require 'flycheck)
+(add-hook 'emacs-lisp-mode-hook '(lambda () (flycheck-mode)))
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
+
+
 (setq debug-on-error t)
+(add-to-list 'load-path (concat user-emacs-directory "ensime"))
 (require 'ensime)
 ;(require 'whitespace)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
@@ -186,7 +196,6 @@
 
 	     (local-set-key (kbd "<backtab>") 'scala-indent:indent-with-reluctant-strategy)
 ))
-
 
 ;; HACK: for ensime dev
 ;;(find-file "~/Projects/ensime/src/main/elisp/ensime.el")
