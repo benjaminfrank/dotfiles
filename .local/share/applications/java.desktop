@@ -1,0 +1,13 @@
+# don't forget to run this to make the associations:
+# update-desktop-database ~/.local/share/applications
+[Desktop Entry]
+Type=Application
+Name=Java Runtime
+MimeType=application/x-java-archive;application/java-archive;application/x-jar;application/jar
+#http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
+# BUG https://bugs.freedesktop.org/show_bug.cgi?id=80714
+#Exec=/opt/jdk1.7.0_51/bin/java -jar
+#Exec=echo BOO => always echos just the input, not the 'BOO'
+Exec=javaw
+NoDisplay=true
+Terminal=false
