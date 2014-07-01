@@ -13,6 +13,8 @@
 # @param file the file to pass to the application
 # @param rest* application and arguments
 
+echo $*
+
 EXE="$1"
 PREFIX="${exe:0:5}"
 shift || true
