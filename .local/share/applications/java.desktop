@@ -5,10 +5,6 @@ Type=Application
 Name=Java Runtime
 MimeType=application/x-java-archive;application/java-archive;application/x-jar;application/jar
 #http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-# BUG https://bugs.freedesktop.org/show_bug.cgi?id=80714
-# RFE mime-support cautious-launcher use a --question with ability to set executable bit
-Exec=cautious-launcher %f /opt/jdk1.7.0_51/bin/java -jar
-#Exec=echo BOO %U
-#Exec=javaw
+Exec=launch-with-ask %f /opt/jdk1.7.0_51/bin/java -jar
 NoDisplay=true
 Terminal=false

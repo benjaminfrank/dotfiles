@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Prompts the user if they really want to pass a (possibly downloaded)
+# file to an application (e.g. shell script to a shell, java application)
+# when called from a .desktop Application for a mime-type.
+#
+# * files are executed without question if the executable bit is set
+# * otherwise the user is asked if they wish to set the executable bit and run
+# * failure to set the executable bit, or selecting no, will exit early
+#
+# Notes: taken (and modified to be useful) from Ubuntu's mime-support.
+#
+# @param file the file to pass to the application
+# @param rest* application and arguments
+
+EXE="$1"
+PREFIX="${exe:0:5}"
+shift || true
+
+MESSAGE="The file '$EXE' is not executable, which is required for it to be run by '$@'.
+
+If you <b>ABSOLUTELY TRUST</b> this file and its origin, select <b>RUN</b>.
+
+If you do not know what this means, select <b>BLOCK</b>.
+
+<big><b>The security of your computer may be at risk</b>.</big>
+
+<small>For more details, read about the <a href=\"https://wiki.ubuntu.com/Security/ExecutableBit\">executable bit</a>.</small>"
+
+ZENITY=`which zenity`
+
+if [ ! -x "$EXE" ] && [ "$PREFIX" != "/usr/" ] && [ "$PREFIX" != "/opt/" ] ; then
+    if [ ! -x "$ZENITY" ] ; then
+	echo "'$EXE' is not executable and zenity is not installed. Aborting." >&2
+	exit 1
+    fi
+
+    "$ZENITY" --question --text="$MESSAGE" --ok-label="RUN" --cancel-label="BLOCK"
+    if [ $? -ne 0 ] ; then
+	echo "User selected not to run '$EXE'" >&2
+	exit 1
+    fi
+
+    chmod u+x "$EXE"
+    if [ $? -ne 0 ] ; then
+	"$ZENITY" --warning --text "Unable to set the executable bit on $EXE. You may not have permissions."
+	exit 2
+    fi
+
+fi
+
+exec "$@" "$EXE"
