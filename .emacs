@@ -170,7 +170,7 @@
 (require 'ctags)
 (require 'auto-complete-exuberant-ctags)
 (ac-exuberant-ctags-setup)
-
+(require 'ctags-update)
 
 (require 'erc)
 
@@ -178,15 +178,20 @@
 (add-hook 'emacs-lisp-mode-hook '(lambda () (flycheck-mode)))
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
-
+(add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
 (setq debug-on-error t)
 (add-to-list 'load-path (concat user-emacs-directory "ensime"))
 (require 'ensime)
-;(require 'whitespace)
+(require 'whitespace)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'scala-mode-hook
 	  '(lambda ()
+	     (make-local-variable 'before-save-hook)
+	     (make-local-variable 'forward-word)
+	     (add-hook 'before-save-hook 'whitespace-cleanup)
+
 	     (highlight-symbol-mode)
 	     (local-set-key (kbd "s-n") 'ensime-search)
 	     (local-set-key (kbd "RET") '(lambda ()
@@ -194,8 +199,17 @@
 					   (newline-and-indent)
 					   (scala-indent:insert-asterisk-on-multiline-comment)))
 
-	     (local-set-key (kbd "<backtab>") 'scala-indent:indent-with-reluctant-strategy)
-))
+	     (setq forward-word 'scala-syntax:forward-token)))
+
+(add-hook 'java-mode-hook '(lambda()
+			     (make-local-variable 'before-save-hook)
+			     (add-hook 'before-save-hook 'whitespace-cleanup)))
+(add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
+
+;(require 'speedbar)
+;(speedbar-add-supported-extension "\\.scala")
+;(add-to-list 'speedbar-fetch-etags-parse-list
+;     '("\\.scala" . speedbar-parse-c-or-c++tag))
 
 ;; HACK: for ensime dev
 ;;(find-file "~/Projects/ensime/src/main/elisp/ensime.el")
