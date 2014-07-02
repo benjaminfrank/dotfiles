@@ -35,6 +35,8 @@
 (show-paren-mode 1)
 (set-frame-font "Inconsolata-16")
 
+ (global-auto-revert-mode 1)
+
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
 
@@ -132,7 +134,7 @@
 (global-set-key (kbd "s-q") 'describe-foo-at-point)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
 (global-set-key (kbd "s-o") 'close-and-kill-next-pane)
-
+(global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
