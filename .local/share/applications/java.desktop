@@ -5,7 +5,7 @@ Type=Application
 Name=Java Runtime
 MimeType=application/x-java-archive;application/java-archive;application/x-jar;application/jar
 #http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables
-# it is advised to copy "launch-with-ask" over /usr/bin/cautios-launcher
+# it is advised to copy fommil's "cautious-launcher" into /usr/local/bin
 # as chromium does not forward the user's PATH to xdg-open.
 Exec=cautious-launcher %f /opt/jdk1.7.0_51/bin/java -jar
 NoDisplay=true
