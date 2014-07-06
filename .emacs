@@ -183,7 +183,7 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
 (setq debug-on-error t)
-(add-to-list 'load-path (concat user-emacs-directory "ensime"))
+;(add-to-list 'load-path (concat user-emacs-directory "ensime"))
 (require 'ensime)
 (require 'whitespace)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
