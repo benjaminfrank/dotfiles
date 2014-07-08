@@ -18,10 +18,10 @@ synclient HorizTwoFingerScroll=1
 
 syndaemon -t -k -i 2 &
 
-xfce4-power-manager
+#xfce4-power-manager
 
 xmobar &
 
 # Google Drive
-. /home/fommil/.opam/opam-init/init.sh
-google-drive-ocamlfuse $HOME/Google/Drive
+#. /home/fommil/.opam/opam-init/init.sh
+#google-drive-ocamlfuse $HOME/Google/Drive

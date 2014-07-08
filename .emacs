@@ -11,6 +11,7 @@
       ispell-dictionary "british"
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
+      ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
 					; email
       mail-user-agent 'message-user-agent
@@ -35,7 +36,7 @@
 (show-paren-mode 1)
 (set-frame-font "Inconsolata-16")
 
- (global-auto-revert-mode 1)
+(global-auto-revert-mode 1)
 
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
@@ -45,19 +46,21 @@
 	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
+;;(package-refresh-contents)
+
+(defun required (package)
+  (unless (require package nil 'no-error)
+    (package-install package)))
+
+(required 'solarized-theme)
 (load-theme 'solarized-dark 'NO-CONFIRM)
 
-(require 'git-gutter)
-(require 'magit)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-(require 'scala-mode2)
-
-(require 'autopair)
+(required 'misc-cmds)
+(required 'git-gutter)
+(required 'magit)
+(required 'scala-mode2)
+(required 'autopair)
 (autopair-global-mode)
-
-;(require 'helm-config)
-;(helm-mode 1)
 
 (defun indent-buffer ()
   "Indent the entire buffer"
@@ -110,8 +113,6 @@
   (if (not (one-window-p))
       (delete-window)))
 
-(require 'misc-cmds)
-
 (defun kill-current-buffer-and-its-windows ()
   "Kill without confirm"
   (interactive)
@@ -138,10 +139,10 @@
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
-(require 'notmuch)
+(required 'notmuch)
 (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
 
-(require 'notmuch-address)
+(required 'notmuch-address)
 (notmuch-address-message-insinuate)
 
 (defun describe-foo-at-point ()
@@ -168,15 +169,15 @@
 	  ((setq sym (variable-at-point)) (describe-variable sym))
 	  ((setq sym (function-at-point)) (describe-function sym)))))
 
-(require 'highlight-symbol)
-(require 'ctags)
-(require 'auto-complete-exuberant-ctags)
+(required 'highlight-symbol)
+(required 'ctags)
+(required 'auto-complete-exuberant-ctags)
+(required 'ctags-update)
 (ac-exuberant-ctags-setup)
-(require 'ctags-update)
 
-(require 'erc)
+(required 'erc)
 
-(require 'flycheck)
+(required 'flycheck)
 (add-hook 'emacs-lisp-mode-hook '(lambda () (flycheck-mode)))
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
@@ -184,8 +185,8 @@
 
 (setq debug-on-error t)
 ;(add-to-list 'load-path (concat user-emacs-directory "ensime"))
-(require 'ensime)
-(require 'whitespace)
+(required 'ensime)
+(required 'whitespace)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'scala-mode-hook
