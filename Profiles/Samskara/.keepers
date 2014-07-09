@@ -1,6 +1,8 @@
 alsa-base
 alsa-utils
 alsamixergui
+android-tools-adb
+android-tools-fastboot
 apt-file
 autocutsel
 bash-completion
@@ -50,6 +52,7 @@ imagemagick
 inkscape
 insync
 isight-firmware-tools
+jmtpfs
 joystick
 less
 libatlas-dev
@@ -105,6 +108,7 @@ scrot
 suckless-tools
 sudo
 texlive-latex-base
+trayer
 tree
 ttf-dejavu
 ttf-liberation
@@ -131,3 +135,4 @@ xmonad
 xorg
 xsel
 xserver-xorg-input-mouse
+-gmtp
