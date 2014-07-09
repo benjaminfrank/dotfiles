@@ -46,18 +46,21 @@
 	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-;;(package-refresh-contents)
+(package-refresh-contents)
 
 (defun required (package)
   (unless (require package nil 'no-error)
-    (package-install package)))
+    (package-install package)
+    (require package)))
 
 (required 'solarized-theme)
 (load-theme 'solarized-dark 'NO-CONFIRM)
 
+(required 'hungry-delete)
 (required 'misc-cmds)
 (required 'git-gutter)
 (required 'magit)
+(required 'magit-find-file)
 (required 'scala-mode2)
 (required 'autopair)
 (autopair-global-mode)
