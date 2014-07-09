@@ -46,7 +46,9 @@
 	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-(package-refresh-contents)
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
 
 (defun required (package)
   (unless (require package nil 'no-error)
