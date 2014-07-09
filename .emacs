@@ -196,9 +196,9 @@
 (add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'scala-mode-hook
 	  '(lambda ()
-	     (make-local-variable 'before-save-hook)
+;	     (make-local-variable 'before-save-hook)
 	     (make-local-variable 'forward-word)
-	     (add-hook 'before-save-hook 'whitespace-cleanup)
+;	     (add-hook 'before-save-hook 'whitespace-cleanup)
 
 	     (highlight-symbol-mode)
 	     (local-set-key (kbd "s-n") 'ensime-search)
