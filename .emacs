@@ -11,9 +11,9 @@
       ispell-dictionary "british"
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
+      ;;debug-on-error t
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
-					; email
       mail-user-agent 'message-user-agent
       user-mail-address "Sam.Halliday@gmail.com"
       user-full-name "Sam Halliday"
@@ -188,17 +188,18 @@
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
-(setq debug-on-error t)
 ;(add-to-list 'load-path (concat user-emacs-directory "ensime"))
 (required 'ensime)
 (required 'whitespace)
+(required 'sbt-mode)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'scala-mode-hook
 	  '(lambda ()
-;	     (make-local-variable 'before-save-hook)
+					;	     (make-local-variable 'before-save-hook)
+					;	     (add-hook 'before-save-hook 'whitespace-cleanup)
 	     (make-local-variable 'forward-word)
-;	     (add-hook 'before-save-hook 'whitespace-cleanup)
+	     (setq forward-word 'scala-syntax:forward-token)
 
 	     (highlight-symbol-mode)
 	     (local-set-key (kbd "s-n") 'ensime-search)
@@ -207,7 +208,22 @@
 					   (newline-and-indent)
 					   (scala-indent:insert-asterisk-on-multiline-comment)))
 
-	     (setq forward-word 'scala-syntax:forward-token)))
+	     (local-set-key (kbd "C-c C-c") 'sbt-command)
+	     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
+
+;; TODO ensime-server dev restart cycle hotkey
+
+(defun ensime-developer-restart()
+  (interactive)
+  (kill-buffer-and-its-windows "*inferior-ensime-server-ensime*")
+  (sbt-command "publishLocal")
+  (ensime))
+
+(add-hook 'sbt-mode-hook '(lambda ()
+			    (setq compilation-skip-threshold 1)
+			    (local-set-key (kbd "C-a") 'comint-bol)
+			    (local-set-key (kbd "M-RET") 'comint-accumulate)))
+
 
 (add-hook 'java-mode-hook '(lambda()
 			     (make-local-variable 'before-save-hook)

@@ -1,7 +1,8 @@
 #!/bin/bash
 
+export SCALA_HOME=/opt/scala-2.10.4
 export JAVA_HOME=/opt/jdk1.7.0_51
-export PATH=$JAVA_HOME/bin:/opt/apache-maven-3.2.1/bin/:$PATH
+export PATH=$SCALA_HOME/bin:$JAVA_HOME/bin:/opt/apache-maven-3.2.1/bin/:$PATH
 
 . ~/.travis/travis.sh
 
