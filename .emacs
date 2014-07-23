@@ -12,7 +12,7 @@
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
-;;      debug-on-error t
+      ;;debug-on-error t
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
       mail-user-agent 'message-user-agent
@@ -175,6 +175,22 @@
 	  ((setq sym (variable-at-point)) (describe-variable sym))
 	  ((setq sym (function-at-point)) (describe-function sym)))))
 
+;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
+(defun rename-file-and-buffer (new-name)
+  "Renames both current buffer and file it's visiting to NEW-NAME."
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not filename)
+        (message "Buffer '%s' is not visiting a file!" name)
+      (if (get-buffer new-name)
+          (message "A buffer named '%s' already exists!" new-name)
+        (progn
+          (rename-file name new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil))))))
+
 (required 'highlight-symbol)
 (required 'ctags)
 (required 'auto-complete-exuberant-ctags)
@@ -226,9 +242,11 @@
 			    (local-set-key (kbd "M-RET") 'comint-accumulate)))
 
 
-;;(add-hook 'java-mode-hook '(lambda()
-;;			     (make-local-variable 'before-save-hook)
-;;			     (add-hook 'before-save-hook 'whitespace-cleanup)))
+(add-hook 'java-mode-hook '(lambda()
+ 			     ;; (make-local-variable 'before-save-hook)
+			     ;; (add-hook 'before-save-hook 'whitespace-cleanup)
+			     ;; wtf? why reset my indent-tabs-mode
+			     (setq indent-tabs-mode nil)))
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
 ;(require 'speedbar)
