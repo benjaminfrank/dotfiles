@@ -11,7 +11,8 @@
       ispell-dictionary "british"
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
-      ;;debug-on-error t
+      ensime-default-buffer-prefix "ENSIME-"
+;;      debug-on-error t
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
       mail-user-agent 'message-user-agent
@@ -215,7 +216,7 @@
 
 (defun ensime-developer-restart()
   (interactive)
-  (kill-buffer-and-its-windows "*inferior-ensime-server-ensime*")
+  (kill-buffer-and-its-windows "*ENSIME-ensime*")
   (sbt-command "publishLocal")
   (ensime))
 
@@ -225,9 +226,9 @@
 			    (local-set-key (kbd "M-RET") 'comint-accumulate)))
 
 
-(add-hook 'java-mode-hook '(lambda()
-			     (make-local-variable 'before-save-hook)
-			     (add-hook 'before-save-hook 'whitespace-cleanup)))
+;;(add-hook 'java-mode-hook '(lambda()
+;;			     (make-local-variable 'before-save-hook)
+;;			     (add-hook 'before-save-hook 'whitespace-cleanup)))
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
 ;(require 'speedbar)
