@@ -36,7 +36,7 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 (set-frame-font "Inconsolata-16")
-
+(mouse-avoidance-mode 'banish)
 (global-auto-revert-mode 1)
 
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")

@@ -50,7 +50,7 @@ IWhite="\[\033[0;97m\]"
 # Reset
 Color_Off="\[\033[0m\]"
 
-if [ "$SSH_CLIENT" != "" ] ; then
+if [ "$SSH_CLIENT" != "" ] || [ "$SSH_TTY" != "" ] ; then
     PS1PREFIX="$White\h$Color_Off "
 fi
 
