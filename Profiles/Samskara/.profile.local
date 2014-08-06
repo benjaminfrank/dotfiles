@@ -1,10 +1,16 @@
 #!/bin/bash
 
-export SCALA_HOME=/opt/scala-2.10.4
-export JAVA_HOME=/opt/jdk1.7.0_51
-export PATH=$SCALA_HOME/bin:$JAVA_HOME/bin:/opt/apache-maven-3.2.1/bin/:$PATH
+#export SCALA_HOME=/opt/scala-2.9.2
+#export SCALA_HOME=/opt/scala-2.9.3
+#export SCALA_HOME=/opt/scala-2.10.4
+export SCALA_HOME=/opt/scala-2.11.2
+#export JAVA_HOME=/opt/jdk1.7.0_65
+#export JAVA_HOME=/opt/jdk1.8.0_11
+#export JAVA_HOME=/opt/jdk1.6.0_45
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+export MAVEN_HOME=/opt/apache-maven-3.2.1
+export PATH=$SCALA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin/:$PATH
 
-. ~/.travis/travis.sh
 
 #. $HOME/.opam/opam-init/init.sh
 

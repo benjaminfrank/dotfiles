@@ -39,6 +39,12 @@
 (mouse-avoidance-mode 'banish)
 (global-auto-revert-mode 1)
 
+(substitute-key-definition
+ ;; allows using SPACE when in the minibuffer
+ 'minibuffer-complete-word
+ 'self-insert-command
+ minibuffer-local-completion-map)
+
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
 
@@ -80,7 +86,7 @@
   "Hungry whitespace or delete word depending on context"
   (interactive)
   (if (looking-back "[\t\s\n\r]\\{2,\\}" (- (point) 3))
-      (hungry-delete-backward)
+      (hungry-delete-backward 1)
     (backward-kill-word 1)))
 
 (defun git-grep (search)
