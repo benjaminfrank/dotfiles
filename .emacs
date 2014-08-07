@@ -69,6 +69,7 @@
 (required 'misc-cmds)
 (required 'git-gutter)
 (required 'magit)
+(magit-auto-revert-mode -1) ; we have auto-revert already
 (required 'magit-find-file)
 (required 'scala-mode2)
 (required 'autopair)
@@ -216,7 +217,7 @@
 (required 'whitespace)
 (required 'sbt-mode)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-(add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
+;(add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'scala-mode-hook
 	  '(lambda ()
 					;	     (make-local-variable 'before-save-hook)
