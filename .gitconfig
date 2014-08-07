@@ -23,6 +23,7 @@
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
 	cut = checkout -b
 	sith = push --force
+	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e props.conf
 [color]
 	branch = auto
 	diff = auto
@@ -33,7 +34,6 @@
 	whitespace = warn
 #[http]
 #	sslCAInfo=/home/hallisam/.traf.crt
-#git update-index --assume-unchanged
 
 # for repos that use HTTPS, this stores passwords in a cache (1 hour)
 #git config credential.helper cache
