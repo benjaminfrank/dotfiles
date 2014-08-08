@@ -36,7 +36,7 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 (set-frame-font "Inconsolata-16")
-(mouse-avoidance-mode 'banish)
+;(mouse-avoidance-mode 'banish) ; https://github.com/ensime/ensime-server/issues/545
 (global-auto-revert-mode 1)
 
 (substitute-key-definition
