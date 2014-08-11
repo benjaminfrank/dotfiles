@@ -7,10 +7,8 @@
 # see https://github.com/hvesalai/sbt-mode/issues/14
 if [ -e ".javahome" ]; then
   export JAVA_HOME=`cat .javahome`
-else 
-  export JAVA_HOME="your default here"
+  export PATH=$JAVA_HOME/bin:$PATH
 fi
-export PATH=$JAVA_HOME/bin:$PATH
 
 
 # todo - make this dynamic
