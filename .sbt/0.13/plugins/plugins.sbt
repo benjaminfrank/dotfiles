@@ -5,6 +5,7 @@ def plugin(m: ModuleID) =
 resolvers += Resolver.sonatypeRepo("snapshots")
 
 libraryDependencies ++= Seq(
-  plugin("org.ensime" % "ensime-sbt" % "0.1.5-SNAPSHOT")
-  plugin("com.timushev.sbt" % "sbt-updates" % "0.1.6")
+  plugin("org.ensime" % "ensime-sbt" % "0.1.5-SNAPSHOT"),
+  plugin("com.timushev.sbt" % "sbt-updates" % "0.1.6"),
+  plugin("com.typesafe.sbt" % "sbt-pgp" % "0.8.2")
 )
