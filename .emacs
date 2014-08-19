@@ -4,8 +4,9 @@
       make-backup-files nil
       x-select-enable-clipboard t
       interprogram-paste-function 'x-cut-buffer-or-selection-value
-      tab-width 2
       indent-tabs-mode nil
+      tab-width 4
+      c-basic-offset 4
       scroll-error-top-bottom t
       show-trailing-whitespace t
       ispell-dictionary "british"
@@ -233,6 +234,7 @@
 					   (scala-indent:insert-asterisk-on-multiline-comment)))
 
 	     (local-set-key (kbd "C-c C-c") 'sbt-command)
+	     (local-set-key (kbd "C-c C-e") 'next-error)
 	     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
 
 ;; TODO ensime-server dev restart cycle hotkey
@@ -250,10 +252,13 @@
 
 
 (add-hook 'java-mode-hook '(lambda()
- 			     ;; (make-local-variable 'before-save-hook)
-			     ;; (add-hook 'before-save-hook 'whitespace-cleanup)
-			     ;; wtf? why reset my indent-tabs-mode
-			     (setq indent-tabs-mode nil)))
+			     ;; http://www.emacswiki.org/emacs/IndentingJava
+			     ;; java-mode resets all the default tab settings. dick.
+			     (setq indent-tabs-mode nil
+				   tab-width 4
+				   c-basic-offset 4)
+			     (turn-on-ctags-auto-update-mode)))
+
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
 ;(require 'speedbar)
