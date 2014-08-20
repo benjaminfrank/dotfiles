@@ -213,8 +213,14 @@
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
-;(add-to-list 'load-path (concat user-emacs-directory "ensime"))
-(required 'ensime)
+; Allows ensime-dev. Don't forget to
+;   rm -rf ~/.emacs.d/elpa/ensime-*
+(let* ((local-ensime (concat user-emacs-directory "ensime")))
+  (if (file-exists-p local-ensime)
+      (progn
+	(add-to-list 'load-path local-ensime)
+	(require 'ensime))
+    (required 'ensime)))
 (required 'whitespace)
 (required 'sbt-mode)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
