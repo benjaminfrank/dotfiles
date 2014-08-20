@@ -1,7 +1,4 @@
 accountsservice
-acpi
-acpi-support
-acpi-support-base
 android-tools-adb
 android-tools-fastboot
 android-tools-fsutils
@@ -14,6 +11,7 @@ blueman
 bluetooth
 bluez-compat
 cabal-install
+calibre
 ccrypt
 chromium
 command-not-found
@@ -48,6 +46,7 @@ gnome-system-monitor
 google-talkplugin
 gparted
 gpm
+grive
 grub-efi
 gtk2-engines-moblin
 gucharmap
@@ -57,13 +56,14 @@ i3lock
 i7z
 imagemagick
 inkscape
-insync
+iproute
 jmtpfs
 joystick
 laptop-mode-tools
 less
 libatlas-dev
 libatlas3-base
+libboost-test1.55.0
 libfuse-dev
 libghc-xmonad-contrib-dev
 lightdm
@@ -141,3 +141,4 @@ xsel
 xserver-xorg-input-mouse
 xserver-xorg-input-synaptics
 zip
+
