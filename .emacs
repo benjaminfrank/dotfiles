@@ -243,6 +243,11 @@
 	     (local-set-key (kbd "C-c C-e") 'next-error)
 	     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
 
+(setq ensime-goto-test-config-defaults
+      (plist-put ensime-goto-test-config-defaults
+		 :test-template-fn 'ensime-goto-test--test-template-scalatest-1))
+
+
 ;; TODO ensime-server dev restart cycle hotkey
 
 (defun ensime-developer-restart()
