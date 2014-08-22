@@ -150,6 +150,11 @@
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
 (global-set-key (kbd "s-o") 'close-and-kill-next-pane)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
+(global-set-key (kbd "C-M-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-M-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-M-<down>") 'shrink-window)
+(global-set-key (kbd "C-M-<up>") 'enlarge-window)
+
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
