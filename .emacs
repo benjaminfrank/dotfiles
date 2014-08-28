@@ -150,10 +150,10 @@
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
 (global-set-key (kbd "s-o") 'close-and-kill-next-pane)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
-(global-set-key (kbd "C-M-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "C-M-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-M-<down>") 'shrink-window)
-(global-set-key (kbd "C-M-<up>") 'enlarge-window)
+(global-set-key (kbd "s-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "s-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "s-<down>") 'shrink-window)
+(global-set-key (kbd "s-<up>") 'enlarge-window)
 
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
@@ -252,6 +252,8 @@
       (plist-put ensime-goto-test-config-defaults
 		 :test-template-fn 'ensime-goto-test--test-template-scalatest-1))
 
+; the defaults have settings for "ensime-server" that I don't like
+;(setq ensime-goto-test-configs nil)
 
 ;; TODO ensime-server dev restart cycle hotkey
 
