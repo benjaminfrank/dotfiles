@@ -76,6 +76,8 @@
 (required 'autopair)
 (autopair-global-mode)
 
+(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-mode))
+
 (defun indent-buffer ()
   "Indent the entire buffer"
   (interactive)
