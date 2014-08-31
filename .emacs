@@ -261,7 +261,7 @@
 
 (defun ensime-developer-restart()
   (interactive)
-  (kill-buffer-and-its-windows "*ENSIME-ensime*")
+  (kill-buffer-and-its-windows "*ENSIME-ensime-server*")
   (sbt-command "publishLocal")
   (ensime))
 

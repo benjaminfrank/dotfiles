@@ -1,3 +1,4 @@
+import org.ensime.Imports._
 //import EnsimePlugin._
 //import EnsimeKeys._
 
