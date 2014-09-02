@@ -6,6 +6,7 @@
       interprogram-paste-function 'x-cut-buffer-or-selection-value
       indent-tabs-mode nil
       tab-width 4
+      column-number-mode t
       c-basic-offset 4
       scroll-error-top-bottom t
       show-trailing-whitespace t
@@ -76,7 +77,7 @@
 (required 'autopair)
 (autopair-global-mode)
 
-(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-mode))
+(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 
 (defun indent-buffer ()
   "Indent the entire buffer"
