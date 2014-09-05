@@ -135,6 +135,21 @@
   (interactive)
   (kill-buffer-and-its-windows (current-buffer)))
 
+; keep buffers under control
+(required 'midnight)
+(add-to-list 'clean-buffer-list-kill-regexps "\\`\\*magit.*\\*\\'")
+(add-to-list 'clean-buffer-list-kill-never-buffer-names "*ensime-events*")
+(add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*sbt.*")
+(add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*ENSIME.*")
+
+(defun declare-buffer-bankruptcy()
+  "Declare buffer bankruptcy and clean up everything"
+  (interactive)
+  (let ((clean-buffer-list-delay-general 0)
+	(clean-buffer-list-delay-special 0))
+    (clean-buffer-list)))
+
+
 ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
@@ -216,10 +231,13 @@
 (required 'erc)
 
 (required 'flycheck)
-(add-hook 'emacs-lisp-mode-hook '(lambda () (flycheck-mode)))
+(add-hook 'emacs-lisp-mode-hook '(lambda ()
+				   (local-set-key (kbd "M-.") 'find-function-at-point)
+				   (flycheck-mode)))
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
+
 
 ; Allows ensime-dev. Don't forget to
 ;   rm -rf ~/.emacs.d/elpa/ensime-*
@@ -262,7 +280,7 @@
 
 (defun ensime-developer-restart()
   (interactive)
-  (kill-buffer-and-its-windows "*ENSIME-ensime-server*")
+  (kill-buffer-and-its-windows "*ENSIME-ensime*")
   (sbt-command "publishLocal")
   (ensime))
 
