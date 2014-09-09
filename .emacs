@@ -8,6 +8,7 @@
       tab-width 4
       column-number-mode t
       c-basic-offset 4
+      scala-indent:use-javadoc-style t ; to match scalariform
       scroll-error-top-bottom t
       show-trailing-whitespace t
       ispell-dictionary "british"
@@ -31,8 +32,8 @@
       notmuch-search-oldest-first nil
       notmuch-address-command "google-contacts"
       notmuch-saved-searches '(("inbox" . "tag:inbox")
-			       ("unread" . "tag:unread")
-			       ("flagged" . "tag:flagged")))
+                               ("unread" . "tag:unread")
+                               ("flagged" . "tag:flagged")))
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -139,6 +140,7 @@
 (required 'midnight)
 (add-to-list 'clean-buffer-list-kill-regexps "\\`\\*magit.*\\*\\'")
 (add-to-list 'clean-buffer-list-kill-never-buffer-names "*ensime-events*")
+; TODO: is there a clean way to add-to-list a list?
 (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*sbt.*")
 (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*ENSIME.*")
 
@@ -270,8 +272,11 @@
 	     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
 
 (setq ensime-goto-test-config-defaults
-      (plist-put ensime-goto-test-config-defaults
-		 :test-template-fn 'ensime-goto-test--test-template-scalatest-1))
+      ; TODO: is there a clean way to plist-put a list?
+      (plist-put (plist-put
+                  ensime-goto-test-config-defaults
+                  :test-class-suffixes '("Spec" "Test" "Check"))
+                 :test-template-fn 'ensime-goto-test--test-template-scalatest-1))
 
 ; the defaults have settings for "ensime-server" that I don't like
 ;(setq ensime-goto-test-configs nil)
@@ -283,6 +288,12 @@
   (kill-buffer-and-its-windows "*ENSIME-ensime*")
   (sbt-command "publishLocal")
   (ensime))
+
+(defun scala-start()
+  (interactive)
+  (sbt-command "test:compile")
+  (ensime))
+
 
 (add-hook 'sbt-mode-hook '(lambda ()
 			    (setq compilation-skip-threshold 1)
