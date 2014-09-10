@@ -15,7 +15,7 @@
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
-      ;;debug-on-error t
+      debug-on-error t
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
       mail-user-agent 'message-user-agent
@@ -50,6 +50,8 @@
 
 (if (file-exists-p "/usr/local/share/emacs/site-lisp")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"))
+
+(add-to-list 'load-path (concat user-emacs-directory "lisp"))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -251,6 +253,19 @@
     (required 'ensime)))
 (required 'whitespace)
 (required 'sbt-mode)
+
+;; https://github.com/auto-complete/popup-el/issues/77
+(require 'popup-complete)
+(setq complete-in-region-use-popup t)
+(require 'maker-mode)
+
+(defun sbt-or-maker-command ()
+  "Find and launch maker-command, falling back to sbt-command"
+  (interactive)
+  (if (maker:find-root)
+      (call-interactively 'maker-command)
+    (call-interactively 'sbt-command)))
+
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 ;(add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'scala-mode-hook
@@ -267,7 +282,7 @@
 					   (newline-and-indent)
 					   (scala-indent:insert-asterisk-on-multiline-comment)))
 
-	     (local-set-key (kbd "C-c C-c") 'sbt-command)
+	     (local-set-key (kbd "C-c C-c") 'sbt-or-maker-command)
 	     (local-set-key (kbd "C-c C-e") 'next-error)
 	     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
 
@@ -319,3 +334,4 @@
 ;; HACK: for ensime dev
 ;;(find-file "~/Projects/ensime/src/main/elisp/ensime.el")
 ;;(ensime)
+
