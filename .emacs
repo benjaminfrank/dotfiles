@@ -291,7 +291,7 @@
       (plist-put (plist-put
                   ensime-goto-test-config-defaults
                   :test-class-suffixes '("Spec" "Test" "Check"))
-                 :test-template-fn 'ensime-goto-test--test-template-scalatest-1))
+                 :test-template-fn 'ensime-goto-test--test-template-scalatest-2))
 
 ; the defaults have settings for "ensime-server" that I don't like
 ;(setq ensime-goto-test-configs nil)

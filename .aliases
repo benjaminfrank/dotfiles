@@ -34,6 +34,8 @@ alias nano="nano -w"
 alias emacs="emacs -nw"
 alias please="sudo"
 
+alias markdown="hsmarkdown"
+
 alias open="xdg-open"
 
 alias fommil-defaults="bash $HOME/.fommil/check.sh"

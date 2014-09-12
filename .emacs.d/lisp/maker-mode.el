@@ -357,7 +357,7 @@ identified by the following rules:
   "Return the buffer name for running maker."
   (format "%s<%s>"
           maker:buffer-name-base
-          (maker:find-root)))
+          (expand-file-name (maker:find-root))))
 
 (defun maker:require-buffer ()
   "Throw error if the current buffer is not a maker-buffer"
