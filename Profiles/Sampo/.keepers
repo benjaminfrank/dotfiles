@@ -9,7 +9,6 @@ bc
 beignet
 blueman
 bluetooth
-bluez-compat
 cabal-install
 calibre
 ccrypt
@@ -41,6 +40,7 @@ gfortran
 ghc-haddock
 gimp
 git
+gkrellm-cpufreq
 gnome-brave-icon-theme
 gnome-system-monitor
 google-talkplugin
@@ -111,6 +111,7 @@ sane-utils
 scrot
 suckless-tools
 sudo
+sysvinit
 texlive-latex-base
 trayer
 tree
