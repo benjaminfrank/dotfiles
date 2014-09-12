@@ -38,7 +38,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
-(set-frame-font "Inconsolata-16")
+
 ;(mouse-avoidance-mode 'banish) ; https://github.com/ensime/ensime-server/issues/545
 (global-auto-revert-mode 1)
 
@@ -69,6 +69,11 @@
 
 (required 'solarized-theme)
 (load-theme 'solarized-dark 'NO-CONFIRM)
+; Darkula needs a little work https://github.com/bmdhacks/emacs-color-theme-darkula/issues/2
+;(add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
+;(load-theme 'Darkula t)
+(set-frame-font "Inconsolata-16")
+
 
 (required 'hungry-delete)
 (required 'misc-cmds)
