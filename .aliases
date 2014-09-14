@@ -33,9 +33,11 @@ alias rm="rm -i"
 alias nano="nano -w"
 alias emacs="emacs -nw"
 alias please="sudo"
+alias fuck="rm -rf"
 
 alias markdown="hsmarkdown"
 
 alias open="xdg-open"
+alias volume="pavucontrol"
 
 alias fommil-defaults="bash $HOME/.fommil/check.sh"
