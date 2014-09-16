@@ -67,11 +67,11 @@
     (package-install package)
     (require package)))
 
-(required 'solarized-theme)
-(load-theme 'solarized-dark 'NO-CONFIRM)
+;(required 'solarized-theme)
+;(load-theme 'solarized-dark 'NO-CONFIRM)
 ; Darkula needs a little work https://github.com/bmdhacks/emacs-color-theme-darkula/issues/2
-;(add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
-;(load-theme 'Darkula t)
+(add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
+(load-theme 'Darkula t)
 (set-frame-font "Inconsolata-16")
 
 

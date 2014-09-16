@@ -63,6 +63,14 @@
   "Clear the current maker buffer and send RET to maker to re-display the prompt"
   (interactive) (maker:clear))
 
+(defun maker-kill ()
+  "Tell maker to kill the currently executing process (main method or test)"
+  (interactive)
+  (with-current-buffer (maker:buffer-name)
+    (display-buffer (current-buffer))
+    (comint-send-string (current-buffer) (concat "" "\n"))))
+
+
 (defun maker-completion-at-point ()
   "Complete the command at point. Works both in maker shell and
 scala console."
@@ -189,6 +197,7 @@ buffer called *maker*projectdir."
                                              comint-mode-map))
     (define-key map (kbd "TAB") 'maker-completion-at-point)
     (define-key map (kbd "C-c l") 'maker-clear)
+    (define-key map (kbd "C-]") 'maker-kill)
     map)
   "Basic mode map for `maker-start'")
 
