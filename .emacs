@@ -291,6 +291,23 @@
 	     (local-set-key (kbd "C-c C-e") 'next-error)
 	     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
 
+(custom-set-faces
+;; '(scala-font-lock:var-face ((t (:underline t)))))
+ '(scala-font-lock:var-face ((t (:underline (:style wave :color "yellow"))))))
+
+(setq ensime-sem-high-faces
+      '((var . scala-font-lock:var-face)
+	(val . nil)
+	(varField . scala-font-lock:var-face)
+	(valField . nil)
+	(functionCall . font-lock-function-name-face)
+	(operator . font-lock-keyword-face)
+	(param . (:slant italic))
+	(class . font-lock-type-face)
+	(trait .  (:inherit font-lock-type-face :slant italic))
+	(object . font-lock-constant-face)
+	(package . font-lock-preprocessor-face)))
+
 (setq ensime-goto-test-config-defaults
       ; TODO: is there a clean way to plist-put a list?
       (plist-put (plist-put
