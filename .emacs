@@ -5,6 +5,7 @@
       x-select-enable-clipboard t
       interprogram-paste-function 'x-cut-buffer-or-selection-value
       indent-tabs-mode nil
+      ;;cursor-type 'bar
       tab-width 4
       column-number-mode t
       c-basic-offset 4
@@ -72,7 +73,7 @@
 ; Darkula needs a little work https://github.com/bmdhacks/emacs-color-theme-darkula/issues/2
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
 (load-theme 'Darkula t)
-(set-frame-font "Inconsolata-16")
+;;(set-frame-font "Inconsolata-16")
 
 
 (required 'hungry-delete)
@@ -170,7 +171,7 @@
 ;(global-set-key (kbd "s-f") 'find-name-dired)
 (global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-F") 'git-grep)
-(global-set-key (kbd "s-b") 'helm-mini)
+(global-set-key (kbd "s-b") 'magit-blame-mode)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-q") 'describe-foo-at-point)
@@ -288,25 +289,24 @@
 					   (scala-indent:insert-asterisk-on-multiline-comment)))
 
 	     (local-set-key (kbd "C-c C-c") 'sbt-or-maker-command)
-	     (local-set-key (kbd "C-c C-e") 'next-error)
-	     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
+	     (local-set-key (kbd "C-c C-e") 'next-error)))
 
 (custom-set-faces
-;; '(scala-font-lock:var-face ((t (:underline t)))))
- '(scala-font-lock:var-face ((t (:underline (:style wave :color "yellow"))))))
+ '(scala-font-lock:val-face ((t (:foreground "#9876aa" :inherit 'default))))
+ '(scala-font-lock:var-face ((t (:inherit 'scala-font-lock:val-face :underline (:style wave :color "yellow"))))))
 
 (setq ensime-sem-high-faces
-      '((var . scala-font-lock:var-face)
-	(val . nil)
-	(varField . scala-font-lock:var-face)
-	(valField . nil)
-	(functionCall . font-lock-function-name-face)
-	(operator . font-lock-keyword-face)
-	(param . (:slant italic))
-	(class . font-lock-type-face)
-	(trait .  (:inherit font-lock-type-face :slant italic))
-	(object . font-lock-constant-face)
-	(package . font-lock-preprocessor-face)))
+      '((var . 'scala-font-lock:var-face)
+        (val . 'scala-font-lock:val-face)
+        (varField . (:inherit 'scala-font-lock:var-face :slant italic))
+	(valField . (:inherit 'scala-font-lock:val-face :slant italic))
+        (functionCall . 'font-lock-variable-name-face)
+        (operator . 'font-lock-keyword-face)
+        (param . 'font-lock-variable-name-face)
+        (class . 'font-lock-type-face)
+        (trait . (:inherit 'font-lock-type-face :slant italic))
+        (object . (:inherit 'font-lock-constant-face :slant italic))
+        (package . 'font-lock-preprocessor-face)))
 
 (setq ensime-goto-test-config-defaults
       ; TODO: is there a clean way to plist-put a list?
@@ -348,12 +348,4 @@
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
-;(require 'speedbar)
-;(speedbar-add-supported-extension "\\.scala")
-;(add-to-list 'speedbar-fetch-etags-parse-list
-;     '("\\.scala" . speedbar-parse-c-or-c++tag))
-
-;; HACK: for ensime dev
-;;(find-file "~/Projects/ensime/src/main/elisp/ensime.el")
-;;(ensime)
-
+(required 'rainbow-mode)
