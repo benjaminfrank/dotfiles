@@ -14,7 +14,6 @@
  '(error ((t (:inherit 'default :underline (:style wave :color "red")))))
  '(fixed-pitch ((t (:family "Inconsolata"))))
  '(variable-pitch ((t (:family "Liberation Serif"))))
-
  ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Faces-for-Font-Lock.html
  '(font-lock-warning-face ((t (:underline (:style wave :color "orange" :inherit 'default)))))
 					;for a construct that is peculiar, or that greatly changes the meaning of other text.
@@ -42,10 +41,8 @@
 					;for documentation strings in the code.
  '(font-lock-negation-char-face ((t (:underline (:color foreground-color :style line) :inherit 'default))))
 					;for easily-overlooked negation characters.
-
- '(flymake-errline)
- '(flymake-warnline)
- 
+ '(flymake-errline ((t (:inherit 'error))))
+ '(flymake-warnline ((t (:inherit 'warning)))) 
  '(escape-glyph ((((background dark)) (:foreground "cyan")) (((type pc)) (:foreground "magenta")) (t (:foreground "brown"))))
  '(minibuffer-prompt ((t (:weight bold :slant normal :underline nil :inverse-video nil :foreground "#259185"))))
  '(highlight ((t (:background "#0a2832"))))

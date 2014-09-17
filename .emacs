@@ -75,6 +75,26 @@
 (load-theme 'Darkula t)
 ;;(set-frame-font "Inconsolata-16")
 
+(custom-set-faces
+ ;; UPSTREAM BUG: https://github.com/hvesalai/scala-mode2/issues/81
+ '(scala-font-lock:val-face ((t (:foreground "#9876aa" :inherit 'font-lock-variable-name-face))))
+ '(scala-font-lock:var-face ((t (:underline (:style wave :color "yellow") :inherit 'scala-font-lock:val-face)))))
+
+(setq ensime-sem-high-faces
+      ;; UPSTREAM BUG: https://github.com/ensime/ensime-server/issues/596
+      ;; NOTE: Inconsolata doesn't have italics
+      '((var . (:foreground "#9876aa" :underline (:style wave :color "yellow")))
+        (val . (:foreground "#9876aa"))
+        (varField . (:foreground "#9876aa" :underline (:style wave :color "yellow") :slant italic))
+	(valField . (:foreground "#9876aa" :slant italic))
+        (functionCall . (:inherit font-lock-variable-name-face))
+        (operator . (:inherit font-lock-keyword-face))
+        (param . (:inherit font-lock-variable-name-face))
+        (class . (:inherit font-lock-type-face))
+        (trait . (:inherit font-lock-type-face :slant italic))
+        (object . (:inherit font-lock-constant-face :slant italic))
+        (package . (:inherit font-lock-preprocessor-face))))
+
 
 (required 'hungry-delete)
 (required 'misc-cmds)
@@ -290,23 +310,6 @@
 
 	     (local-set-key (kbd "C-c C-c") 'sbt-or-maker-command)
 	     (local-set-key (kbd "C-c C-e") 'next-error)))
-
-(custom-set-faces
- '(scala-font-lock:val-face ((t (:foreground "#9876aa" :inherit 'default))))
- '(scala-font-lock:var-face ((t (:inherit 'scala-font-lock:val-face :underline (:style wave :color "yellow"))))))
-
-(setq ensime-sem-high-faces
-      '((var . 'scala-font-lock:var-face)
-        (val . 'scala-font-lock:val-face)
-        (varField . (:inherit 'scala-font-lock:var-face :slant italic))
-	(valField . (:inherit 'scala-font-lock:val-face :slant italic))
-        (functionCall . 'font-lock-variable-name-face)
-        (operator . 'font-lock-keyword-face)
-        (param . 'font-lock-variable-name-face)
-        (class . 'font-lock-type-face)
-        (trait . (:inherit 'font-lock-type-face :slant italic))
-        (object . (:inherit 'font-lock-constant-face :slant italic))
-        (package . 'font-lock-preprocessor-face)))
 
 (setq ensime-goto-test-config-defaults
       ; TODO: is there a clean way to plist-put a list?
