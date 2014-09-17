@@ -1,13 +1,17 @@
 (deftheme Darkula
-  ;; https://github.com/bmdhacks/emacs-color-theme-darkula
-  "Created 2013-09-09.")
+  ;; based on https://github.com/bmdhacks/emacs-color-theme-darkula
+  "Inspired by IntelliJ's Darcula theme")
+
+;; http://www.emacswiki.org/emacs/HexColour is very useful when editing this file.
+;; "C-x C-x =" useful for inspecting misbehaving faces.
+;; "M-x list-faces-display" useful for listing everything that new major modes introduce.
 
 (custom-theme-set-faces
  'Darkula
  '(default ((t (:inherit nil :stipple nil :background "#2B2B2B" :foreground "#a9b7c6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry nil :family nil))))
  '(cursor ((t (:foreground "#042028" :background "#708183"))))
- '(fixed-pitch ((t (:family "Monospace"))))
- '(variable-pitch ((t (:family "Sans Serif"))))
+ '(fixed-pitch ((t (:family "Inconsolata"))))
+ '(variable-pitch ((t (:family "Liberation Serif"))))
  '(escape-glyph ((((background dark)) (:foreground "cyan")) (((type pc)) (:foreground "magenta")) (t (:foreground "brown"))))
  '(minibuffer-prompt ((t (:weight bold :slant normal :underline nil :inverse-video nil :foreground "#259185"))))
  '(highlight ((t (:background "#0a2832"))))
@@ -15,6 +19,7 @@
  '(shadow ((t (:foreground "#465a61"))))
  '(secondary-selection ((t (:background "#0a2832"))))
  '(trailing-whitespace ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#c60007" :background "red1"))))
+ ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Faces-for-Font-Lock.html
  '(font-lock-builtin-face ((t (:foreground "#cc7832" :inverse-video nil :underline nil :slant normal :weight normal))))
  '(font-lock-comment-delimiter-face ((t (:weight normal :slant italic :underline nil :inverse-video nil :foreground "#465a61" :inherit (font-lock-comment-face)))))
  '(font-lock-comment-face ((t (:weight normal :slant italic :underline nil :inverse-video nil :foreground "#808080"))))
@@ -44,11 +49,12 @@
  '(isearch ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#bd3612" :background "#042028"))))
  '(isearch-fail ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#bd3612" :background "#042028"))))
  '(lazy-highlight ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#a57705" :background "#042028"))))
+ '(compilation-info ((t (:weight bold :foreground "#a6c25c" :underline nil))))
  '(match ((((class color) (min-colors 88) (background light)) (:background "yellow1"))
-	  (((class color) (min-colors 88) (background dark)) (:background "RoyalBlue3"))
-	  (((class color) (min-colors 8) (background light)) (:foreground "black" :background "yellow"))
-	  (((class color) (min-colors 8) (background dark)) (:foreground "white" :background "blue"))
-	  (((type tty) (class mono)) (:inverse-video t)) (t (:background "gray"))))
+          (((class color) (min-colors 88) (background dark)) (:background "RoyalBlue3"))
+          (((class color) (min-colors 8) (background light)) (:foreground "black" :background "yellow"))
+          (((class color) (min-colors 8) (background dark)) (:foreground "white" :background "blue"))
+          (((type tty) (class mono)) (:inverse-video t)) (t (:background "gray"))))
  '(next-error ((t (:inherit (region)))))
  '(query-replace ((t (:inherit (isearch))))))
 
