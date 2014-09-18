@@ -74,7 +74,3 @@
  '(query-replace ((t (:inherit (isearch))))))
 
 (provide-theme 'Darkula)
-
-;; Local Variables:
-;; eval: (and (fboundp 'rainbow-mode) (rainbow-mode))
-;; End:

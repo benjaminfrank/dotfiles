@@ -40,7 +40,7 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 
-;(mouse-avoidance-mode 'banish) ; https://github.com/ensime/ensime-server/issues/545
+;;(mouse-avoidance-mode 'banish) ; https://github.com/ensime/ensime-server/issues/545
 (global-auto-revert-mode 1)
 
 (substitute-key-definition
@@ -56,7 +56,7 @@
 
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -68,33 +68,46 @@
     (package-install package)
     (require package)))
 
-;(required 'solarized-theme)
-;(load-theme 'solarized-dark 'NO-CONFIRM)
-; Darkula needs a little work https://github.com/bmdhacks/emacs-color-theme-darkula/issues/2
+;; WORKAROUND https://github.com/alezost/alect-themes/#emacs-2431-and-earlier
+(defun face-spec-recalc-new (face frame)
+  "Improved version of `face-spec-recalc'."
+  (while (get face 'face-alias)
+    (setq face (get face 'face-alias)))
+  (face-spec-reset-face face frame)
+  (let ((theme-faces (get face 'theme-face)))
+    (if theme-faces
+        (dolist (spec (reverse theme-faces))
+          (face-spec-set-2 face frame (cadr spec)))
+      (face-spec-set-2 face frame (face-default-spec face))))
+  (face-spec-set-2 face frame (get face 'face-override-spec)))
+(defadvice face-spec-recalc (around new-recalc (face frame) activate)
+  "Use `face-spec-recalc-new' instead."
+  (face-spec-recalc-new face frame))
+
+;;(required 'solarized-theme)
+;;(load-theme 'solarized-dark 'NO-CONFIRM)
+;; Darkula needs a little work https://github.com/bmdhacks/emacs-color-theme-darkula/issues/2
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
 (load-theme 'Darkula t)
 ;;(set-frame-font "Inconsolata-16")
 
 (custom-set-faces
- ;; UPSTREAM BUG: https://github.com/hvesalai/scala-mode2/issues/81
- '(scala-font-lock:val-face ((t (:foreground "#9876aa" :inherit 'font-lock-variable-name-face))))
- '(scala-font-lock:var-face ((t (:underline (:style wave :color "yellow") :inherit 'scala-font-lock:val-face)))))
+ '(scala-font-lock:var-face
+   ((t (:foreground "#9876aa" :underline (:style wave :color "yellow") :inherit 'font-lock-variable-name-face)))))
 
 (setq ensime-sem-high-faces
-      ;; UPSTREAM BUG: https://github.com/ensime/ensime-server/issues/596
       ;; NOTE: Inconsolata doesn't have italics
-      '((var . (:foreground "#9876aa" :underline (:style wave :color "yellow")))
-        (val . (:foreground "#9876aa"))
-        (varField . (:foreground "#9876aa" :underline (:style wave :color "yellow") :slant italic))
-	(valField . (:foreground "#9876aa" :slant italic))
-        (functionCall . (:inherit font-lock-variable-name-face))
-        (operator . (:inherit font-lock-keyword-face))
-        (param . (:inherit font-lock-variable-name-face))
-        (class . (:inherit font-lock-type-face))
-        (trait . (:inherit font-lock-type-face :slant italic))
-        (object . (:inherit font-lock-constant-face :slant italic))
-        (package . (:inherit font-lock-preprocessor-face))))
-
+      '((var . (:inherit 'scala-font-lock:var-face))
+        (val . (:inherit 'font-lock-variable-name-face :foreground "#9876aa"))
+        (varField . (:inherit 'scala-font-lock:var-face :slant italic))
+        (valField . (:inherit 'font-lock-variable-name-face :foreground "#9876aa" :slant italic))
+        (functionCall . (:inherit 'font-lock-variable-name-face))
+        (operator . (:inherit 'font-lock-keyword-face))
+        (param . (:inherit 'font-lock-variable-name-face))
+        (class . (:inherit 'font-lock-type-face))
+        (trait . (:inherit 'font-lock-type-face :slant italic))
+        (object . (:inherit 'font-lock-constant-face :slant italic))
+        (package . (:inherit 'font-lock-preprocessor-face))))
 
 (required 'hungry-delete)
 (required 'misc-cmds)
@@ -124,19 +137,19 @@
     (backward-kill-word 1)))
 
 (defun git-grep (search)
-  ; https://www.ogre.com/node/447
+                                        ; https://www.ogre.com/node/447
   "git-grep the entire current repo"
   (interactive (list (completing-read "Search for: " nil nil nil (current-word))))
   (grep-find (concat "git --no-pager grep -P -n " search " `git rev-parse --show-toplevel`"))
   (other-window 1))
 
 (defun count-buffers (&optional display-anyway)
-  ;http://www.cb1.com/~john/computing/emacs/lisp/startup/buffer-misc.el
+                                        ;http://www.cb1.com/~john/computing/emacs/lisp/startup/buffer-misc.el
   "Display or return the number of buffers."
   (interactive)
   (let ((buf-count (length (buffer-list))))
     (if (or (interactive-p) display-anyway)
-    (message "%d buffers in this Emacs" buf-count)) buf-count))
+        (message "%d buffers in this Emacs" buf-count)) buf-count))
 
 (defun exit ()
   "short hand for death to all buffers"
@@ -164,11 +177,12 @@
   (interactive)
   (kill-buffer-and-its-windows (current-buffer)))
 
-; keep buffers under control
+;; keep buffers under control
 (required 'midnight)
+
 (add-to-list 'clean-buffer-list-kill-regexps "\\`\\*magit.*\\*\\'")
 (add-to-list 'clean-buffer-list-kill-never-buffer-names "*ensime-events*")
-; TODO: is there a clean way to add-to-list a list?
+;; TODO: is there a clean way to append-to-list a list?
 (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*sbt.*")
 (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*ENSIME.*")
 
@@ -176,19 +190,19 @@
   "Declare buffer bankruptcy and clean up everything"
   (interactive)
   (let ((clean-buffer-list-delay-general 0)
-	(clean-buffer-list-delay-special 0))
+        (clean-buffer-list-delay-special 0))
     (clean-buffer-list)))
 
 
-; modified commands
+                                        ; modified commands
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 
-; new bindings
+                                        ; new bindings
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
-;(global-set-key (kbd "s-f") 'find-name-dired)
+                                        ;(global-set-key (kbd "s-f") 'find-name-dired)
 (global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-F") 'git-grep)
 (global-set-key (kbd "s-b") 'magit-blame-mode)
@@ -215,26 +229,26 @@
 (defun describe-foo-at-point ()
   ;;; http://www.emacswiki.org/emacs/DescribeThingAtPoint
   "Show the documentation of the Elisp function and variable near point.
-	This checks in turn:
-	-- for a function name where point is
-	-- for a variable name where point is
-	-- for a surrounding function call
-	"
+        This checks in turn:
+        -- for a function name where point is
+        -- for a variable name where point is
+        -- for a surrounding function call
+        "
   (interactive)
   (let (sym)
     (cond ((setq sym (ignore-errors
-		       (with-syntax-table emacs-lisp-mode-syntax-table
-			 (save-excursion
-			   (or (not (zerop (skip-syntax-backward "_w")))
-			       (eq (char-syntax (char-after (point))) ?w)
-			       (eq (char-syntax (char-after (point))) ?_)
-			       (forward-sexp -1))
-			   (skip-chars-forward "`'")
-			   (let ((obj (read (current-buffer))))
-			     (and (symbolp obj) (fboundp obj) obj))))))
-	   (describe-function sym))
-	  ((setq sym (variable-at-point)) (describe-variable sym))
-	  ((setq sym (function-at-point)) (describe-function sym)))))
+                       (with-syntax-table emacs-lisp-mode-syntax-table
+                         (save-excursion
+                           (or (not (zerop (skip-syntax-backward "_w")))
+                               (eq (char-syntax (char-after (point))) ?w)
+                               (eq (char-syntax (char-after (point))) ?_)
+                               (forward-sexp -1))
+                           (skip-chars-forward "`'")
+                           (let ((obj (read (current-buffer))))
+                             (and (symbolp obj) (fboundp obj) obj))))))
+           (describe-function sym))
+          ((setq sym (variable-at-point)) (describe-variable sym))
+          ((setq sym (function-at-point)) (describe-function sym)))))
 
 ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
 (defun rename-file-and-buffer (new-name)
@@ -262,20 +276,20 @@
 
 (required 'flycheck)
 (add-hook 'emacs-lisp-mode-hook '(lambda ()
-				   (local-set-key (kbd "M-.") 'find-function-at-point)
-				   (flycheck-mode)))
+                                   (local-set-key (kbd "M-.") 'find-function-at-point)
+                                   (flycheck-mode)))
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 
 
-; Allows ensime-dev. Don't forget to
-;   rm -rf ~/.emacs.d/elpa/ensime-*
+                                        ; Allows ensime-dev. Don't forget to
+                                        ;   rm -rf ~/.emacs.d/elpa/ensime-*
 (let* ((local-ensime (concat user-emacs-directory "ensime")))
   (if (file-exists-p local-ensime)
       (progn
-	(add-to-list 'load-path local-ensime)
-	(require 'ensime))
+        (add-to-list 'load-path local-ensime)
+        (require 'ensime))
     (required 'ensime)))
 (required 'whitespace)
 (required 'sbt-mode)
@@ -293,33 +307,33 @@
     (call-interactively 'sbt-command)))
 
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-;(add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
+                                        ;(add-hook 'scala-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'scala-mode-hook
-	  '(lambda ()
-					;	     (make-local-variable 'before-save-hook)
-					;	     (add-hook 'before-save-hook 'whitespace-cleanup)
-	     (make-local-variable 'forward-word)
-	     (setq forward-word 'scala-syntax:forward-token)
+          '(lambda ()
+                                        ;            (make-local-variable 'before-save-hook)
+                                        ;            (add-hook 'before-save-hook 'whitespace-cleanup)
+             (make-local-variable 'forward-word)
+             (setq forward-word 'scala-syntax:forward-token)
 
-	     (highlight-symbol-mode)
-	     (local-set-key (kbd "s-n") 'ensime-search)
-	     (local-set-key (kbd "RET") '(lambda ()
-					   (interactive)
-					   (newline-and-indent)
-					   (scala-indent:insert-asterisk-on-multiline-comment)))
+             (highlight-symbol-mode)
+             (local-set-key (kbd "s-n") 'ensime-search)
+             (local-set-key (kbd "RET") '(lambda ()
+                                           (interactive)
+                                           (newline-and-indent)
+                                           (scala-indent:insert-asterisk-on-multiline-comment)))
 
-	     (local-set-key (kbd "C-c C-c") 'sbt-or-maker-command)
-	     (local-set-key (kbd "C-c C-e") 'next-error)))
+             (local-set-key (kbd "C-c C-c") 'sbt-or-maker-command)
+             (local-set-key (kbd "C-c C-e") 'next-error)))
 
 (setq ensime-goto-test-config-defaults
-      ; TODO: is there a clean way to plist-put a list?
+                                        ; TODO: is there a clean way to plist-put a list?
       (plist-put (plist-put
                   ensime-goto-test-config-defaults
                   :test-class-suffixes '("Spec" "Test" "Check"))
                  :test-template-fn 'ensime-goto-test--test-template-scalatest-2))
 
-; the defaults have settings for "ensime-server" that I don't like
-;(setq ensime-goto-test-configs nil)
+                                        ; the defaults have settings for "ensime-server" that I don't like
+                                        ;(setq ensime-goto-test-configs nil)
 
 ;; TODO ensime-server dev restart cycle hotkey
 
@@ -336,19 +350,22 @@
 
 
 (add-hook 'sbt-mode-hook '(lambda ()
-			    (setq compilation-skip-threshold 1)
-			    (local-set-key (kbd "C-a") 'comint-bol)
-			    (local-set-key (kbd "M-RET") 'comint-accumulate)))
+                            (setq compilation-skip-threshold 1)
+                            (local-set-key (kbd "C-a") 'comint-bol)
+                            (local-set-key (kbd "M-RET") 'comint-accumulate)))
 
 
 (add-hook 'java-mode-hook '(lambda()
-			     ;; http://www.emacswiki.org/emacs/IndentingJava
-			     ;; java-mode resets all the default tab settings. dick.
-			     (setq indent-tabs-mode nil
-				   tab-width 4
-				   c-basic-offset 4)
-			     (turn-on-ctags-auto-update-mode)))
-
-(add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
+                             ;; http://www.emacswiki.org/emacs/IndentingJava
+                             ;; java-mode resets all the default tab settings. dick.
+                             (setq indent-tabs-mode nil
+                                   tab-width 4
+                                   c-basic-offset 4)
+                             (turn-on-ctags-auto-update-mode)))
 
 (required 'rainbow-mode)
+
+(add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
+(add-hook 'emacs-lisp-mode-hook '(lambda()
+				   (rainbow-mode)))
+
