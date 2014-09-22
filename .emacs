@@ -97,17 +97,18 @@
 
 (setq ensime-sem-high-faces
       ;; NOTE: Inconsolata doesn't have italics
-      '((var . (:inherit 'scala-font-lock:var-face))
-        (val . (:inherit 'font-lock-variable-name-face :foreground "#9876aa"))
-        (varField . (:inherit 'scala-font-lock:var-face :slant italic))
-        (valField . (:inherit 'font-lock-variable-name-face :foreground "#9876aa" :slant italic))
-        (functionCall . (:inherit 'font-lock-variable-name-face))
-        (operator . (:inherit 'font-lock-keyword-face))
-        (param . (:inherit 'font-lock-variable-name-face))
-        (class . (:inherit 'font-lock-type-face))
-        (trait . (:inherit 'font-lock-type-face :slant italic))
-        (object . (:inherit 'font-lock-constant-face :slant italic))
-        (package . (:inherit 'font-lock-preprocessor-face))))
+      ;; FURTHER NOTE: these are overlays, not faces
+      '((var . (:foreground "#9876aa" :underline (:style wave :color "yellow")))
+        (val . (:foreground "#9876aa"))
+        (varField . (:slant italic))
+        (valField . (:foreground "#9876aa" :slant italic))
+        (functionCall . (:foreground "#a9b7c6"))
+        (operator . (:foreground "#cc7832"))
+        (param . (:foreground "#a9b7c6"))
+        (class . (:foreground "#4e807d"))
+        (trait . (:foreground "#4e807d" :slant italic))
+        (object . (:foreground "#6897bb" :slant italic))
+        (package . (:foreground "#cc7832"))))
 
 (required 'hungry-delete)
 (required 'misc-cmds)
