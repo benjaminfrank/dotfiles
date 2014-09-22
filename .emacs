@@ -35,6 +35,7 @@
       notmuch-saved-searches '(("inbox" . "tag:inbox")
                                ("unread" . "tag:unread")
                                ("flagged" . "tag:flagged")))
+(setq-default indent-tabs-mode nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -368,5 +369,7 @@
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
 (add-hook 'emacs-lisp-mode-hook '(lambda()
-				   (rainbow-mode)))
-
+                                   (setq indent-tabs-mode nil
+                                         tab-width 4
+                                         c-basic-offset 4)
+                                   (rainbow-mode)))
