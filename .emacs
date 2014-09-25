@@ -324,8 +324,8 @@
                                            (newline-and-indent)
                                            (scala-indent:insert-asterisk-on-multiline-comment)))
 
-             (local-set-key (kbd "C-c C-c") 'sbt-or-maker-command)
-             (local-set-key (kbd "C-c C-e") 'next-error)))
+             (local-set-key (kbd "C-c c") 'sbt-or-maker-command)
+             (local-set-key (kbd "C-c e") 'next-error)))
 
 (setq ensime-goto-test-config-defaults
                                         ; TODO: is there a clean way to plist-put a list?
@@ -341,7 +341,7 @@
 
 (defun ensime-developer-restart()
   (interactive)
-  (kill-buffer-and-its-windows "*ENSIME-ensime*")
+  (kill-buffer-and-its-windows "*ENSIME-ensime-server*")
   (sbt-command "publishLocal")
   (ensime))
 

@@ -12,7 +12,10 @@
  '(default ((t (:inherit nil :stipple nil :background "#2B2B2B" :foreground "#a9b7c6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry nil :family "Inconsolata"))))
  '(cursor ((t (:foreground "#042028" :background "#708183"))))
  '(error ((t (:inherit 'default :underline (:style wave :color "red")))))
+ '(compilation-error ((t (:inherit 'default :foreground "red" :underline "red"))))
  '(sbt:error ((t (:inherit 'default :foreground "red"))))
+ '(maker:error ((t (:inherit 'default :foreground "red"))))
+ '(ensime-warnline-highlight ((t (:inherit 'font-lock-warning-face))))
  '(fixed-pitch ((t (:family "Inconsolata"))))
  '(variable-pitch ((t (:family "Liberation Serif"))))
  ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Faces-for-Font-Lock.html
