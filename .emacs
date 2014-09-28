@@ -319,6 +319,7 @@
 
              (highlight-symbol-mode)
              (local-set-key (kbd "s-n") 'ensime-search)
+             (local-set-key (kbd "s-i") 'ensime-print-type-at-point)
              (local-set-key (kbd "RET") '(lambda ()
                                            (interactive)
                                            (newline-and-indent)
