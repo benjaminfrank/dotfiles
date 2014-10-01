@@ -28,6 +28,6 @@ fi
 
 # stops problems with virtual windows not re-rendering
 # https://github.com/chjj/compton/wiki/perf-guide
-compton -b
+#compton -b
 
 exec xmonad

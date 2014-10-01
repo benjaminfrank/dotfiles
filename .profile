@@ -21,3 +21,6 @@ if [ "$PS1" ] && [ "$BASH" ]; then
         . /etc/bashrc
     fi
 fi
+
+export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+export JDK_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
