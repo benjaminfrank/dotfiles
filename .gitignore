@@ -4,5 +4,6 @@ target/
 lib_managed/
 
 .ensime*
+.javahome
 
 TAGS
