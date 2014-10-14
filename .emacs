@@ -201,6 +201,7 @@
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
+(global-unset-key (kbd "C-z"))
 
                                         ; new bindings
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
