@@ -93,10 +93,6 @@
 (load-theme 'darcula t)
 ;;(set-frame-font "Inconsolata-16")
 
-;; (custom-set-faces
-;;  '(scala-font-lock:var-face
-;;    ((t (:foreground "#9876aa" :underline (:style wave :color "yellow") :inherit 'font-lock-variable-name-face)))))
-
 (setq ensime-sem-high-faces
       ;; NOTE: Inconsolata doesn't have italics
       ;; FURTHER NOTE: these are overlays, not faces
