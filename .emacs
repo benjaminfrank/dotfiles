@@ -87,14 +87,13 @@
 
 ;;(required 'solarized-theme)
 ;;(load-theme 'solarized-dark 'NO-CONFIRM)
-;; Darkula needs a little work https://github.com/bmdhacks/emacs-color-theme-darkula/issues/2
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
-(load-theme 'Darkula t)
+(load-theme 'darcula t)
 ;;(set-frame-font "Inconsolata-16")
 
-(custom-set-faces
- '(scala-font-lock:var-face
-   ((t (:foreground "#9876aa" :underline (:style wave :color "yellow") :inherit 'font-lock-variable-name-face)))))
+;; (custom-set-faces
+;;  '(scala-font-lock:var-face
+;;    ((t (:foreground "#9876aa" :underline (:style wave :color "yellow") :inherit 'font-lock-variable-name-face)))))
 
 (setq ensime-sem-high-faces
       ;; NOTE: Inconsolata doesn't have italics
@@ -300,7 +299,7 @@
 ;; https://github.com/auto-complete/popup-el/issues/77
 (require 'popup-complete)
 (setq complete-in-region-use-popup t)
-(require 'maker-mode)
+(required 'maker-mode)
 
 (defun sbt-or-maker-command ()
   "Find and launch maker-command, falling back to sbt-command"

@@ -1,5 +1,29 @@
-(deftheme Darkula
-  ;; based on https://github.com/bmdhacks/emacs-color-theme-darkula
+;;; darcula-theme.el --- Inspired by IntelliJ's Darcula theme
+
+;; Copyright (C) 2014  Sam Halliday
+
+;; Author: Sam Halliday <Sam.Halliday@gmail.com>
+;; Keywords: faces
+;; URL: https://github.com/fommil/darcula-theme-emacs
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;;; Code:
+
+(deftheme darcula
   "Inspired by IntelliJ's Darcula theme")
 
 ;; NOTE: https://github.com/alezost/alect-themes/#emacs-2431-and-earlier
@@ -8,11 +32,15 @@
 ;; "M-x list-faces-display" useful for listing everything that new major modes introduce.
 
 (custom-theme-set-faces
- 'Darkula
- '(default ((t (:inherit nil :stipple nil :background "#2B2B2B" :foreground "#a9b7c6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry nil :family "Inconsolata"))))
+ 'darcula
+ '(default ((t (:inherit nil :stipple nil :background "#2B2B2B" :foreground "#a9b7c6"
+                         :inverse-video nil :box nil :strike-through nil :overline nil
+                         :underline nil :slant normal :weight normal :height 160
+                         :width normal :foundry nil :family "Inconsolata"))))
  '(cursor ((t (:foreground "#042028" :background "#708183"))))
  '(error ((t (:inherit 'default :underline (:style wave :color "red")))))
  '(compilation-error ((t (:inherit 'default :foreground "red" :underline "red"))))
+ '(scala-font-lock:var-face ((t (:foreground "#9876aa" :underline (:style wave :color "yellow") :inherit 'font-lock-variable-name-face))))
  '(sbt:error ((t (:inherit 'default :foreground "red"))))
  '(maker:error ((t (:inherit 'default :foreground "red"))))
  '(ensime-warnline-highlight ((t (:inherit 'font-lock-warning-face))))
@@ -84,4 +112,13 @@
  '(next-error ((t (:inherit (region)))))
  '(query-replace ((t (:inherit (isearch))))))
 
-(provide-theme 'Darkula)
+
+;;;###autoload
+(when (boundp 'custom-theme-load-path)
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
+
+
+(provide-theme 'darcula)
+
+;;; darcula-theme.el ends here
