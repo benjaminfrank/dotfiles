@@ -88,6 +88,8 @@
 ;;(required 'solarized-theme)
 ;;(load-theme 'solarized-dark 'NO-CONFIRM)
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
+
+(required 'darcula-theme)
 (load-theme 'darcula t)
 ;;(set-frame-font "Inconsolata-16")
 
