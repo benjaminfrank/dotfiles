@@ -346,7 +346,7 @@
 
 (defun scala-start()
   (interactive)
-  (sbt-command "test:compile")
+  (sbt-or-maker-command)
   (ensime))
 
 
