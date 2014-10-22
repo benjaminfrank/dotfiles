@@ -295,7 +295,7 @@
 (required 'sbt-mode)
 
 ;; https://github.com/auto-complete/popup-el/issues/77
-(require 'popup-complete)
+(required 'popup-complete)
 (setq complete-in-region-use-popup t)
 (required 'maker-mode)
 
