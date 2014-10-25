@@ -16,7 +16,8 @@
 	l = log --pretty=format:'%h : %an, %ar : %s' --graph
 	pick = cherry-pick
 #	up = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
-	up = !"git pull origin ; git fetch upstream ; git rebase upstream/master"
+#	up = !"git pull origin ; git fetch upstream ; git rebase upstream/master"
+        up = fetch --all -p
 	undo = reset --soft 'HEAD^'
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged

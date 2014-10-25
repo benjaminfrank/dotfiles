@@ -40,6 +40,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
+(subword-mode 1)
 
 ;;(mouse-avoidance-mode 'banish) ; https://github.com/ensime/ensime-server/issues/545
 (global-auto-revert-mode 1)
@@ -132,7 +133,9 @@
   (interactive)
   (if (looking-back "[\t\s\n\r]\\{2,\\}" (- (point) 3))
       (hungry-delete-backward 1)
-    (backward-kill-word 1)))
+    (if (subword-mode)
+        (subword-backward-kill 1)
+      (backward-kill-word 1))))
 
 (defun git-grep (search)
                                         ; https://www.ogre.com/node/447
@@ -196,7 +199,12 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
+(global-set-key (kbd "M-<left>") 'subword-backward)
+(global-set-key (kbd "C-<left>") 'subword-backward)
+(global-set-key (kbd "M-<right>") 'subword-forward)
+(global-set-key (kbd "C-<right>") 'subword-forward)
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
+
 (global-unset-key (kbd "C-z"))
 
                                         ; new bindings
@@ -311,8 +319,7 @@
           '(lambda ()
                                         ;            (make-local-variable 'before-save-hook)
                                         ;            (add-hook 'before-save-hook 'whitespace-cleanup)
-             (make-local-variable 'forward-word)
-             (setq forward-word 'scala-syntax:forward-token)
+             (set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
 
              (highlight-symbol-mode)
              (local-set-key (kbd "s-n") 'ensime-search)
@@ -321,6 +328,8 @@
                                            (interactive)
                                            (newline-and-indent)
                                            (scala-indent:insert-asterisk-on-multiline-comment)))
+;;             (local-set-key (kbd "C-<right>") 'scala-syntax:forward-token)
+;;             (local-set-key (kbd "C-<left>") 'scala-syntax:backward-token)
 
              (local-set-key (kbd "C-c c") 'sbt-or-maker-command)
              (local-set-key (kbd "C-c e") 'next-error)))
