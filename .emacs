@@ -70,25 +70,28 @@
     (package-install package)
     (require package)))
 
-;; WORKAROUND https://github.com/alezost/alect-themes/#emacs-2431-and-earlier
-(defun face-spec-recalc-new (face frame)
-  "Improved version of `face-spec-recalc'."
-  (while (get face 'face-alias)
-    (setq face (get face 'face-alias)))
-  (face-spec-reset-face face frame)
-  (let ((theme-faces (get face 'theme-face)))
-    (if theme-faces
-        (dolist (spec (reverse theme-faces))
-          (face-spec-set-2 face frame (cadr spec)))
-      (face-spec-set-2 face frame (face-default-spec face))))
-  (face-spec-set-2 face frame (get face 'face-override-spec)))
-(defadvice face-spec-recalc (around new-recalc (face frame) activate)
-  "Use `face-spec-recalc-new' instead."
-  (face-spec-recalc-new face frame))
-
 ;;(required 'solarized-theme)
 ;;(load-theme 'solarized-dark 'NO-CONFIRM)
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
+
+
+(while (version< emacs-version "24.4")
+  (progn
+    ;; WORKAROUND https://github.com/alezost/alect-themes/#emacs-2431-and-earlier
+    (defun face-spec-recalc-new (face frame)
+      "Improved version of `face-spec-recalc'."
+      (while (get face 'face-alias)
+        (setq face (get face 'face-alias)))
+      (face-spec-reset-face face frame)
+      (let ((theme-faces (get face 'theme-face)))
+        (if theme-faces
+            (dolist (spec (reverse theme-faces))
+              (face-spec-set-2 face frame (cadr spec)))
+          (face-spec-set-2 face frame (face-default-spec face))))
+      (face-spec-set-2 face frame (get face 'face-override-spec)))
+    (defadvice face-spec-recalc (around new-recalc (face frame) activate)
+      "Use `face-spec-recalc-new' instead."
+      (face-spec-recalc-new face frame))))
 
 (required 'darcula-theme)
 ;;(set-frame-font "Inconsolata-16")
@@ -217,7 +220,6 @@
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-q") 'describe-foo-at-point)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
-(global-set-key (kbd "s-o") 'close-and-kill-next-pane)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 (global-set-key (kbd "s-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "s-<right>") 'enlarge-window-horizontally)
@@ -300,11 +302,12 @@
     (required 'ensime)))
 (required 'whitespace)
 (required 'sbt-mode)
+(required 'scala-outline-popup)
+(required 'maker-mode)
 
 ;; https://github.com/auto-complete/popup-el/issues/77
-(required 'popup-complete)
-(setq complete-in-region-use-popup t)
-(required 'maker-mode)
+;(required 'popup-complete)
+;(setq complete-in-region-use-popup t)
 
 (defun sbt-or-maker-command ()
   "Find and launch maker-command, falling back to sbt-command"
@@ -324,6 +327,7 @@
              (highlight-symbol-mode)
              (local-set-key (kbd "s-n") 'ensime-search)
              (local-set-key (kbd "s-i") 'ensime-print-type-at-point)
+             (local-set-key (kbd "s-o") 'scala-outline-popup)
              (local-set-key (kbd "RET") '(lambda ()
                                            (interactive)
                                            (newline-and-indent)
