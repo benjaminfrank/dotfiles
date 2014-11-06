@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# On some networks, the wifi just drops and nmcli must be invoked to reconnect.
+# Add the following to cron to enable this:
+#  */1 * * * * /home/fommil/.fommil/bin/wifi-reconnector
+
+STATUS=`nmcli --fields DEVICE,STATE dev status | grep wlan0 | grep -c ' connected'`
+if [ "${STATUS}" != "1" ]
+then
+    echo "Disconnected, trying to reconnect..."
+    nmcli dev connect wlan0
+fi
