@@ -22,3 +22,7 @@ export PATH=$SCALA_HOME/bin:$PATH
 #    (but prefer an ethernet connection)
 # 3. iSight firmware is in
 #    /System/Library/Extensions/IOUSBFamilyekext/Contents/PlugIns/AppleUSBVideoSupport.kext/Contents/MacOS/AppleUSBVideoSupport
+
+# speakers and headphones:
+# /etc/modprobe.d/intel-sound.conf
+# options snd-hda-intel model=imac27_122

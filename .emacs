@@ -1,4 +1,5 @@
 (setq inhibit-startup-screen t
+      ;; debug-on-error t
       show-paren-delay 0
       create-lockfiles nil
       make-backup-files nil
@@ -10,13 +11,13 @@
       column-number-mode t
       c-basic-offset 4
       scala-indent:use-javadoc-style t ; to match scalariform
+      popup-complete-enabled-modes '(scala-mode)
       scroll-error-top-bottom t
       show-trailing-whitespace t
       ispell-dictionary "british"
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
-      debug-on-error t
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
       mail-user-agent 'message-user-agent
@@ -75,7 +76,7 @@
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
 
 
-(while (version< emacs-version "24.4")
+(when (version< emacs-version "24.4")
   (progn
     ;; WORKAROUND https://github.com/alezost/alect-themes/#emacs-2431-and-earlier
     (defun face-spec-recalc-new (face frame)
@@ -305,9 +306,8 @@
 (required 'scala-outline-popup)
 (required 'maker-mode)
 
-;; https://github.com/auto-complete/popup-el/issues/77
-;(required 'popup-complete)
-;(setq complete-in-region-use-popup t)
+(required 'popup-complete)
+;;(setq complete-in-region-use-popup t)
 
 (defun sbt-or-maker-command ()
   "Find and launch maker-command, falling back to sbt-command"
@@ -328,6 +328,7 @@
              (local-set-key (kbd "s-n") 'ensime-search)
              (local-set-key (kbd "s-i") 'ensime-print-type-at-point)
              (local-set-key (kbd "s-o") 'scala-outline-popup)
+             (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)
              (local-set-key (kbd "RET") '(lambda ()
                                            (interactive)
                                            (newline-and-indent)
@@ -384,3 +385,8 @@
                                          tab-width 4
                                          c-basic-offset 4)
                                    (rainbow-mode)))
+
+(required 'markdown-mode)
+(required 'pandoc-mode)
+(add-hook 'markdown-mode-hook 'conditionally-turn-on-pandoc)
+(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
