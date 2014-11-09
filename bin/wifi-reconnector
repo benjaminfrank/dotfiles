@@ -8,5 +8,6 @@ STATUS=`nmcli --fields DEVICE,STATE dev status | grep wlan0 | grep -c ' connecte
 if [ "${STATUS}" != "1" ]
 then
     echo "Disconnected, trying to reconnect..."
+    nmcli dev disconnect wlan0
     nmcli dev connect wlan0
 fi
