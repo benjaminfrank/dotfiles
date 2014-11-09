@@ -390,3 +390,6 @@
 (required 'pandoc-mode)
 (add-hook 'markdown-mode-hook 'conditionally-turn-on-pandoc)
 (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+
+(required 'yasnippet)
+(yas-global-mode 1)
