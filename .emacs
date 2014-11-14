@@ -18,6 +18,7 @@
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
+      scala-outline-popup-select 'closest
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
       mail-user-agent 'message-user-agent
@@ -71,46 +72,10 @@
     (package-install package)
     (require package)))
 
-;;(required 'solarized-theme)
-;;(load-theme 'solarized-dark 'NO-CONFIRM)
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "lisp"))
 
-
-(when (version< emacs-version "24.4")
-  (progn
-    ;; WORKAROUND https://github.com/alezost/alect-themes/#emacs-2431-and-earlier
-    (defun face-spec-recalc-new (face frame)
-      "Improved version of `face-spec-recalc'."
-      (while (get face 'face-alias)
-        (setq face (get face 'face-alias)))
-      (face-spec-reset-face face frame)
-      (let ((theme-faces (get face 'theme-face)))
-        (if theme-faces
-            (dolist (spec (reverse theme-faces))
-              (face-spec-set-2 face frame (cadr spec)))
-          (face-spec-set-2 face frame (face-default-spec face))))
-      (face-spec-set-2 face frame (get face 'face-override-spec)))
-    (defadvice face-spec-recalc (around new-recalc (face frame) activate)
-      "Use `face-spec-recalc-new' instead."
-      (face-spec-recalc-new face frame))))
-
 (required 'darcula-theme)
-;;(set-frame-font "Inconsolata-16")
-
-(setq ensime-sem-high-faces
-      ;; NOTE: Inconsolata doesn't have italics
-      ;; FURTHER NOTE: these are overlays, not faces
-      '((var . (:foreground "#9876aa" :underline (:style wave :color "yellow")))
-        (val . (:foreground "#9876aa"))
-        (varField . (:slant italic))
-        (valField . (:foreground "#9876aa" :slant italic))
-        (functionCall . (:foreground "#a9b7c6"))
-        (operator . (:foreground "#cc7832"))
-        (param . (:foreground "#a9b7c6"))
-        (class . (:foreground "#4e807d"))
-        (trait . (:foreground "#4e807d" :slant italic))
-        (object . (:foreground "#6897bb" :slant italic))
-        (package . (:foreground "#cc7832"))))
+(set-frame-font "Inconsolata-16")
 
 (required 'hungry-delete)
 (required 'misc-cmds)
@@ -145,7 +110,7 @@
                                         ; https://www.ogre.com/node/447
   "git-grep the entire current repo"
   (interactive (list (completing-read "Search for: " nil nil nil (current-word))))
-  (grep-find (concat "git --no-pager grep -P -n " search " `git rev-parse --show-toplevel`"))
+  (grep-find (concat "git --no-pager grep -P -n \"" search "\" `git rev-parse --show-toplevel`"))
   (other-window 1))
 
 (defun count-buffers (&optional display-anyway)
@@ -226,7 +191,6 @@
 (global-set-key (kbd "s-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "s-<down>") 'shrink-window)
 (global-set-key (kbd "s-<up>") 'enlarge-window)
-
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
 
@@ -393,3 +357,4 @@
 
 (required 'yasnippet)
 (yas-global-mode 1)
+
