@@ -10,7 +10,7 @@ export SCALA_HOME=/opt/scala-2.11.2
 #export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 #export MAVEN_HOME=/opt/apache-maven-3.2.1
 #export PATH=$SCALA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin/:$PATH
-export PATH=$SCALA_HOME/bin:$PATH
+export PATH=$SCALA_HOME/bin:$HOME/.cabal/bin:$PATH
 
 
 #. $HOME/.opam/opam-init/init.sh

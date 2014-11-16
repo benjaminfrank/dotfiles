@@ -1,5 +1,4 @@
 (setq inhibit-startup-screen t
-      ;; debug-on-error t
       show-paren-delay 0
       create-lockfiles nil
       make-backup-files nil
@@ -12,6 +11,8 @@
       c-basic-offset 4
       scala-indent:use-javadoc-style t ; to match scalariform
       popup-complete-enabled-modes '(scala-mode)
+      ;;org-latex-create-formula-image-program 'imagemagick
+      org-latex-default-packages-alist nil
       scroll-error-top-bottom t
       show-trailing-whitespace t
       ispell-dictionary "british"
@@ -37,6 +38,9 @@
       notmuch-saved-searches '(("inbox" . "tag:inbox")
                                ("unread" . "tag:unread")
                                ("flagged" . "tag:flagged")))
+(setq debug-on-error t)
+
+
 (setq-default indent-tabs-mode nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -249,8 +253,15 @@
 (required 'erc)
 
 (required 'flycheck)
-(add-hook 'emacs-lisp-mode-hook '(lambda ()
+(required 'rainbow-mode)
+(required 'pretty-lambdada)
+
+;; elisp
+(add-hook 'emacs-lisp-mode-hook '(lambda()
                                    (local-set-key (kbd "M-.") 'find-function-at-point)
+                                   (setq indent-tabs-mode nil tab-width 4 c-basic-offset 4)
+                                   (rainbow-mode)
+                                   (pretty-lambda-mode)
                                    (flycheck-mode)))
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
@@ -341,20 +352,22 @@
                                    c-basic-offset 4)
                              (turn-on-ctags-auto-update-mode)))
 
-(required 'rainbow-mode)
-
-(add-hook 'emacs-lisp-mode-hook 'turn-on-ctags-auto-update-mode)
-(add-hook 'emacs-lisp-mode-hook '(lambda()
-                                   (setq indent-tabs-mode nil
-                                         tab-width 4
-                                         c-basic-offset 4)
-                                   (rainbow-mode)))
-
 (required 'markdown-mode)
-(required 'pandoc-mode)
-(add-hook 'markdown-mode-hook 'conditionally-turn-on-pandoc)
-(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
-
 (required 'yasnippet)
 (yas-global-mode 1)
 
+(required 'org)
+
+(defun pandoc ()
+  "If a hidden .pandoc file exists for the file, run it"
+  ;; this effectively replaces pandoc-mode for me
+  ;;(required 'pandoc-mode)
+  (interactive)
+  (let ((command-file (concat (file-name-directory buffer-file-name)
+                              "." (file-name-nondirectory buffer-file-name)
+                              ".pandoc")))
+    (when (file-exists-p command-file)
+      (shell-command (concat command-file " "
+                             (file-name-sans-extension buffer-file-name))))))
+
+(add-hook 'org-mode-hook (lambda() (local-set-key (kbd "C-c c") 'pandoc)))
