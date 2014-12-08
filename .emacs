@@ -12,13 +12,14 @@
       scala-indent:use-javadoc-style t ; to match scalariform
       popup-complete-enabled-modes '(scala-mode)
       ;;org-latex-create-formula-image-program 'imagemagick
-      org-latex-default-packages-alist nil
+;;      org-latex-default-packages-alist nil ;;'("amsmath")
       scroll-error-top-bottom t
       show-trailing-whitespace t
       ispell-dictionary "british"
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
+      ensime-sbt-perform-on-save nil
       scala-outline-popup-select 'closest
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
@@ -200,6 +201,7 @@
 
 (required 'notmuch)
 (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+(add-hook 'mml-mode (lambda() (auto-fill-mode)))
 
 (required 'notmuch-address)
 (notmuch-address-message-insinuate)
@@ -370,4 +372,10 @@
       (shell-command (concat command-file " "
                              (file-name-sans-extension buffer-file-name))))))
 
-(add-hook 'org-mode-hook (lambda() (local-set-key (kbd "C-c c") 'pandoc)))
+(add-hook 'org-mode-hook (lambda()
+                           (auto-fill-mode)
+                           (local-set-key (kbd "C-c c") 'pandoc)))
+
+(add-hook 'c-mode-hook 'turn-on-ctags-auto-update-mode)
+
+(required 'ess-site)
