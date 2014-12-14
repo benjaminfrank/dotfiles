@@ -369,8 +369,7 @@
                               "." (file-name-nondirectory buffer-file-name)
                               ".pandoc")))
     (when (file-exists-p command-file)
-      (shell-command (concat command-file " "
-                             (file-name-sans-extension buffer-file-name))))))
+      (shell-command command-file))))
 
 (add-hook 'org-mode-hook (lambda()
                            (auto-fill-mode)
@@ -378,4 +377,5 @@
 
 (add-hook 'c-mode-hook 'turn-on-ctags-auto-update-mode)
 
-(required 'ess-site)
+(required 'ess)
+(require 'ess-site)
