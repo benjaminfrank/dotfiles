@@ -2,6 +2,7 @@
       show-paren-delay 0
       create-lockfiles nil
       make-backup-files nil
+      load-prefer-newer t
       x-select-enable-clipboard t
       interprogram-paste-function 'x-cut-buffer-or-selection-value
       indent-tabs-mode nil
