@@ -9,6 +9,8 @@
       tab-width 4
       column-number-mode t
       c-basic-offset 4
+      whitespace-style '(face trailing tab-mark lines-tail)
+      whitespace-line-column 80
       scala-indent:use-javadoc-style t ; to match scalariform
       popup-complete-enabled-modes '(scala-mode)
       ;;org-latex-create-formula-image-program 'imagemagick
@@ -19,7 +21,8 @@
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
-      ensime-sbt-perform-on-save nil
+      ;;ensime-sbt-perform-on-save nil
+      ;;company-idle-delay nil ;; don't offer autocompletions
       scala-outline-popup-select 'closest
       ediff-window-setup-function 'ediff-setup-windows-plain
       erc-hide-list '("JOIN" "PART" "QUIT")
@@ -84,6 +87,8 @@
 
 (required 'hungry-delete)
 (required 'misc-cmds)
+(required 'multiple-cursors)
+
 (required 'git-gutter)
 (required 'magit)
 (magit-auto-revert-mode -1) ; we have auto-revert already
@@ -301,6 +306,11 @@
                                         ;            (add-hook 'before-save-hook 'whitespace-cleanup)
              (set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
 
+             ;; TODO: make whitespace warning project-specific
+             (set (make-local-variable 'whitespace-line-column) 116)
+             ;; doesn't really work with ENSIME semantic highlighting
+             (whitespace-mode)
+             
              (highlight-symbol-mode)
              (local-set-key (kbd "s-n") 'ensime-search)
              (local-set-key (kbd "s-i") 'ensime-print-type-at-point)
@@ -342,9 +352,16 @@
 
 (add-hook 'sbt-mode-hook '(lambda ()
                             (setq compilation-skip-threshold 1)
-                            (local-set-key (kbd "C-a") 'comint-bol)
+                            (local-set-key (kbd "C-c c") 'sbt-command)
+                            (local-set-key (kbd "C-c e") 'next-error)
                             (local-set-key (kbd "M-RET") 'comint-accumulate)))
 
+(add-hook 'maker-mode-hook '(lambda ()
+                              (local-set-key (kbd "C-c c") 'maker-command)
+                              (local-set-key (kbd "C-c e") 'next-error)))
+(add-hook 'dired-mode-hook '(lambda ()
+                              (local-set-key (kbd "C-c c") 'sbt-or-maker-command)
+                              (local-set-key (kbd "C-c e") 'next-error)))
 
 (add-hook 'java-mode-hook '(lambda()
                              ;; http://www.emacswiki.org/emacs/IndentingJava
@@ -379,3 +396,5 @@
 
 (required 'ess)
 (require 'ess-site)
+
+
