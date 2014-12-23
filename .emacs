@@ -289,7 +289,8 @@
 (required 'scala-outline-popup)
 (required 'maker-mode)
 
-(required 'popup-complete)
+;; popup-complete might not be needed anymore since ENSIME went to company-mode
+;;(required 'popup-complete)
 ;;(setq complete-in-region-use-popup t)
 
 (defun sbt-or-maker-command ()
