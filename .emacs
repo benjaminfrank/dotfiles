@@ -89,6 +89,7 @@
 (required 'hungry-delete)
 (required 'misc-cmds)
 (required 'multiple-cursors)
+(required 'darkroom)
 
 (required 'git-gutter)
 (required 'magit)
