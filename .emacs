@@ -1,4 +1,5 @@
 (setq inhibit-startup-screen t
+      ;;debug-on-error t
       show-paren-delay 0
       create-lockfiles nil
       make-backup-files nil
@@ -43,7 +44,6 @@
       notmuch-saved-searches '(("inbox" . "tag:inbox")
                                ("unread" . "tag:unread")
                                ("flagged" . "tag:flagged")))
-(setq debug-on-error t)
 
 
 (setq-default indent-tabs-mode nil)
