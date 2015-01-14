@@ -39,3 +39,6 @@
 # for repos that use HTTPS, this stores passwords in a cache (1 hour)
 #git config credential.helper cache
 #git config credential.helper "cache --timeout=3600"
+
+# for simple resolving conflicts after manual merging
+# grep -lr '<<<<<<<' . | xargs git checkout --theirs
