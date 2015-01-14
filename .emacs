@@ -19,6 +19,8 @@
       scroll-error-top-bottom t
       show-trailing-whitespace t
       ispell-dictionary "british"
+      ;; disable flyspell in Strings and line comments
+      flyspell-prog-text-faces '(font-lock-doc-face)
       sentence-end-double-space nil
       ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
@@ -205,6 +207,15 @@
 (global-set-key (kbd "s-<up>") 'enlarge-window)
 
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1))); (C-c $) for corrections
+(defun flyspell-ignore-http-and-https ()
+  ;; http://emacs.stackexchange.com/a/5435
+  "Ignore anything starting with 'http' or 'https'."
+  (save-excursion
+    (forward-whitespace -1)
+    (when (looking-at " ")
+      (forward-char)
+      (not (looking-at "https?\\b")))))
+(put 'text-mode 'flyspell-mode-predicate 'flyspell-ignore-http-and-https)
 
 (required 'notmuch)
 (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
@@ -308,11 +319,13 @@
                                         ;            (make-local-variable 'before-save-hook)
                                         ;            (add-hook 'before-save-hook 'whitespace-cleanup)
              (set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
-
+ 
              ;; TODO: make whitespace warning project-specific
              (set (make-local-variable 'whitespace-line-column) 116)
              ;; doesn't really work with ENSIME semantic highlighting
              (whitespace-mode)
+
+             (flyspell-prog-mode)
              
              (highlight-symbol-mode)
              (local-set-key (kbd "s-n") 'ensime-search)
