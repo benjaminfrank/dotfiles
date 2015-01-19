@@ -1,4 +1,5 @@
 (setq inhibit-startup-screen t
+      initial-scratch-message nil
       ;;debug-on-error t
       show-paren-delay 0
       create-lockfiles nil
@@ -7,6 +8,7 @@
       x-select-enable-clipboard t
       interprogram-paste-function 'x-cut-buffer-or-selection-value
       indent-tabs-mode nil
+      compilation-skip-threshold 2
       ;;cursor-type 'bar
       tab-width 4
       column-number-mode t
@@ -413,4 +415,4 @@
 (required 'ess)
 (require 'ess-site)
 
-
+(required 'elnode)
