@@ -56,6 +56,7 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 (subword-mode 1)
+(setenv "SBT_OPTS" "-no-colors")
 
 ;;(mouse-avoidance-mode 'banish) ; https://github.com/ensime/ensime-server/issues/545
 (global-auto-revert-mode 1)
