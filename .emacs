@@ -1,6 +1,5 @@
 (setq inhibit-startup-screen t
       initial-scratch-message nil
-      persistent-scratch-backup-directory (concat user-emacs-directory "scratch")
       ;;debug-on-error t
       show-paren-delay 0
       create-lockfiles nil
@@ -419,6 +418,7 @@
 
 (required 'elnode)
 (required 'persistent-scratch)
-(ignore-errors (persistent-scratch-restore))
+(persistent-scratch-setup-default)
+
 
 ;;; .emacs ends here
