@@ -15,6 +15,7 @@
       c-basic-offset 4
       whitespace-style '(face trailing tab-mark lines-tail)
       whitespace-line-column 80
+      nxml-slash-auto-complete-flag t
       scala-indent:use-javadoc-style t ; to match scalariform
       popup-complete-enabled-modes '(scala-mode)
       ;;org-latex-create-formula-image-program 'imagemagick
@@ -420,5 +421,8 @@
 (required 'persistent-scratch)
 (persistent-scratch-setup-default)
 
+(add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode))
+;;(add-to-list 'auto-mode-alist '("\\.html\\'" . nxml-mode))
+(fset 'html-mode 'nxml-mode)
 
 ;;; .emacs ends here
