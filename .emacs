@@ -26,7 +26,6 @@
       ;; disable flyspell in Strings and line comments
       flyspell-prog-text-faces '(font-lock-doc-face)
       sentence-end-double-space nil
-      ensime-typecheck-when-idle nil
       ensime-default-buffer-prefix "ENSIME-"
       ;;ensime-sbt-perform-on-save nil
       ;;company-idle-delay nil ;; don't offer autocompletions

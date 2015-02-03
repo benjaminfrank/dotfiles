@@ -1,0 +1,11 @@
+input-xml: yes
+quiet: yes
+indent: yes
+indent-attributes: yes
+indent-spaces: 4
+char-encoding: utf8
+wrap: 0
+wrap-asp: no
+wrap-jste: no
+wrap-php: no
+wrap-sections: no
