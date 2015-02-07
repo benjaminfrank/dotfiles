@@ -56,7 +56,7 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 (subword-mode 1)
-(setenv "SBT_OPTS" "-no-colors")
+(setenv "SBT_OPTS" (concat "-no-colors" (getenv "SBT_OPTS")))
 
 ;;(mouse-avoidance-mode 'banish) ; https://github.com/ensime/ensime-server/issues/545
 (global-auto-revert-mode 1)
@@ -423,5 +423,6 @@
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode))
 ;;(add-to-list 'auto-mode-alist '("\\.html\\'" . nxml-mode))
 (fset 'html-mode 'nxml-mode)
+(required 'tidy)
 
 ;;; .emacs ends here

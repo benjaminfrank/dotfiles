@@ -13,6 +13,8 @@ fi
 
 export HISTCONTROL=ignoredups
 export EDITOR="emacs -nw"
+export WINEARCH=win32
+export WINEDEBUG=fixme-all,warn+cursor
 
 if [ "$PS1" ] && [ "$BASH" ]; then
     if [ -f $HOME/.bashrc ] ; then
