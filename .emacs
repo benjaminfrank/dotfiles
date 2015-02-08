@@ -229,6 +229,11 @@ distributed under a different name than their function."
                                'flyspell-ignore-http-and-https)))
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 
+(required 'flx-ido)
+(setq projectile-use-native-indexing t)
+(required 'projectile nil (lambda() (flx-ido-mode 1)))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
 (global-unset-key (kbd "C-z")) ;; I hate you so much C-z
@@ -246,7 +251,8 @@ distributed under a different name than their function."
 ;; This section is for defining commonly invoked commands that deserve
 ;; a short binding instead of their packager's preferred binding.
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
-(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
+;;(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
+(global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'git-grep)
 (global-set-key (kbd "s-b") 'magit-blame-mode)
 (global-set-key (kbd "s-s") 'replace-string)
@@ -349,6 +355,7 @@ distributed under a different name than their function."
 (add-hook 'scala-mode-hook
           (lambda()
             (ensime-scala-mode-hook)
+            (projectile-mode)
             (set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
             ;; TODO: make whitespace warning project-specific
             (set (make-local-variable 'whitespace-line-column) 116)
@@ -398,6 +405,7 @@ class %TESTCLASS% extends WordSpec with Matchers {
                              (local-set-key (kbd "C-c c") 'maker-command)
                              (local-set-key (kbd "C-c e") 'next-error)))
 (add-hook 'dired-mode-hook (lambda()
+                             (projectile-mode)
                              ;; a workflow optimisation too far?
                              (local-set-key (kbd "C-c c") 'sbt-or-maker-command)
                              (local-set-key (kbd "C-c e") 'next-error)))
