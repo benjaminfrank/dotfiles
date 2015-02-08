@@ -217,12 +217,12 @@ distributed under a different name than their function."
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
 (required 'erc)
 
-(setq whitespace-style '(face trailing tab-mark lines-tail))
-(setq whitespace-line-column 80)
+(setq whitespace-style '(face trailing tab-mark lines-tail)
+      whitespace-line-column 80)
 (required 'whitespace)
 
-(setq ispell-dictionary "british")
-(setq flyspell-prog-text-faces '(font-lock-doc-face))
+(setq ispell-dictionary "british"
+      flyspell-prog-text-faces '(font-lock-doc-face))
 (required 'flyspell nil (lambda()
                           (put 'text-mode
                                'flyspell-mode-predicate
