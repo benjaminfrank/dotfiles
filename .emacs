@@ -137,7 +137,8 @@ awkward packages."
                                      ".*\\*sbt.*")
                         (add-to-list 'clean-buffer-list-kill-never-regexps
                                      ".*\\*ENSIME.*")))
-
+(required 'erc t)
+(required 'darkroom t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
@@ -146,7 +147,6 @@ awkward packages."
 (required 'hungry-delete)
 (required 'misc-cmds)
 (required 'multiple-cursors)
-(required 'darkroom)
 (required 'git-gutter)
 (required 'magit nil (lambda() (magit-auto-revert-mode -1)))
 (required 'magit-find-file)
@@ -155,7 +155,6 @@ awkward packages."
 (required 'auto-complete-exuberant-ctags nil
           (lambda() (ac-exuberant-ctags-setup)))
 (required 'ctags-update)
-(required 'erc)
 (required 'rainbow-mode)
 (required 'pretty-lambdada)
 (required 'whitespace)
