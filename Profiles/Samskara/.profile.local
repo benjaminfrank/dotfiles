@@ -3,7 +3,7 @@
 #export SCALA_HOME=/opt/scala-2.9.2
 #export SCALA_HOME=/opt/scala-2.9.3
 #export SCALA_HOME=/opt/scala-2.10.4
-export SCALA_HOME=/opt/scala-2.11.4
+export SCALA_HOME=/opt/scala-2.11.5
 #export JAVA_HOME=/opt/jdk1.7.0_65
 #export JAVA_HOME=/opt/jdk1.8.0_11
 #export JAVA_HOME=/opt/jdk1.6.0_45

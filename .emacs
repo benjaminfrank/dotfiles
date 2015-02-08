@@ -160,15 +160,19 @@ distributed under a different name than their function."
 (defun exit ()
   "Short hand for DEATH TO ALL PUNY BUFFERS!"
   (interactive)
-  (save-buffers-kill-emacs))
+  (if (daemonp)
+      (message "You silly")
+    (save-buffers-kill-emacs)))
 
 (defun safe-kill-emacs ()
   "Only exit Emacs if this is a small sesssion, otherwise prompt."
   (interactive)
-  (let ((count-buffers (length (buffer-list))))
-    (if (< count-buffers 10)
-        (save-buffers-kill-emacs)
-      (message-box "use 'M-x exit'"))))
+  (if (daemonp)
+      (delete-frame)
+    (let ((count-buffers (length (buffer-list))))
+      (if (< count-buffers 10)
+          (save-buffers-kill-emacs)
+        (message-box "use 'M-x exit'")))))
 
 (defun kill-current-buffer-and-its-windows ()
   "Kill without confirm."

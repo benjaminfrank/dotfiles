@@ -12,9 +12,14 @@ if [ ! -f ~/.inputrc ] && [ -f /etc/inputrc ] ; then
 fi
 
 export HISTCONTROL=ignoredups
-export EDITOR="emacs -nw"
 export WINEARCH=win32
 export WINEDEBUG=fixme-all,warn+cursor
+export EDITOR="emacsclient -nw"
+
+# using emacsclient will be super fast to load, but don't forget that
+# changes to .emacs need to be manually loaded, or the daemon
+# restarted.
+emacs --daemon
 
 if [ "$PS1" ] && [ "$BASH" ]; then
     if [ -f $HOME/.bashrc ] ; then
@@ -26,5 +31,3 @@ fi
 
 export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 export JDK_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
-
-which emacs >/dev/null && emacs --daemon
