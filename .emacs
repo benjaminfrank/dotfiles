@@ -77,7 +77,7 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 (subword-mode 1)
-(setenv "SBT_OPTS" (concat "-no-colors" (getenv "SBT_OPTS")))
+(setenv "SBT_OPTS" (concat "-no-colors " (getenv "SBT_OPTS")))
 (global-auto-revert-mode 1)
 (substitute-key-definition
  ;; allows using SPACE when in the minibuffer
