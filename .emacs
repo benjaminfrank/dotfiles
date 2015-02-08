@@ -18,7 +18,7 @@
 ;;
 ;; This file is broken into sections which gather similar features or
 ;; modes together. Sections are delimited by a row of semi-colons
-;; (stage/functional sections) or a row of hyphens (major modes).
+;; (stage/functional sections) or a row of dots (primary modes).
 
 ;;; Code:
 ;; This section is for global settings that do not require packages to
@@ -87,6 +87,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 (defun add-to-load-path (path)
+  "Add PATH to LOAD-PATH if PATH exists."
   (when (file-exists-p path)
     (add-to-list 'load-path path)))
 (add-to-load-path "/usr/local/share/emacs/site-lisp")
@@ -104,30 +105,96 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defun required (package &optional force hook melpa)
-  "`autoload' a PACKAGE :symbol, installing if not present,
-and running a HOOK :lambda when the file is loaded. FORCE :boolean
-will use `require' instead of `autoload'. MELPA :symbol can be
-used to specify the package name on the package manager for
-awkward packages."
-  (interactive)
-  (unless (locate-library (symbol-name package))
-    (if melpa
-        (package-install melpa)
-      (package-install package)))
-  (when hook
-    (eval-after-load (locate-library (symbol-name package)) hook))
-  (if force
-      (require package)
-    (autoload package (symbol-name package))))
+(defun required (function &optional force hook package)
+  "`autoload' an interactive FUNCTION :symbol, installing if not present.
 
+FORCE :boolean will use `require' instead of `autoload'.
+
+Runs a HOOK :lambda when the file is loaded.
+
+PACKAGE :symbol is used to workaround packages that have been
+distributed under a different name than their function."
+  (interactive)
+  (let* ((sym (or package function))
+         (name (symbol-name sym)))
+    (unless (locate-library name)
+      (package-install sym))
+    (when hook
+      (eval-after-load (locate-library name) hook))
+    (if force
+        (require function)
+      (autoload function name nil 'interactive))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This section is for generic interactive convenience methods.
+;; Arguably could be uploaded to MELPA as package 'fommil-utils.
+;; References included where shamelessly stolen.
+(defun indent-buffer ()
+  "Indent the entire buffer."
+  (interactive)
+  (save-excursion
+    (delete-trailing-whitespace)
+    (indent-region (point-min) (point-max) nil)
+    (untabify (point-min) (point-max))))
+
+(defun contextual-backspace ()
+  "Hungry whitespace or delete word depending on context."
+  (interactive)
+  (if (looking-back "[\t\s\n\r]\\{2,\\}" (- (point) 3))
+      (hungry-delete-backward 1)
+    (if (subword-mode)
+        (subword-backward-kill 1)
+      (backward-kill-word 1))))
+
+(defun git-grep (search)
+  ;; https://www.ogre.com/node/447
+  "Git grep the entire current repository for SEARCH."
+  (interactive (list (completing-read
+                      "Search for: " nil nil nil (current-word))))
+  (grep-find (concat "git --no-pager grep -P -n \""
+                     search
+                     "\" `git rev-parse --show-toplevel`"))
+  (other-window 1))
+
+(defun exit ()
+  "Short hand for DEATH TO ALL PUNY BUFFERS!"
+  (interactive)
+  (save-buffers-kill-emacs))
+
+(defun safe-kill-emacs ()
+  "Only exit Emacs if this is a small sesssion, otherwise prompt."
+  (interactive)
+  (let ((count-buffers (length (buffer-list))))
+    (if (< count-buffers 10)
+        (save-buffers-kill-emacs)
+      (message-box "use 'M-x exit'"))))
+
+(defun kill-current-buffer-and-its-windows ()
+  "Kill without confirm."
+  (interactive)
+  (kill-buffer-and-its-windows (current-buffer)))
+
+(defun declare-buffer-bankruptcy()
+  "Declare buffer bankruptcy and clean up everything."
+  (interactive)
+  (let ((clean-buffer-list-delay-general 0)
+        (clean-buffer-list-delay-special 0))
+    (clean-buffer-list)))
+
+(defun flyspell-ignore-http-and-https ()
+  ;; http://emacs.stackexchange.com/a/5435
+  "Ignore anything starting with 'http' or 'https'."
+  (save-excursion
+    (forward-whitespace -1)
+    (when (looking-at " ")
+      (forward-char)
+      (not (looking-at "https?\\b")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
 (required 'darcula-theme t (lambda() (set-frame-font "Inconsolata-16")))
-(required 'autopair t (lambda()
-                        (autopair-global-mode)))
 (required 'midnight t (lambda()
                         (add-to-list 'clean-buffer-list-kill-regexps
                                      "\\`\\*magit.*\\*\\'")
@@ -137,8 +204,11 @@ awkward packages."
                                      ".*\\*sbt.*")
                         (add-to-list 'clean-buffer-list-kill-never-regexps
                                      ".*\\*ENSIME.*")))
-(required 'erc t)
-(required 'darkroom t)
+(required 'persistent-scratch t (lambda() (persistent-scratch-setup-default)))
+(required 'autopair t (lambda() (autopair-global-mode)))
+(required 'highlight-symbol t
+          (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
@@ -150,114 +220,26 @@ awkward packages."
 (required 'git-gutter)
 (required 'magit nil (lambda() (magit-auto-revert-mode -1)))
 (required 'magit-find-file)
-(required 'highlight-symbol)
 (required 'ctags)
-(required 'auto-complete-exuberant-ctags nil
-          (lambda() (ac-exuberant-ctags-setup)))
+(required 'auto-complete-exuberant-ctags nil (lambda() (ac-exuberant-ctags-setup)))
 (required 'ctags-update)
 (required 'rainbow-mode)
 (required 'pretty-lambdada)
 (required 'whitespace)
 
-(defun flyspell-ignore-http-and-https ()
-  ;; http://emacs.stackexchange.com/a/5435
-  "Ignore anything starting with 'http' or 'https'."
-  (save-excursion
-    (forward-whitespace -1)
-    (when (looking-at " ")
-      (forward-char)
-      (not (looking-at "https?\\b")))))
 (required 'flyspell nil (lambda()
                           (put 'text-mode
                                'flyspell-mode-predicate
                                'flyspell-ignore-http-and-https)))
-(add-hook 'text-mode-hook (lambda()
-                            (flyspell-mode 1)))
+(add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 (required 'flycheck)
 (required 'markdown-mode)
-(add-hook 'markdown-mode-hook (lambda()
-                                (yas-minor-mode)))
+(add-hook 'markdown-mode-hook (lambda() (yas-minor-mode)))
 (required 'yasnippet)
 (required 'elnode)
 (required 'tidy)
-(required 'persistent-scratch nil (lambda()
-                                    (persistent-scratch-setup-default)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; This section is for generic interactive convenience methods.
-;; Arguably could be uploaded to MELPA as package 'fommil-utils.
-;; References included where shamelessly stolen.
-(defun indent-buffer ()
-  "Indent the entire buffer"
-  (interactive)
-  (save-excursion
-    (delete-trailing-whitespace)
-    (indent-region (point-min) (point-max) nil)
-    (untabify (point-min) (point-max))))
-
-(defun contextual-backspace ()
-  "Hungry whitespace or delete word depending on context"
-  (interactive)
-  (if (looking-back "[\t\s\n\r]\\{2,\\}" (- (point) 3))
-      (hungry-delete-backward 1)
-    (if (subword-mode)
-        (subword-backward-kill 1)
-      (backward-kill-word 1))))
-
-(defun git-grep (search)
-  ;; https://www.ogre.com/node/447
-  "git-grep the entire current repo"
-  (interactive (list (completing-read
-                      "Search for: " nil nil nil (current-word))))
-  (grep-find (concat "git --no-pager grep -P -n \""
-                     search
-                     "\" `git rev-parse --show-toplevel`"))
-  (other-window 1))
-
-(defun count-buffers (&optional display-anyway)
-  ;;http://www.cb1.com/~john/computing/emacs/lisp/startup/buffer-misc.el
-  "Display or return the number of buffers."
-  (let ((buf-count (length (buffer-list))))
-    (if (or (interactive-p) display-anyway)
-        (message "%d buffers in this Emacs" buf-count)) buf-count))
-
-(defun exit ()
-  "short hand for DEATH TO ALL PUNY BUFFERS"
-  (interactive)
-  (save-buffers-kill-emacs))
-
-(defun safe-kill-emacs ()
-  "Only exit emacs if this is a small sesssion, otherwise prompt.
-Excellent for people, like @fommil, who are forever typing C-x
-C-c by accident."
-  (interactive)
-  (if (< (count-buffers) 10)
-      (save-buffers-kill-emacs)
-    (message-box "use 'M-x exit'")))
-
-(defun close-and-kill-next-pane ()
-  ;; http://www.emacswiki.org/emacs/KillingBuffers
-  "If there are multiple windows, then close the other pane and
-kill the buffer in it also."
-  (interactive)
-  (other-window 1)
-  (kill-this-buffer)
-  (if (not (one-window-p))
-      (delete-window)))
-
-(defun kill-current-buffer-and-its-windows ()
-  "Kill without confirm"
-  (interactive)
-  (kill-buffer-and-its-windows (current-buffer)))
-
-(defun declare-buffer-bankruptcy()
-  "Declare buffer bankruptcy and clean up everything"
-  (interactive)
-  (let ((clean-buffer-list-delay-general 0)
-        (clean-buffer-list-delay-special 0))
-    (clean-buffer-list)))
-
+(required 'erc)
+(required 'darkroom-mode nil nil 'darkroom)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
@@ -297,19 +279,14 @@ kill the buffer in it also."
 (required 'notmuch nil (lambda()
                          (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
                          (add-hook 'mml-mode (lambda() (auto-fill-mode)))))
-(required 'notmuch-address nil (lambda()
-                                 (notmuch-address-message-insinuate)))
+(required 'notmuch-address nil (lambda() (notmuch-address-message-insinuate)))
 
 
 ;;..............................................................................
 ;; elisp
 (defun describe-foo-at-point ()
   ;;; http://www.emacswiki.org/emacs/DescribeThingAtPoint
-  "Show the documentation of the Elisp function and variable near point.
-        This checks in turn:
-        -- for a function name where point is
-        -- for a variable name where point is
-        -- for a surrounding function call"
+  "Show the documentation of the function and variable near point."
   (interactive)
   (let (sym)
     (cond ((setq sym (ignore-errors
@@ -334,7 +311,7 @@ kill the buffer in it also."
             (rainbow-mode)
             (pretty-lambda-mode)
             (flyspell-prog-mode)
-            (turn-on-eldoc-mode)
+            (eldoc-mode)
             (flycheck-mode)
             (yas-minor-mode)
             (turn-on-ctags-auto-update-mode)))
@@ -358,7 +335,7 @@ kill the buffer in it also."
 (required 'maker-mode)
 
 (defun sbt-or-maker-command ()
-  "Find and launch maker-command, falling back to sbt-command"
+  "Find and launch `maker-command', falling back to `sbt-command'."
   (interactive)
   (if (maker:find-root)
       (call-interactively 'maker-command)
@@ -388,7 +365,7 @@ kill the buffer in it also."
             (local-set-key (kbd "C-c e") 'next-error)))
 
 (defun ensime-template-wordspec ()
-  ""
+  "ENSIME template for a ScalaCheck WordSpec style test."
   "package %TESTPACKAGE%
 import org.scalatest._
 
@@ -444,7 +421,7 @@ class %TESTCLASS% extends WordSpec with Matchers {
 ;; org-mode
 (required 'org)
 (defun pandoc ()
-  "If a hidden .pandoc file exists for the file, run it"
+  "If a hidden .pandoc file exists for the file, run it."
   ;; this effectively replaces pandoc-mode for me
   (interactive)
   (let ((command-file (concat (file-name-directory buffer-file-name)
