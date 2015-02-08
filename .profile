@@ -26,3 +26,5 @@ fi
 
 export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 export JDK_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
+
+which emacs >/dev/null && emacs --daemon
