@@ -442,7 +442,10 @@ class %TESTCLASS% extends WordSpec with Matchers {
 
 ;;..............................................................................
 ;; R
-(required 'ess-site t nil 'ess)
-;; bad packaging means we have to force load ess-site
+(required 'ess-site nil nil 'ess)
+;; bad packaging means we have to manually setup R-mode
+(autoload 'R-mode "ess-site" nil t)
+(add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
+
 
 ;;; .emacs ends here
