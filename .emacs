@@ -337,6 +337,7 @@ distributed under a different name than their function."
 (required 'scala-outline-popup)
 (required 'sbt-mode)
 (required 'maker-mode)
+(autoload 'maker:find-root "maker-mode")
 
 (defun sbt-or-maker-command ()
   "Find and launch `maker-command', falling back to `sbt-command'."
