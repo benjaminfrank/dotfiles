@@ -21,53 +21,34 @@
 ;; (stage/functional sections) or a row of dots (primary modes).
 
 ;;; Code:
-;; This section is for global settings that do not require packages to
-;; be installed prior to setting the variable. No need to document
-;; what each does, as it is a simple case of looking up the symbol.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This section is for global settings for built-in emacs parameters
 (setq inhibit-startup-screen t
       initial-scratch-message nil
       ;;debug-on-error t
-      show-paren-delay 0
       create-lockfiles nil
       make-backup-files nil
       load-prefer-newer t
       x-select-enable-clipboard t
       interprogram-paste-function 'x-cut-buffer-or-selection-value
       indent-tabs-mode nil
-      compilation-skip-threshold 2
       tab-width 4
       column-number-mode t
-      c-basic-offset 4
-      whitespace-style '(face trailing tab-mark lines-tail)
-      whitespace-line-column 80
-      nxml-slash-auto-complete-flag t
-      scala-indent:use-javadoc-style t
-      popup-complete-enabled-modes '(scala-mode)
       scroll-error-top-bottom t
       show-trailing-whitespace t
-      ispell-dictionary "british"
-      flyspell-prog-text-faces '(font-lock-doc-face)
-      sentence-end-double-space nil
-      ensime-default-buffer-prefix "ENSIME-"
-      scala-outline-popup-select 'closest
-      ediff-window-setup-function 'ediff-setup-windows-plain
-      erc-hide-list '("JOIN" "PART" "QUIT")
       mail-user-agent 'message-user-agent
       user-mail-address "Sam.Halliday@gmail.com"
       user-full-name "Sam Halliday"
-      smtpmail-stream-type 'ssl
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 465
-      send-mail-function 'smtpmail-send-it
-      message-auto-save-directory (concat user-emacs-directory "drafts")
-      message-kill-buffer-on-exit t
-      message-signature "Best regards,\nSam\n"
-      notmuch-fcc-dirs nil
-      notmuch-search-oldest-first nil
-      notmuch-address-command "google-contacts"
-      notmuch-saved-searches '(("inbox" . "tag:inbox")
-                               ("unread" . "tag:unread")
-                               ("flagged" . "tag:flagged")))
+      send-mail-function 'smtpmail-send-it)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This section is for global settings for built-in packages that autoload
+(setq show-paren-delay 0
+      compilation-skip-threshold 2
+      c-basic-offset 4
+      nxml-slash-auto-complete-flag t
+      sentence-end-double-space nil
+      ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setup functions that are built-in to emacs
@@ -227,21 +208,26 @@ distributed under a different name than their function."
 (required 'ctags-update)
 (required 'rainbow-mode)
 (required 'pretty-lambdada)
+(required 'flycheck)
+(required 'yasnippet)
+(required 'elnode)
+(required 'tidy)
+(required 'darkroom-mode nil nil 'darkroom)
+
+(setq erc-hide-list '("JOIN" "PART" "QUIT"))
+(required 'erc)
+
+(setq whitespace-style '(face trailing tab-mark lines-tail))
+(setq whitespace-line-column 80)
 (required 'whitespace)
 
+(setq ispell-dictionary "british")
+(setq flyspell-prog-text-faces '(font-lock-doc-face))
 (required 'flyspell nil (lambda()
                           (put 'text-mode
                                'flyspell-mode-predicate
                                'flyspell-ignore-http-and-https)))
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
-(required 'flycheck)
-(required 'markdown-mode)
-(add-hook 'markdown-mode-hook (lambda() (yas-minor-mode)))
-(required 'yasnippet)
-(required 'elnode)
-(required 'tidy)
-(required 'erc)
-(required 'darkroom-mode nil nil 'darkroom)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
@@ -278,6 +264,18 @@ distributed under a different name than their function."
 ;; task/function-specific modes, organised by task or function.
 ;;..............................................................................
 ;; Email
+(setq smtpmail-stream-type 'ssl
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 465
+      message-auto-save-directory (concat user-emacs-directory "drafts")
+      message-kill-buffer-on-exit t
+      message-signature "Best regards,\nSam\n"
+      notmuch-fcc-dirs nil
+      notmuch-search-oldest-first nil
+      notmuch-address-command "google-contacts"
+      notmuch-saved-searches '(("inbox" . "tag:inbox")
+                               ("unread" . "tag:unread")
+                               ("flagged" . "tag:flagged")))
 (required 'notmuch nil (lambda()
                          (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
                          (add-hook 'mml-mode (lambda() (auto-fill-mode)))))
@@ -321,6 +319,10 @@ distributed under a different name than their function."
 
 ;;..............................................................................
 ;; Scala
+(setq scala-indent:use-javadoc-style t
+      popup-complete-enabled-modes '(scala-mode)
+      ensime-default-buffer-prefix "ENSIME-"
+      scala-outline-popup-select 'closest)
 (let* ((local-ensime (concat user-emacs-directory "ensime-emacs")))
   (when (file-exists-p local-ensime)
     (add-to-list 'load-path local-ensime)))
@@ -346,7 +348,7 @@ distributed under a different name than their function."
 (add-hook 'scala-mode-hook
           (lambda()
             (ensime-scala-mode-hook)
-            (set (make-local-variable 'forward-word) 'scala-syntax:forward-token) 
+            (set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
             ;; TODO: make whitespace warning project-specific
             (set (make-local-variable 'whitespace-line-column) 116)
             (whitespace-mode)
@@ -422,6 +424,7 @@ class %TESTCLASS% extends WordSpec with Matchers {
 ;;..............................................................................
 ;; org-mode
 (required 'org)
+(required 'markdown-mode)
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
   ;; this effectively replaces pandoc-mode for me
@@ -436,7 +439,7 @@ class %TESTCLASS% extends WordSpec with Matchers {
                            (auto-fill-mode)
                            (yas-minor-mode)
                            (local-set-key (kbd "C-c c") 'pandoc)))
-
+(add-hook 'markdown-mode-hook (lambda() (yas-minor-mode)))
 
 ;;..............................................................................
 ;; R
