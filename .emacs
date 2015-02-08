@@ -165,7 +165,7 @@ distributed under a different name than their function."
     (save-buffers-kill-emacs)))
 
 (defun safe-kill-emacs ()
-  "Only exit Emacs if this is a small sesssion, otherwise prompt."
+  "Only exit Emacs if this is a small session, otherwise prompt."
   (interactive)
   (if (daemonp)
       (delete-frame)
@@ -202,12 +202,10 @@ distributed under a different name than their function."
 (required 'midnight t (lambda()
                         (add-to-list 'clean-buffer-list-kill-regexps
                                      "\\`\\*magit.*\\*\\'")
-                        (add-to-list 'clean-buffer-list-kill-never-buffer-names
-                                     "*ensime-events*")
                         (add-to-list 'clean-buffer-list-kill-never-regexps
                                      ".*\\*sbt.*")
                         (add-to-list 'clean-buffer-list-kill-never-regexps
-                                     ".*\\*ENSIME.*")))
+                                     ".*\\*ENSIME-server.*")))
 (required 'persistent-scratch t (lambda() (persistent-scratch-setup-default)))
 (required 'autopair t (lambda() (autopair-global-mode)))
 (required 'highlight-symbol t
