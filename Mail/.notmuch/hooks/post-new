@@ -1,4 +1,4 @@
 #!/bin/bash
 
 notmuch tag -new -- from:sam.halliday@gmail.com tag:new
-notmuch tag -new +inbox -- tag:new
+#notmuch tag -new +inbox -- tag:new
