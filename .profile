@@ -19,7 +19,7 @@ export EDITOR="emacsclient -nw"
 # using emacsclient will be super fast to load, but don't forget that
 # changes to .emacs need to be manually loaded, or the daemon
 # restarted.
-emacs --daemon
+DISPLAY="" emacs --daemon --with-x-toolkit=lucid &
 
 if [ "$PS1" ] && [ "$BASH" ]; then
     if [ -f $HOME/.bashrc ] ; then

@@ -26,6 +26,7 @@
 (setq inhibit-startup-screen t
       initial-scratch-message nil
       ;;debug-on-error t
+      enable-recursive-minibuffers t
       create-lockfiles nil
       make-backup-files nil
       load-prefer-newer t
@@ -229,9 +230,9 @@ distributed under a different name than their function."
                                'flyspell-ignore-http-and-https)))
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 
-(required 'flx-ido)
+;;(required 'flx-ido)
 (setq projectile-use-native-indexing t)
-(required 'projectile nil (lambda() (flx-ido-mode 1)))
+(required 'projectile);; nil (lambda() (flx-ido-mode 1)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -354,7 +355,6 @@ distributed under a different name than their function."
 
 (add-hook 'scala-mode-hook
           (lambda()
-            (ensime-scala-mode-hook)
             (projectile-mode)
             (set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
             ;; TODO: make whitespace warning project-specific
@@ -374,7 +374,9 @@ distributed under a different name than their function."
              ;;(local-set-key (kbd "C-<right>") 'scala-syntax:forward-token)
             ;;(local-set-key (kbd "C-<left>") 'scala-syntax:backward-token)
             (local-set-key (kbd "C-c c") 'sbt-or-maker-command)
-            (local-set-key (kbd "C-c e") 'next-error)))
+            (local-set-key (kbd "C-c e") 'next-error)
+            (ensime-scala-mode-hook)))
+
 
 (defun ensime-template-wordspec ()
   "ENSIME template for a ScalaCheck WordSpec style test."
