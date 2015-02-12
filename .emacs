@@ -373,7 +373,8 @@ distributed under a different name than their function."
                              (scala-indent:insert-asterisk-on-multiline-comment)))
              ;;(local-set-key (kbd "C-<right>") 'scala-syntax:forward-token)
             ;;(local-set-key (kbd "C-<left>") 'scala-syntax:backward-token)
-            (local-set-key (kbd "C-c c") 'sbt-or-maker-command)
+            ;;(local-set-key (kbd "C-c c") 'sbt-or-maker-command)
+            (local-set-key (kbd "C-c c") 'sbt-command)
             (local-set-key (kbd "C-c e") 'next-error)
             (ensime-scala-mode-hook)))
 
@@ -395,11 +396,11 @@ class %TESTCLASS% extends WordSpec with Matchers {
 (defun scala-start()
   "Easy way to initialise All The Things for a Scala project"
   (interactive)
-  (sbt-or-maker-command)
+  (sbt-command)
   (ensime))
 
 (add-hook 'sbt-mode-hook (lambda()
-                           (setq compilation-skip-threshold 1)
+                           ;;(setq compilation-skip-threshold 1)
                            (local-set-key (kbd "C-c c") 'sbt-command)
                            (local-set-key (kbd "C-c e") 'next-error)
                            (local-set-key (kbd "M-RET") 'comint-accumulate)))
@@ -409,7 +410,7 @@ class %TESTCLASS% extends WordSpec with Matchers {
 (add-hook 'dired-mode-hook (lambda()
                              (projectile-mode)
                              ;; a workflow optimisation too far?
-                             (local-set-key (kbd "C-c c") 'sbt-or-maker-command)
+                             (local-set-key (kbd "C-c c") 'sbt-command)
                              (local-set-key (kbd "C-c e") 'next-error)))
 
 
