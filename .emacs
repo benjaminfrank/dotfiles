@@ -344,8 +344,8 @@ distributed under a different name than their function."
 (required 'scala-outline-popup)
 (required 'sbt-mode)
 (required 'maker-mode)
-(autoload 'maker:find-root "maker-mode")
 
+;;(autoload 'maker:find-root "maker-mode")
 (defun sbt-or-maker-command ()
   "Find and launch `maker-command', falling back to `sbt-command'."
   (interactive)
@@ -365,7 +365,6 @@ distributed under a different name than their function."
             (local-set-key (kbd "s-n") 'ensime-search)
             (local-set-key (kbd "s-i") 'ensime-print-type-at-point)
             (local-set-key (kbd "s-o") 'scala-outline-popup)
-            (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)
             (local-set-key (kbd "RET")
                            (lambda()
                              (interactive)
@@ -376,7 +375,9 @@ distributed under a different name than their function."
             ;;(local-set-key (kbd "C-c c") 'sbt-or-maker-command)
             (local-set-key (kbd "C-c c") 'sbt-command)
             (local-set-key (kbd "C-c e") 'next-error)
-            (ensime-scala-mode-hook)))
+            (ensime-scala-mode-hook)
+            (required 'scala-outline-popup t)
+            (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)))
 
 
 (defun ensime-template-wordspec ()
@@ -424,7 +425,10 @@ class %TESTCLASS% extends WordSpec with Matchers {
                   tab-width 4
                   c-basic-offset 4)
             (yas-minor-mode)
+            (projectile-mode)
+            (local-set-key (kbd "C-c e") 'next-error)
             (turn-on-ctags-auto-update-mode)))
+
 
 ;;..............................................................................
 ;; C
