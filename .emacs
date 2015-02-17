@@ -375,7 +375,8 @@ distributed under a different name than their function."
             ;;(local-set-key (kbd "C-c c") 'sbt-or-maker-command)
             (local-set-key (kbd "C-c c") 'sbt-command)
             (local-set-key (kbd "C-c e") 'next-error)
-            (ensime-scala-mode-hook)
+            (required 'ensime t)
+            (ensime-mode 1)
             (required 'scala-outline-popup t)
             (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)))
 
