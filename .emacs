@@ -234,6 +234,8 @@ distributed under a different name than their function."
 (setq projectile-use-native-indexing t)
 (required 'projectile);; nil (lambda() (flx-ido-mode 1)))
 
+(required 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
