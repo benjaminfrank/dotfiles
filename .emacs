@@ -212,7 +212,7 @@ distributed under a different name than their function."
 (required 'flycheck)
 (required 'yasnippet)
 (required 'elnode)
-(required 'tidy)
+(required 'tidy-buffer nil nil 'tidy)
 (required 'darkroom-mode nil nil 'darkroom)
 
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
