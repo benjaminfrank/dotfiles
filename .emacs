@@ -454,11 +454,12 @@ class %TESTCLASS% extends WordSpec with Matchers {
     (when (file-exists-p command-file)
       (shell-command command-file))))
 
-(add-hook 'org-mode-hook (lambda()
-                           (auto-fill-mode)
-                           (yas-minor-mode)
-                           (local-set-key (kbd "C-c c") 'pandoc)))
-(add-hook 'markdown-mode-hook (lambda() (yas-minor-mode)))
+(defun markup-common-hooks()
+  (auto-fill-mode)
+  (yas-minor-mode)
+  (local-set-key (kbd "C-c c") 'pandoc))
+(add-hook 'org-mode-hook 'markup-common-hooks)
+(add-hook 'markdown-mode-hook 'markup-common-hooks)
 
 ;;..............................................................................
 ;; R
