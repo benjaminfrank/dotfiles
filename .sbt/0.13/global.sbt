@@ -2,3 +2,5 @@
 addCommandAlias("pluginDependencyUpdates", "; reload plugins; dependencyUpdates; reload return")
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
+
+useGpg := true
