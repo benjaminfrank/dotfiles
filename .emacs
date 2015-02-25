@@ -358,6 +358,7 @@ distributed under a different name than their function."
 (add-hook 'scala-mode-hook
           (lambda()
             (projectile-mode)
+            ;; TODO https://github.com/hvesalai/scala-mode2/issues/75
             (set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
             ;; TODO: make whitespace warning project-specific
             (set (make-local-variable 'whitespace-line-column) 116)
