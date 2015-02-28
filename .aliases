@@ -32,7 +32,7 @@ alias rm="rm -i"
 
 #alias nano="nano -w"
 alias nano='echo "stop using nano, emacs is fast now"'
-alias emacs="emacsclient -nw"
+alias emacs="emacs -nw"
 alias please="sudo"
 alias fuck="rm -rf"
 
