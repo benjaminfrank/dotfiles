@@ -221,10 +221,9 @@ distributed under a different name than their function."
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 
 ;;(required 'flx-ido)
-(required 'vc-git-grep nil nil 'vc-git)
 (setq projectile-use-native-indexing t
       projectile-use-git-grep t)
-(required 'projectile);; nil (lambda() (flx-ido-mode 1)))
+(required 'projectile nil (lambda() (require 'vc-git)))
 
 (required 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
