@@ -309,7 +309,7 @@ distributed under a different name than their function."
   "Use `find-tag' to find symbol at point, falling back to `find-func' features."
   (interactive)
   (let* ((fun (function-called-at-point)))
-    (if (find-function-noselect fun 'no-c-sources)
+    (if (and fun (find-function-noselect fun 'no-c-sources))
         (find-function-do-it fun nil 'switch-to-buffer)
       (find-tag (symbol-name (symbol-at-point))))))
 
