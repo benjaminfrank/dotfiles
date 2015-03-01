@@ -247,6 +247,8 @@ distributed under a different name than their function."
 ;;(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-grep)
+;; projectile-find-tag is too slow: https://github.com/bbatsov/projectile/issues/668
+(global-set-key (kbd "M-.") 'find-tag)
 (global-set-key (kbd "s-b") 'magit-blame-mode)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
@@ -302,9 +304,21 @@ distributed under a different name than their function."
           ((setq sym (variable-at-point)) (describe-variable sym))
           ((setq sym (function-at-point)) (describe-function sym)))))
 
+(defun elisp-find-tag-or-find-func ()
+  ;;; Could be a lot smarter for non-function symbols (variables, faces, packages, etc)
+  "Use `find-tag' to find symbol at point, falling back to `find-func' features."
+  (interactive)
+  (let* ((fun (function-called-at-point)))
+    (if (find-function-noselect fun 'no-c-sources)
+        (find-function-do-it fun nil 'switch-to-buffer)
+      (find-tag (symbol-name (symbol-at-point))))))
+
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
-            (local-set-key (kbd "M-.") 'find-function-at-point)
+            ;; TODO: have standard location for emacs-source
+            ;;       http://stackoverflow.com/questions/11595317
+            ;;       using apt-get source emacs24
+            (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
             (setq indent-tabs-mode nil tab-width 4 c-basic-offset 4)
             (rainbow-mode)
