@@ -129,16 +129,6 @@ distributed under a different name than their function."
         (subword-backward-kill 1)
       (backward-kill-word 1))))
 
-(defun git-grep (search)
-  ;; https://www.ogre.com/node/447
-  "Git grep the entire current repository for SEARCH."
-  (interactive (list (completing-read
-                      "Search for: " nil nil nil (current-word))))
-  (grep-find (concat "git --no-pager grep -P -n \""
-                     search
-                     "\" `git rev-parse --show-toplevel`"))
-  (other-window 1))
-
 (defun exit ()
   "Short hand for DEATH TO ALL PUNY BUFFERS!"
   (interactive)
@@ -231,7 +221,9 @@ distributed under a different name than their function."
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 
 ;;(required 'flx-ido)
-(setq projectile-use-native-indexing t)
+(required 'vc-git-grep nil nil 'vc-git)
+(setq projectile-use-native-indexing t
+      projectile-use-git-grep t)
 (required 'projectile);; nil (lambda() (flx-ido-mode 1)))
 
 (required 'yaml-mode)
@@ -256,7 +248,7 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;;(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-f") 'projectile-find-file)
-(global-set-key (kbd "s-F") 'git-grep)
+(global-set-key (kbd "s-F") 'projectile-grep)
 (global-set-key (kbd "s-b") 'magit-blame-mode)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
