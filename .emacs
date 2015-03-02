@@ -47,6 +47,7 @@
 (setq show-paren-delay 0
       compilation-skip-threshold 2
       c-basic-offset 4
+      source-directory (getenv "EMACS_SOURCE")
       nxml-slash-auto-complete-flag t
       sentence-end-double-space nil
       ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -309,15 +310,12 @@ distributed under a different name than their function."
   "Use `find-tag' to find symbol at point, falling back to `find-func' features."
   (interactive)
   (let* ((fun (function-called-at-point)))
-    (if (and fun (find-function-noselect fun 'no-c-sources))
+    (if (and fun (find-function-noselect fun (not source-directory)))
         (find-function-do-it fun nil 'switch-to-buffer)
       (find-tag (symbol-name (symbol-at-point))))))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
-            ;; TODO: have standard location for emacs-source
-            ;;       http://stackoverflow.com/questions/11595317
-            ;;       using apt-get source emacs24
             (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
             (setq indent-tabs-mode nil tab-width 4 c-basic-offset 4)

@@ -24,7 +24,7 @@
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
 	cut = checkout -b
 	sith = push --force
-	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e .ensime_cache -e .javahome -e .sbtopts -e props.conf -e eventstore_props.conf
+	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .javahome -e props.conf -e eventstore_props.conf
 [color]
 	branch = auto
 	diff = auto
