@@ -78,7 +78,7 @@ URxvt.color13:     S_base06
 URxvt.color14:     S_base07
 URxvt.color15:     S_base08
 
-URxvt.tabbed.tabbar-fg: 2
+URxvt.tabbed.tabbar-fg: 4
 URxvt.tabbed.tabbar-bg: 0
 URxvt.tabbed.tab-fg:    0
-URxvt.tabbed.tab-bg:    2
+URxvt.tabbed.tab-bg:    4
