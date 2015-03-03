@@ -48,19 +48,19 @@ URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 ! URxvt.color2:      #333333
 ! URxvt.color3:      #008800
 
-#define S_baseBG #2B2B2B
-#define S_baseFG #a9b7c6
 #define S_base00 #2B2B2B
-#define S_base01 #9876aa
-#define S_base02 #629755
-#define S_base03 #cc7832
-#define S_base04 #a6c25c
-#define S_base05 #259185
-#define S_base06 #5859b7
+#define S_base01 #a9b7c6
+#define S_base02 #cc7832
+#define S_base03 #629755
+#define S_base04 #259185
+#define S_base05 #fec66c
+#define S_base06 #a6c25c
+#define S_base07 #9876aa
+#define S_base08 #5859b7
 
 !! Mini-darcula
-URxvt.background:  S_baseBG
-URxvt.foreground:  S_baseFG
+URxvt.background:  S_base00
+URxvt.foreground:  S_base01
 URxvt.color0:      S_base00
 URxvt.color1:      S_base01
 URxvt.color2:      S_base02
@@ -68,17 +68,17 @@ URxvt.color3:      S_base03
 URxvt.color4:      S_base04
 URxvt.color5:      S_base05
 URxvt.color6:      S_base06
-URxvt.color7:      S_base01
-URxvt.color8:      S_base02
-URxvt.color9:      S_base03
-URxvt.color10:     S_base04
-URxvt.color11:     S_base05
-URxvt.color12:     S_base06
-URxvt.color13:     S_base01
-URxvt.color14:     S_base02
-URxvt.color15:     S_base03
+URxvt.color7:      S_base07
+URxvt.color8:      S_base01
+URxvt.color9:      S_base02
+URxvt.color10:     S_base03
+URxvt.color11:     S_base04
+URxvt.color12:     S_base05
+URxvt.color13:     S_base06
+URxvt.color14:     S_base07
+URxvt.color15:     S_base08
 
-URxvt.tabbed.tabbar-fg: 2
+URxvt.tabbed.tabbar-fg: 1
 URxvt.tabbed.tabbar-bg: 0
-URxvt.tabbed.tab-fg:    1
+URxvt.tabbed.tab-fg:    6
 URxvt.tabbed.tab-bg:    0
