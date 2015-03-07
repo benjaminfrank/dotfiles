@@ -48,37 +48,45 @@ URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 ! URxvt.color2:      #333333
 ! URxvt.color3:      #008800
 
-#define S_base00 #2B2B2B
-#define S_base01 #a9b7c6
-#define S_base02 #cc7832
-#define S_base03 #259185
-#define S_base04 #629755
-#define S_base05 #fec66c
-#define S_base06 #a6c25c
-#define S_base07 #9876aa
-#define S_base08 #5859b7
-
 !! Mini-darcula
-URxvt.background:  S_base00
-URxvt.foreground:  S_base01
-URxvt.color0:      S_base00
-URxvt.color1:      S_base01
-URxvt.color2:      S_base02
-URxvt.color3:      S_base03
-URxvt.color4:      S_base04
-URxvt.color5:      S_base05
-URxvt.color6:      S_base06
-URxvt.color7:      S_base07
-URxvt.color8:      S_base01
-URxvt.color9:      S_base02
-URxvt.color10:     S_base03
-URxvt.color11:     S_base04
-URxvt.color12:     S_base05
-URxvt.color13:     S_base06
-URxvt.color14:     S_base07
-URxvt.color15:     S_base08
 
-URxvt.tabbed.tabbar-fg: 4
+
+!30	Black
+!31	Red
+!32	Green
+!33	Yellow
+!34	Blue
+!35	Magenta
+!36	Cyan
+!37	White
+
+URxvt.background:  #2B2B2B
+URxvt.foreground:  #a9b7c6
+
+
+!! To be portable, any colour scheme should roughly match the ANSI colour codes
+!! http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+!! which cycle through: black, red, green, yellow, blue, magenta, cyan, white
+!! and repeat for the "bright" versions
+URxvt.color0:      #2B2B2B
+URxvt.color1:      #cc7832
+URxvt.color2:      #629755
+URxvt.color3:      #fec66c
+URxvt.color4:      #5859b7
+URxvt.color5:      #9876aa
+URxvt.color6:      #259185
+URxvt.color7:      #a9b7c6
+! the lighter/stronger variants
+URxvt.color8:      #4d4d4d
+URxvt.color9:      #de7620
+URxvt.color10:     #59a547
+URxvt.color11:     #fec64c
+URxvt.color12:     #4041cf
+URxvt.color13:     #9e64bc
+URxvt.color14:     #179f90
+URxvt.color15:     #ced6de
+
+URxvt.tabbed.tabbar-fg: 2
 URxvt.tabbed.tabbar-bg: 0
 URxvt.tabbed.tab-fg:    0
-URxvt.tabbed.tab-bg:    4
+URxvt.tabbed.tab-bg:    2

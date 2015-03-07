@@ -65,7 +65,7 @@ if [ $? -eq 0 ]; then \
     # @5 - Changes to working tree
     echo "'$IRed'"$(__git_ps1 "%s"); \
   fi) "
-fi)'"$IBlack\\w$Color_Off "
+fi)'"$IWhite\\w$Color_Off "
 
 # workaround for the Emacs shell
 if [ "$TERM" = "dumb" ] ; then
