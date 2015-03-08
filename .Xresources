@@ -40,34 +40,14 @@ URxvt.clipboard.autocopy: true
 !URxvt.keysym.Control-v:   perl:clipboard:paste
 URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 
-!! fommil theme
-! URxvt.background:  #000000
-! URxvt.foreground:  #00CC00
-! URxvt.color0:      #000000
-! URxvt.color1:      #00CC00
-! URxvt.color2:      #333333
-! URxvt.color3:      #008800
-
-!! Mini-darcula
-
-
-!30	Black
-!31	Red
-!32	Green
-!33	Yellow
-!34	Blue
-!35	Magenta
-!36	Cyan
-!37	White
-
-URxvt.background:  #2B2B2B
-URxvt.foreground:  #a9b7c6
-
-
 !! To be portable, any colour scheme should roughly match the ANSI colour codes
 !! http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 !! which cycle through: black, red, green, yellow, blue, magenta, cyan, white
-!! and repeat for the "bright" versions
+!! and repeat for the "bright" versions.
+
+!! Mini-darcula
+URxvt.background:  #2B2B2B
+URxvt.foreground:  #a9b7c6
 URxvt.color0:      #2B2B2B
 URxvt.color1:      #cc7832
 URxvt.color2:      #629755
@@ -85,6 +65,7 @@ URxvt.color12:     #4041cf
 URxvt.color13:     #9e64bc
 URxvt.color14:     #179f90
 URxvt.color15:     #ced6de
+
 
 URxvt.tabbed.tabbar-fg: 2
 URxvt.tabbed.tabbar-bg: 0
