@@ -168,6 +168,11 @@ distributed under a different name than their function."
       (forward-char)
       (not (looking-at "https?\\b")))))
 
+(defun make-frame-second-monitor ()
+  "Make a frame with fonts that work well on my second monitor."
+  (interactive)
+  (make-frame '((font . "14"))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
@@ -219,7 +224,8 @@ distributed under a different name than their function."
                                'flyspell-ignore-http-and-https)))
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 
-;;(required 'flx-ido)
+(setq ag-reuse-window 't)
+(required 'ag)
 (setq projectile-use-native-indexing t
       projectile-use-git-grep t)
 (required 'projectile nil (lambda() (require 'vc-git)))
@@ -246,7 +252,7 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;;(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-f") 'projectile-find-file)
-(global-set-key (kbd "s-F") 'projectile-grep)
+(global-set-key (kbd "s-F") 'projectile-ag)
 ;; projectile-find-tag is too slow: https://github.com/bbatsov/projectile/issues/668
 (global-set-key (kbd "M-.") 'find-tag)
 (global-set-key (kbd "s-b") 'magit-blame-mode)
