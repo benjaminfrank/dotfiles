@@ -330,6 +330,7 @@ distributed under a different name than their function."
             (eldoc-mode)
             (flycheck-mode)
             (yas-minor-mode)
+            (company-mode)
             (turn-on-ctags-auto-update-mode)))
 
 
@@ -437,6 +438,7 @@ class %TESTCLASS% extends WordSpec with Matchers {
                   c-basic-offset 4)
             (yas-minor-mode)
             (projectile-mode)
+            (company-mode)
             (local-set-key (kbd "C-c e") 'next-error)
             (turn-on-ctags-auto-update-mode)))
 
@@ -445,8 +447,9 @@ class %TESTCLASS% extends WordSpec with Matchers {
 ;; C
 (add-hook 'c-mode-hook (lambda()
                          (yas-minor-mode)
+                         (projectile-mode)
+                         (company-mode)
                          (turn-on-ctags-auto-update-mode)))
-
 
 ;;..............................................................................
 ;; org-mode
