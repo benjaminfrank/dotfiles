@@ -189,6 +189,8 @@ distributed under a different name than their function."
 (required 'highlight-symbol t
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
 
+(setq guide-key/guide-key-sequence t)
+(required 'guide-key t (lambda() (guide-key-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
