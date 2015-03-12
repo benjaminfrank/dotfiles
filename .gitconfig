@@ -12,18 +12,27 @@
 	default = simple
 [mergetool]
 	keepBackup = true
+[remote]
+# Setting pushdefault to origin, and not upstream, means that even if
+# pulls come from upstream, pushes still go to origin. This is a very
+# good workflow for github style projects.
+# You'll need to set the upstream, e.g.
+#   git branch --set-upstream-to=upstream/master
+# but this will be done automatically if you create branches with
+#   checkout --track -b
+# i.e. the "cut" alias below.
+        pushdefault = origin
 [alias]
 	l = log --pretty=format:'%h : %an, %ar : %s' --graph
 	pick = cherry-pick
-#	up = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
-#	up = !"git pull origin ; git fetch upstream ; git rebase upstream/master"
         up = fetch --all -p
 	undo = reset --soft 'HEAD^'
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
-	cut = checkout -b
+	cut = checkout --track -b
 	sith = push --force
+        # unfortunately there is no git-config clean.exclude section
 	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .javahome -e props.conf -e eventstore_props.conf
 [color]
 	branch = auto
