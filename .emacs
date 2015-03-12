@@ -328,7 +328,8 @@ distributed under a different name than their function."
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
             (setq indent-tabs-mode nil tab-width 4 c-basic-offset 4)
             (rainbow-mode)
-            (prettify-symbols-mode)
+            (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
+              (prettify-symbols-mode))
             (flyspell-prog-mode)
             (eldoc-mode)
             (flycheck-mode)
