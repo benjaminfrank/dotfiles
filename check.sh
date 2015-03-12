@@ -5,6 +5,8 @@ LOCAL="${DIR}/Profiles/${HOSTNAME}"
 
 function fdiff {
     diff -ru --exclude .git \
+         --exclude .emacs-test.el \
+         --exclude .travis.yml \
          --exclude check.sh \
          --exclude diff-etc-changes.sh \
          --exclude Profiles \
