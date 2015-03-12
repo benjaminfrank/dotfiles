@@ -176,7 +176,6 @@ distributed under a different name than their function."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
-(required 'darcula-theme t (lambda() (set-frame-font "Inconsolata-16")))
 (required 'midnight t (lambda()
                         (add-to-list 'clean-buffer-list-kill-regexps
                                      "\\`\\*magit.*\\*\\'")
@@ -483,5 +482,11 @@ class %TESTCLASS% extends WordSpec with Matchers {
 (autoload 'R-mode "ess-site" nil t)
 (add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
 
+
+;;..............................................................................
+;; User Site Local
+(let ((user-local (concat user-emacs-directory "local.el")))
+  (when (file-exists-p user-local)
+    (load user-local)))
 
 ;;; .emacs ends here
