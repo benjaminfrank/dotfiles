@@ -24,10 +24,12 @@ compton
 console-setup
 corkscrew
 cpufrequtils
+cruft
 cups
 cups-browsed
 cups-bsd
 debfoster
+debsums
 desktop-base
 devscripts
 discover

@@ -1,4 +1,0 @@
-fommil  ALL = NOPASSWD: /usr/sbin/pm-hibernate
-fommil  ALL = NOPASSWD: /usr/sbin/pm-suspend
-fommil  ALL = NOPASSWD: /sbin/reboot
-fommil  ALL = NOPASSWD: /sbin/poweroff

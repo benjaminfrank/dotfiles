@@ -8,14 +8,22 @@
 #   sudo cruft -d /etc
 
 manualFiles="/etc/modprobe.d/that-fucking-beep.conf
-/etc/sudoers.d/apt
 /etc/systemd/system/i3lock.service
 /etc/systemd/system/sleep.target.wants/i3lock.service
-/etc/default/keyboard"
+/etc/default/keyboard
+/etc/apt/sources.list.d/google-talkplugin.list
+/etc/apt/sources.list.d/mono-xamarin.list
+/etc/apt/sources.list.d/spotify.list
+/etc/modprobe.d/intel-sound.conf
+/etc/sudoers.d/apt
+/etc/sudoers.d/pmsuspend
+/etc/udev/rules.d/50-nvidia.rules
+/etc/udev/rules.d/51-android.rules
+/etc/X11/xorg.conf"
 
 # TODO: list of files to ignore
 
-name=`basename $0`
+name=etc
 tmp=/tmp/$name.tmp
 missingPattern='^debsums: missing file'
 
@@ -41,7 +49,7 @@ mkdir -p $tmp.4/
 cat $tmp.3 | xargs -I%%% find /var/cache/apt/archives -name '%%%_*' | xargs -I%%% dpkg-deb --extract %%% $tmp.4/
 
 # diff them!
-cat $tmp.2 | xargs -I%%% diff -Nu %%% $tmp.4/%%% > $name.diff
+cat $tmp.2 | xargs -I%%% diff -Nu $tmp.4/%%% %%% > $name.diff
 
 # clean up
 #echo "you might want to clean up $tmp"

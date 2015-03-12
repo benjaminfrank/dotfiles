@@ -1,0 +1,168 @@
+--- /tmp/etc.tmp.4//etc/modprobe.d/dkms.conf	2014-10-04 19:04:21.000000000 +0100
++++ /etc/modprobe.d/dkms.conf	2014-09-29 20:27:26.000000000 +0100
+@@ -1,4 +0,0 @@
+-# modprobe information used for DKMS modules
+-#
+-# This is a stub file, should be edited when needed,
+-# used by default by DKMS.
+--- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2014-11-04 21:01:16.000000000 +0000
++++ /etc/lightdm/lightdm.conf	2015-03-11 23:57:01.000000000 +0000
+@@ -97,13 +97,13 @@
+ #unity-compositor-command=unity-system-compositor
+ #unity-compositor-timeout=60
+ #greeter-session=example-gtk-gnome
+-#greeter-hide-users=false
++greeter-hide-users=false
+ #greeter-allow-guest=true
+-#greeter-show-manual-login=false
++greeter-show-manual-login=false
+ #greeter-show-remote-login=true
+ #user-session=default
+ #allow-user-switching=true
+-#allow-guest=true
++allow-guest=false
+ #guest-session=
+ #session-wrapper=lightdm-session
+ #greeter-wrapper=
+--- /tmp/etc.tmp.4//etc/init.d/nvidia-kernel	2013-08-03 19:42:02.000000000 +0100
++++ /etc/init.d/nvidia-kernel	2014-06-18 23:44:34.566541326 +0100
+@@ -27,14 +27,14 @@
+     
+ make_nodes () {
+   if ! [ -e /dev/nvidiactl ]; then
+-    mknod -m 0660 /dev/nvidiactl c 195 255
++    mknod -m 0666 /dev/nvidiactl c 195 255
+     chgrp video /dev/nvidiactl
+   fi
+   NVIDIA_CARDS=${NVIDIA_CARDS:-0}
+   i=0
+   while [ "$i" -lt "$NVIDIA_CARDS" ]; do
+     if ! [ -e /dev/nvidia$i ]; then
+-      mknod -m 0660 /dev/nvidia$i c 195 $i
++      mknod -m 0666 /dev/nvidia$i c 195 $i
+       chgrp video /dev/nvidia$i
+     fi
+     i=$((i+1))
+--- /tmp/etc.tmp.4//etc/modprobe.d/nvidia-kernel-common.conf	2014-12-02 00:01:05.000000000 +0000
++++ /etc/modprobe.d/nvidia-kernel-common.conf	2014-06-18 23:46:51.026996177 +0100
+@@ -1,5 +1,5 @@
+ alias char-major-195* nvidia
+-options nvidia NVreg_DeviceFileUID=0 NVreg_DeviceFileGID=44 NVreg_DeviceFileMode=0660
++options nvidia NVreg_DeviceFileUID=0 NVreg_DeviceFileGID=44 NVreg_DeviceFileMode=0666
+ # To enable FastWrites and Sidebus addressing, uncomment these lines
+ # options nvidia NVreg_EnableAGPSBA=1
+ # options nvidia NVreg_EnableAGPFW=1
+--- /tmp/etc.tmp.4//etc/sysctl.conf	2015-03-06 21:12:02.000000000 +0000
++++ /etc/sysctl.conf	2014-06-15 20:57:10.664602465 +0100
+@@ -58,3 +58,6 @@
+ # Log Martian Packets
+ #net.ipv4.conf.all.log_martians = 1
+ #
++
++# added by Insync
++fs.inotify.max_user_watches=1048576
+--- /tmp/etc.tmp.4//etc/systemd/logind.conf	2015-01-21 12:30:37.000000000 +0000
++++ /etc/systemd/logind.conf	2014-07-23 22:25:17.174961880 +0100
+@@ -15,6 +15,7 @@
+ #KillExcludeUsers=root
+ #InhibitDelayMaxSec=5
+ #HandlePowerKey=poweroff
++HandlePowerKey=suspend
+ #HandleSuspendKey=suspend
+ #HandleHibernateKey=hibernate
+ #HandleLidSwitch=suspend
+@@ -24,5 +25,3 @@
+ #LidSwitchIgnoreInhibited=yes
+ #IdleAction=ignore
+ #IdleActionSec=30min
+-#RuntimeDirectorySize=10%
+-#RemoveIPC=yes
+--- /tmp/etc.tmp.4//etc/systemd/system/i3lock.service	1970-01-01 01:00:00.000000000 +0100
++++ /etc/systemd/system/i3lock.service	2014-06-29 16:32:55.795997827 +0100
+@@ -0,0 +1,14 @@
++#systemctl enable i3lock.service
++
++[Unit]
++Description=i3lock
++Before=sleep.target
++
++[Service]
++User=fommil
++Type=forking
++Environment=DISPLAY=:0
++ExecStart=/usr/bin/i3lock -c 000000
++
++[Install]
++WantedBy=sleep.target
+--- /tmp/etc.tmp.4//etc/systemd/system/sleep.target.wants/i3lock.service	1970-01-01 01:00:00.000000000 +0100
++++ /etc/systemd/system/sleep.target.wants/i3lock.service	2014-06-29 16:32:55.795997827 +0100
+@@ -0,0 +1,14 @@
++#systemctl enable i3lock.service
++
++[Unit]
++Description=i3lock
++Before=sleep.target
++
++[Service]
++User=fommil
++Type=forking
++Environment=DISPLAY=:0
++ExecStart=/usr/bin/i3lock -c 000000
++
++[Install]
++WantedBy=sleep.target
+--- /tmp/etc.tmp.4//etc/default/keyboard	1970-01-01 01:00:00.000000000 +0100
++++ /etc/default/keyboard	2015-03-10 20:28:04.300214298 +0000
+@@ -0,0 +1,10 @@
++# KEYBOARD CONFIGURATION FILE
++
++# Consult the keyboard(5) manual page.
++
++XKBMODEL="pc105"
++XKBLAYOUT="us"
++XKBVARIANT=""
++XKBOPTIONS=""
++
++BACKSPACE="guess"
+--- /tmp/etc.tmp.4//etc/apt/sources.list.d/google-talkplugin.list	1970-01-01 01:00:00.000000000 +0100
++++ /etc/apt/sources.list.d/google-talkplugin.list	2014-03-22 02:23:01.316185846 +0000
+@@ -0,0 +1,3 @@
++### THIS FILE IS AUTOMATICALLY CONFIGURED ###
++# You may comment out this entry, but any other modifications may be lost.
++deb http://dl.google.com/linux/talkplugin/deb/ stable main
+--- /tmp/etc.tmp.4//etc/apt/sources.list.d/mono-xamarin.list	1970-01-01 01:00:00.000000000 +0100
++++ /etc/apt/sources.list.d/mono-xamarin.list	2015-01-08 21:55:42.284600121 +0000
+@@ -0,0 +1 @@
++#deb http://download.mono-project.com/repo/debian wheezy main
+--- /tmp/etc.tmp.4//etc/apt/sources.list.d/spotify.list	1970-01-01 01:00:00.000000000 +0100
++++ /etc/apt/sources.list.d/spotify.list	2015-01-18 13:40:36.716472041 +0000
+@@ -0,0 +1 @@
++deb http://repository.spotify.com stable non-free
+--- /tmp/etc.tmp.4//etc/modprobe.d/intel-sound.conf	1970-01-01 01:00:00.000000000 +0100
++++ /etc/modprobe.d/intel-sound.conf	2014-11-07 21:33:57.898611689 +0000
+@@ -0,0 +1,2 @@
++#options snd-hda-intel model=mbp55
++options snd-hda-intel model=imac27_122
+--- /tmp/etc.tmp.4//etc/sudoers.d/aptitude	1970-01-01 01:00:00.000000000 +0100
++++ /etc/sudoers.d/aptitude	2014-10-05 20:10:12.671698358 +0100
+@@ -0,0 +1,2 @@
++fommil  ALL = NOPASSWD: /usr/bin/apt-get
++fommil  ALL = NOPASSWD: /usr/bin/aptitude
+--- /tmp/etc.tmp.4//etc/sudoers.d/pmsuspend	1970-01-01 01:00:00.000000000 +0100
++++ /etc/sudoers.d/pmsuspend	2014-06-13 00:28:14.795337024 +0100
+@@ -0,0 +1,4 @@
++fommil  ALL = NOPASSWD: /usr/sbin/pm-hibernate
++fommil  ALL = NOPASSWD: /usr/sbin/pm-suspend
++fommil  ALL = NOPASSWD: /sbin/reboot
++fommil  ALL = NOPASSWD: /sbin/poweroff
+--- /tmp/etc.tmp.4//etc/udev/rules.d/50-nvidia.rules	1970-01-01 01:00:00.000000000 +0100
++++ /etc/udev/rules.d/50-nvidia.rules	2014-06-18 23:43:04.585577351 +0100
+@@ -0,0 +1,3 @@
++KERNEL="nvidia[0-9]*", NAME="%k"
++KERNEL="nvidiactl", NAME="%k"
++
+--- /tmp/etc.tmp.4//etc/udev/rules.d/51-android.rules	1970-01-01 01:00:00.000000000 +0100
++++ /etc/udev/rules.d/51-android.rules	2014-07-06 19:08:36.403682453 +0100
+@@ -0,0 +1,2 @@
++SUBSYSTEM=="usb", ATTR{idVendor}=="1004", MODE="0666", GROUP="plugdev"
++SUBSYSTEM=="usb", ATTR{idVendor}=="0b05", MODE="0666", GROUP="plugdev"
