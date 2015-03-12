@@ -6,30 +6,36 @@ scala:
 #  - 2.9.3
 #  - 2.10.4
   - 2.11.6
-sudo: false
-addons:
-  apt_packages:
+  
+#sudo: false
+#addons:
+#  apt_packages:
   # Travis doen't allow ppa's on its docker infrastructure but by
   # installing emacs23-gtk we get most of the dependencies we need to
   # run our own build of emacs-24.4.
-  - emacs23-gtk
+#  - emacs23-gtk
+  # waiting for https://github.com/travis-ci/travis-ci/issues/3368
+#  - aspell
 before_install:
   - mkdir emacs.d
-  - echo -e '#!/bin/sh\necho International Ispell Version 3.1.20 but really Aspell 0.60.7-20110707' > bin/aspell && chmod 755 bin/aspell # for flyspell
   - export PATH=$PATH:$PWD/bin
   - sh -e /etc/init.d/xvfb start
 install:
-  - curl -L $EMACS_URL | tar xjf - -C $HOME &&
-    export EMACS=$HOME/emacs-${EMACS_VERSION}-bin/bin/emacs-${EMACS_VERSION} &&
-    $EMACS --version
+#  - curl -L $EMACS_URL | tar xjf - -C $HOME &&
+#    export EMACS=$HOME/emacs-${EMACS_VERSION}-bin/bin/emacs-${EMACS_VERSION} &&
+#    $EMACS --version
+  - sudo add-apt-repository -y ppa:cassou/emacs &&
+    sudo apt-get update -qq &&
+    sudo apt-get install -qq emacs24 emacs24-el aspell &&
+    export EMACS=emacs
 script:
   # only testing emacs starts up ok for now
   - $EMACS --no-init-file --load .emacs-test.el --load .emacs --eval '(kill-emacs 0)'
 env:
   global:
     - DISPLAY=:99.0
-  matrix:
+#  matrix:
 #    - EMACS_VERSION=24.1 EMACS_URL=https://www.dropbox.com/s/lf2c9op9wax86y8/emacs-24.1-bin.tar.bz2
 #    - EMACS_VERSION=24.2 EMACS_URL=https://www.dropbox.com/s/u1isy5ywhu5a2yg/emacs-24.2-bin.tar.bz2
 #    - EMACS_VERSION=24.3 EMACS_URL=https://www.dropbox.com/s/iy3dqx5r378rpe6/emacs-24.3-bin.tar.bz2
-    - EMACS_VERSION=24.4 EMACS_URL=https://www.dropbox.com/s/y3bhjrchxrm9reh/emacs-24.4-bin.tar.bz2
+#    - EMACS_VERSION=24.4 EMACS_URL=https://www.dropbox.com/s/y3bhjrchxrm9reh/emacs-24.4-bin.tar.bz2
