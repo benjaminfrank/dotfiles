@@ -190,8 +190,7 @@ distributed under a different name than their function."
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
 
 (setq guide-key/guide-key-sequence t)
-(required 'guide-key t)
-(guide-key-mode 1)
+(required 'guide-key t (lambda() (guide-key-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
@@ -204,7 +203,9 @@ distributed under a different name than their function."
 (required 'magit nil (lambda() (magit-auto-revert-mode -1)))
 (required 'magit-find-file)
 (required 'ctags-create-tags-table nil nil 'ctags)
+(required 'turn-on-ctags-auto-update-mode nil nil 'ctags-update)
 (required 'auto-complete-exuberant-ctags nil (lambda() (ac-exuberant-ctags-setup)))
+(required 'company-mode nil nil 'company)
 (required 'rainbow-mode)
 (required 'flycheck)
 (required 'yasnippet)
