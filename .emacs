@@ -88,6 +88,8 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+;; TODO: try various obvious permutations on `function` => `package`
+;; mapping, such as dropping `-mode` from the name
 (defun required (function &optional force hook package)
   "`autoload' an interactive FUNCTION :symbol, installing if not present.
 
@@ -168,11 +170,6 @@ distributed under a different name than their function."
       (forward-char)
       (not (looking-at "https?\\b")))))
 
-(defun make-frame-second-monitor ()
-  "Make a frame with fonts that work well on my second monitor."
-  (interactive)
-  (make-frame '((font . "14"))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
@@ -199,7 +196,11 @@ distributed under a different name than their function."
 (required 'misc-cmds)
 (required 'multiple-cursors)
 (required 'git-gutter)
+(required 'magit-push-remote-mode nil nil 'magit-push-remote)
 (required 'magit nil (lambda() (magit-auto-revert-mode -1)))
+;; TODO: move into magit https://github.com/magit/magit-push-remote/issues/4
+(add-hook 'magit-mode-hook (lambda() (magit-push-remote-mode 1)))
+
 (required 'magit-find-file)
 (required 'ctags-create-tags-table nil nil 'ctags)
 (required 'turn-on-ctags-auto-update-mode nil nil 'ctags-update)

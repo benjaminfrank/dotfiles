@@ -18,9 +18,9 @@
 # good workflow for github style projects.
 # You'll need to set the upstream, e.g.
 #   git branch --set-upstream-to=upstream/master
-# but this will be done automatically if you create branches with
-#   checkout --track -b
-# i.e. the "cut" alias below.
+# but this will be done automatically if you use the "cut" alias below.
+# Note that magit needs a little bit of hand-holding and needs pushremote
+# to be set on a per-branch basis
         pushdefault = origin
 [alias]
 	l = log --pretty=format:'%h : %an, %ar : %s' --graph
@@ -30,10 +30,14 @@
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
-	cut = checkout --track -b
+        # http://stackoverflow.com/questions/29030327
+        cut = "!f() { UPSTREAM=`git rev-parse --abbrev-ref --symbolic-full-name @{u}`; git checkout --track -b $1 ; git branch -u $UPSTREAM; git config branch.$1.pushremote origin; }; f"
 	sith = push --force
         # unfortunately there is no git-config clean.exclude section
 	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .javahome -e props.conf -e eventstore_props.conf
+        # for rebase operations (for merge, use --ours)
+        my-way-or-the-highway="!ag '<<<<<<<' . | xargs git checkout --theirs"
+
 [color]
 	branch = auto
 	diff = auto
@@ -42,12 +46,7 @@
 	ui = auto
 [apply]
 	whitespace = warn
-#[http]
-#	sslCAInfo=/home/hallisam/.traf.crt
 
 # for repos that use HTTPS, this stores passwords in a cache (1 hour)
 #git config credential.helper cache
 #git config credential.helper "cache --timeout=3600"
-
-# for simple resolving conflicts after manual merging
-# grep -lr '<<<<<<<' . | xargs git checkout --theirs
