@@ -197,9 +197,9 @@ distributed under a different name than their function."
 (required 'multiple-cursors)
 (required 'git-gutter)
 (required 'magit-push-remote-mode nil nil 'magit-push-remote)
-(required 'magit nil (lambda() (magit-auto-revert-mode -1)))
-;; TODO: move into magit https://github.com/magit/magit-push-remote/issues/4
-(add-hook 'magit-mode-hook (lambda() (magit-push-remote-mode 1)))
+(required 'magit nil (lambda()
+                       (magit-auto-revert-mode -1)
+                       (magit-push-remote-mode 1)))
 
 (required 'magit-find-file)
 (required 'ctags-create-tags-table nil nil 'ctags)
