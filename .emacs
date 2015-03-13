@@ -74,7 +74,9 @@
   (when (file-exists-p path)
     (add-to-list 'load-path path)))
 (add-to-load-path "/usr/local/share/emacs/site-lisp")
+(add-to-load-path "/usr/share/org-mode/lisp")
 (add-to-load-path (concat user-emacs-directory "lisp"))
+
 
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode))
 (fset 'html-mode 'nxml-mode)
@@ -458,7 +460,10 @@ class %TESTCLASS% extends WordSpec with Matchers {
 
 ;;..............................................................................
 ;; org-mode
-(required 'org)
+(required 'org (lambda()
+                 ;; ox-taskjuggler isn't available on MELPA, must be a system install
+                 (when (locate-library "ox-taskjuggler")
+                   (require 'ox-taskjuggler))))
 (required 'markdown-mode)
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
