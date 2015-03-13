@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export SCALA_HOME=/opt/scala-2.11.5
+export SCALA_HOME=/opt/scala-2.11.6
 export MAVEN_HOME=/opt/apache-maven-3.2.5
 
 export PATH=$SCALA_HOME/bin:$MAVEN_HOME/bin:$HOME/.cabal/bin:$PATH
