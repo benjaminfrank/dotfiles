@@ -50,12 +50,16 @@ IWhite="\[\033[0;97m\]"
 # Reset
 Color_Off="\[\033[0m\]"
 
-if [ "$SSH_CLIENT" != "" ] || [ "$SSH_TTY" != "" ] ; then
-    PS1PREFIX="$White\h$Color_Off "
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
+    PS1PREFIX="$Blue\h$Color_Off "
+fi
+
+if [ "$USER" = "root" ] ; then
+    ROOT_WARNING="${BRed}\u$Color_Off "
 fi
 
 # TODO: can this be factored out into a clean function?
-export PS1=$PS1PREFIX'$(git branch &>/dev/null;\
+export PS1=$ROOT_WARNING$PS1PREFIX'$(git branch &>/dev/null;\
 if [ $? -eq 0 ]; then \
   echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
   if [ "$?" -eq "0" ]; then \
@@ -65,7 +69,7 @@ if [ $? -eq 0 ]; then \
     # @5 - Changes to working tree
     echo "'$IRed'"$(__git_ps1 "%s"); \
   fi) "
-fi)'"$IWhite\\w$Color_Off "
+fi)'"$IWhite\w$Color_Off "
 
 # workaround for the Emacs shell
 if [ "$TERM" = "dumb" ] ; then
