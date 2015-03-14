@@ -198,6 +198,11 @@ distributed under a different name than their function."
 (required 'misc-cmds)
 (required 'multiple-cursors)
 (required 'git-gutter)
+
+(defun magit-diff-abbrev-arg ()
+  "WORKAROUND https://github.com/magit/magit-push-remote/issues/8 ."
+  (format "--abbrev=%d" 7))
+
 (required 'magit-push-remote-mode nil nil 'magit-push-remote)
 (required 'magit nil (lambda()
                        (magit-auto-revert-mode -1)
