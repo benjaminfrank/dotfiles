@@ -38,6 +38,8 @@ alias emacs=$EDITOR
 alias please="sudo"
 alias fuck="rm -rf"
 
+alias docker-nuke='docker rm $(docker ps -aq)'
+
 alias markdown="hsmarkdown"
 
 alias open="xdg-open"
