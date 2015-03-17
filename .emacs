@@ -243,6 +243,8 @@ distributed under a different name than their function."
 
 (required 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(required 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . yaml-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
@@ -465,10 +467,11 @@ class %TESTCLASS% extends WordSpec with Matchers {
 
 ;;..............................................................................
 ;; org-mode
-(required 'org (lambda()
-                 ;; ox-taskjuggler isn't available on MELPA, must be a system install
-                 (when (locate-library "ox-taskjuggler")
-                   (require 'ox-taskjuggler))))
+;; 'org is a system install and has a default binding to .org files
+;;(required 'org)
+;; ox-taskjuggler isn't available on MELPA, must be a system install
+(when (locate-library "ox-taskjuggler")
+  (require 'ox-taskjuggler))
 (required 'markdown-mode)
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
