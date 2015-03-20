@@ -49,6 +49,8 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,               xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
     , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
     , ((modMask .|. shiftMask, xK_r     ), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
+    , ((0,                    0x1008ff02), spawn "xbacklight -inc 10")
+    , ((0,                    0x1008ff03), spawn "xbacklight -dec 10")
   ]
     ++
     -- workspaces
