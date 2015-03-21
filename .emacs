@@ -244,7 +244,7 @@ distributed under a different name than their function."
 (required 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 (required 'dockerfile-mode)
-(add-to-list 'auto-mode-alist '("Dockerfile\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
