@@ -16,7 +16,7 @@ export HISTCONTROL=ignoredups
 export WINEARCH=win32
 export WINEDEBUG=fixme-all,warn+cursor
 
-export EDITOR='emacsclient -nw -s ~/.emacs.daemon -a ""'
+export EDITOR=emacs
 
 if [ "$PS1" ] && [ "$BASH" ]; then
     if [ -f $HOME/.bashrc ] ; then

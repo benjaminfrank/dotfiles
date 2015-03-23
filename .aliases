@@ -33,8 +33,6 @@ alias rm="rm -i"
 #alias nano="nano -w"
 alias nano='echo "stop using nano, emacs is fast now"'
 
-alias emacs=$EDITOR
-
 alias please="sudo"
 alias fuck="rm -rf"
 
