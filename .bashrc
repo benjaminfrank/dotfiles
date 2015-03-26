@@ -58,6 +58,11 @@ if [ "$USER" = "root" ] ; then
     ROOT_WARNING="${BRed}\u$Color_Off "
 fi
 
+if [ -z "`type -t __git_ps1`" ] ; then
+    # no-op for older machines
+    function __git_ps1 { exit 0 ; }
+fi
+
 # TODO: can this be factored out into a clean function?
 export PS1=$ROOT_WARNING$PS1PREFIX'$(git branch &>/dev/null;\
 if [ $? -eq 0 ]; then \

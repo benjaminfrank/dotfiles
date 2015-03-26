@@ -35,6 +35,7 @@ alias nano='echo "stop using nano, emacs is fast now"'
 
 alias please="sudo"
 alias fuck="rm -rf"
+alias wtf="ps -ef | grep java"
 
 alias docker-nuke='docker rm $(docker ps -aq)'
 
