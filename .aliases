@@ -37,7 +37,7 @@ alias please="sudo"
 alias fuck="rm -rf"
 alias wtf="ps -ef | grep java"
 
-alias docker-nuke='docker rm $(docker ps -aq)'
+alias docker-nuke="docker rm $(docker ps -aq) ; docker rmi $(docker images | grep '^<none>' | awk '{print $3}')"
 
 alias markdown="hsmarkdown"
 

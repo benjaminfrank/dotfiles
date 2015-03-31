@@ -403,6 +403,7 @@ distributed under a different name than their function."
             (required 'ensime t)
             (ensime-mode 1)
             (required 'scala-outline-popup t)
+            (git-gutter-mode)
             (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)))
 
 
