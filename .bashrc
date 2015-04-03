@@ -81,6 +81,14 @@ if [ "$TERM" = "dumb" ] ; then
     export PS1="\u@\h:\w:"
 fi
 
+# complicated aliases
+
+function docker-nuke {
+    docker rm $(docker ps -aq)
+    docker rmi $(docker images | grep '^<none>' | awk '{print $3}')
+}
+
+
 # Local settings and overrides
 if [ -f ~/.bashrc.local ] ; then
     . ~/.bashrc.local
