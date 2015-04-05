@@ -39,6 +39,7 @@ URxvt.keysym.Control-t: perl:tabbedex:new_tab
 URxvt.clipboard.autocopy: true
 !URxvt.keysym.Control-v:   perl:clipboard:paste
 URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.urgentOnBell: true
 
 !! To be portable, any colour scheme should roughly match the ANSI colour codes
 !! http://en.wikipedia.org/wiki/ANSI_escape_code#Colors

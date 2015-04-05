@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ICCCMFocus
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.UrgencyHook
 import XMonad.Util.EZConfig
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
@@ -13,7 +14,8 @@ myFocusedBorderColor = "#000000"
 
 -- don't forget to follow http://youtrack.jetbrains.com/issue/IDEA-101072
 
-main = xmonad $ defaultConfig {
+main = xmonad $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
+              $ defaultConfig {
 	      terminal = "urxvt"
               , startupHook = setWMName "LG3D"
               , logHook = takeTopFocus

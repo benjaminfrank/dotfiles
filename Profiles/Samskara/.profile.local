@@ -7,6 +7,10 @@ export PATH=$SCALA_HOME/bin:$HOME/.cabal/bin:$MAVEN_HOME/bin:$PATH
 ## cd /opt && sudo apt-get source emacs24
 export EMACS_SOURCE=/opt/emacs24-24.4+1
 
+export EMACS_CLIENT="emacsclient -nw -s $HOME/.emacs.daemon -a ''"
+
+export EDITOR=$EMACS_CLIENT
+
 #. $HOME/.opam/opam-init/init.sh
 
 # iMacs require some TLC for various drivers to work:

@@ -2,6 +2,11 @@
 
 export PATH=$HOME/.fommil/bin:$PATH
 
+export EDITOR=emacs
+export HISTCONTROL=ignoredups
+export WINEARCH=win32
+export WINEDEBUG=fixme-all,warn+cursor
+
 # place local system fixes in here
 if [ -f $HOME/.profile.local ] ; then
     . $HOME/.profile.local
@@ -10,13 +15,6 @@ fi
 if [ ! -f ~/.inputrc ] && [ -f /etc/inputrc ] ; then
     export INPUTRC=/etc/inputrc
 fi
-
-export HISTCONTROL=ignoredups
-
-export WINEARCH=win32
-export WINEDEBUG=fixme-all,warn+cursor
-
-export EDITOR=emacs
 
 if [ "$PS1" ] && [ "$BASH" ]; then
     if [ -f $HOME/.bashrc ] ; then
