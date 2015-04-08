@@ -199,14 +199,10 @@ distributed under a different name than their function."
 (required 'multiple-cursors)
 (required 'git-gutter)
 
-(defun magit-diff-abbrev-arg ()
-  "WORKAROUND https://github.com/magit/magit-push-remote/issues/8 ."
-  (format "--abbrev=%d" 7))
-
-(required 'magit-push-remote-mode nil nil 'magit-push-remote)
 (required 'magit nil (lambda()
-                       (magit-auto-revert-mode -1)
-                       (magit-push-remote-mode 1)))
+                       (magit-auto-revert-mode -1)))
+;;                       (magit-remove-popup-key 'magit-push-popup :actions ?P)))
+;;                       (magit-change-popup-key 'magit-push-popup :actions ?e ?P)))
 
 (required 'magit-find-file)
 (required 'ctags-create-tags-table nil nil 'ctags)
