@@ -199,6 +199,7 @@ distributed under a different name than their function."
 (required 'multiple-cursors)
 (required 'git-gutter)
 
+(setq magit-last-seen-setup-instructions "1.4.0")
 (required 'magit nil (lambda()
                        (magit-auto-revert-mode -1)))
 ;;                       (magit-remove-popup-key 'magit-push-popup :actions ?P)))

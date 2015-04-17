@@ -30,7 +30,9 @@
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
-        cut = "!f() { UPSTREAM=`git rev-parse --abbrev-ref --symbolic-full-name @{u}`; git checkout -b $1 ; git branch -u $UPSTREAM ; }; f"
+        # for when magit supports pushing to origin and pulling from upstream
+        # cut = "!f() { UPSTREAM=`git rev-parse --abbrev-ref --symbolic-full-name @{u}`; git checkout -b $1 ; git branch -u $UPSTREAM ; }; f"
+        cut = checkout -b
 	sith = push --force
         # unfortunately there is no git-config clean.exclude section
 	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .javahome -e props.conf -e eventstore_props.conf
