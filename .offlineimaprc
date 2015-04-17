@@ -7,7 +7,8 @@ ui = quiet
 [Account Gmail]
 localrepository = Local
 remoterepository = Remote
-postsynchook = notmuch new
+#postsynchook seems to be ignored, have separate crontab for it
+#postsynchook = /usr/bin/notmuch new
 #postsynchook = mu index --maildir=~/Gmail
 
 [Repository Local]
