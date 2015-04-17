@@ -211,7 +211,7 @@ distributed under a different name than their function."
 (required 'company-mode nil nil 'company)
 (required 'rainbow-mode)
 (required 'flycheck)
-(required 'yasnippet)
+(required 'yas-minor-mode nil (lambda() (yas-reload-all)) 'yasnippet)
 (required 'elnode)
 (required 'tidy-buffer nil nil 'tidy)
 (required 'darkroom-mode nil nil 'darkroom)
@@ -484,7 +484,8 @@ class %TESTCLASS% extends WordSpec with Matchers {
   (auto-fill-mode)
   (yas-minor-mode)
   (local-set-key (kbd "C-c c") 'pandoc))
-(add-hook 'org-mode-hook 'markup-common-hooks)
+(add-hook 'org-mode-hook (lambda()
+                           (markup-common-hooks)))
 (add-hook 'markdown-mode-hook 'markup-common-hooks)
 
 ;;..............................................................................
