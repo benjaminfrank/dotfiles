@@ -4,3 +4,5 @@ addCommandAlias("pluginDependencyUpdates", "; reload plugins; dependencyUpdates;
 net.virtualvoid.sbt.graph.Plugin.graphSettings
 
 useGpg := true
+
+gpgCommand := "/usr/bin/gpg2"
