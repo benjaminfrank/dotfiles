@@ -11,3 +11,5 @@ export EMACS_SOURCE=/opt/emacs24-24.4+1
 export EMACS_CLIENT="emacsclient -nw -s $HOME/.emacs.daemon -a ''"
 export EDITOR=$EMACS_CLIENT
 
+# allows passphrase caching, apparently (doesn't work for me)
+eval $(gpg-agent --daemon --enable-ssh-support --write-env-file $HOME/.gpg-agent-info)
