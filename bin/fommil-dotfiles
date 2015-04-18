@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Outputs the lines needed to statically link dotfiles to the
+# git-versioned files. This is a far superior solution to dotfile
+# management than:
+#
+# 1. having a git repo in your home (confuses tools into thinking all
+#    files are versioned)
+# 2. symbolic links don't work with some applications
+# 3. copying files, requires a lot of manual maintenance to keep it
+#    in sync on each machine.
+
+BIN=`dirname $0`
+FOMMIL=`dirname $BIN`
+PROFILE="${FOMMIL}/Profiles/${HOSTNAME}"
+
+function fommil-links {
+  cd "$1"
+  find . -type f ! -path "./.git/*" -path "./.*" ! -name .travis.yml ! -name emacs-test.el | \
+    while read A ; do
+        RELDIR=`dirname "$A" | sed -e 's|^[.]/||' -e 's|^[.]$||'`
+        DIR=$HOME/$RELDIR
+        if [ ! -d "$DIR" ] ; then
+            echo mkdir "$DIR"
+        fi
+
+        FILE=`basename "$A"`
+        FROM=$PWD/$RELDIR/$FILE
+        TO=$DIR/$FILE
+        if [ ! "$FROM" -ef "$TO" ] ; then
+            echo ln -f "\"$FROM\"" "\"$TO\""
+        fi
+    done
+}
+
+fommil-links "$FOMMIL"
+fommil-links "$PROFILE"
