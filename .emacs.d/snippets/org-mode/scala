@@ -1,0 +1,5 @@
+#name: scala
+# --
+#+BEGIN_SRC scala
+$0
+#+END_SRC
