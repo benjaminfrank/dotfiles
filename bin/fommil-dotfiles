@@ -21,7 +21,7 @@ function fommil-links {
         RELDIR=`dirname "$A" | sed -e 's|^[.]/||' -e 's|^[.]$||'`
         DIR=$HOME/$RELDIR
         if [ ! -d "$DIR" ] ; then
-            echo mkdir "$DIR"
+            echo mkdir -p "$DIR"
         fi
 
         FILE=`basename "$A"`

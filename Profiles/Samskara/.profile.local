@@ -11,6 +11,9 @@ export EMACS_SOURCE=/opt/emacs24-24.4+1
 export EMACS_CLIENT="emacsclient -nw -s $HOME/.emacs.daemon -a ''"
 export EDITOR=$EMACS_CLIENT
 
+export YOURKIT_HOME=/opt/yjp-2015-build-15046
+export YOURKIT_AGENT=$YOURKIT_AGENT/bin/linux-x86-64/libyjpagent.so
+
 # GnuPG passphrase caching. Oh, GPG, you so user-friendly...
 if test -f $HOME/.gpg-agent-info && \
         kill -0 `cut -d: -f 2 $HOME/.gpg-agent-info` 2>/dev/null; then

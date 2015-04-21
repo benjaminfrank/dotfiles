@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -z "$YOURKIT_HOME" ] ; then
+   echo "YOURKIT_HOME not set"
+fi
+
+exec "$YOURKIT_HOME/bin/yjp.sh"
