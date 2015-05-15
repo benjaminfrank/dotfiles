@@ -9,6 +9,16 @@
  # Recommended packages would be installed together with the package
  # that recommends them in all usual setups.  This option will make
  # debfoster count these recommendations as real dependencies.  En-
+--- /tmp/etc.tmp.4//etc/laptop-mode/conf.d/intel_pstate.conf	2014-10-19 15:46:54.000000000 +0100
++++ /etc/laptop-mode/conf.d/intel_pstate.conf	2015-05-15 21:04:25.328811911 +0100
+@@ -37,6 +37,6 @@
+ LM_AC_INTEL_PSTATE_NO_TURBO=0 # Disable "Turbo Boost"?
+ 
+ #On battery
+-BATT_INTEL_PSTATE_PERF_MIN_PCT=0 # Minimum performance, in percent
++BATT_INTEL_PSTATE_PERF_MIN_PCT=5 # Minimum performance, in percent
+ BATT_INTEL_PSTATE_PERF_MAX_PCT=50 # Maximum performance, in percent
+ BATT_INTEL_PSTATE_NO_TURBO=1 # Disable "Turbo Boost"?
 --- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2014-11-04 21:01:16.000000000 +0000
 +++ /etc/lightdm/lightdm.conf	2014-10-04 13:09:33.153286876 +0100
 @@ -97,13 +97,13 @@
