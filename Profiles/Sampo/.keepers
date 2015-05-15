@@ -3,6 +3,7 @@ anacron
 ant
 apt-file
 apt-show-versions
+aufs-tools
 autocutsel
 avahi-daemon
 bash-completion
@@ -14,6 +15,7 @@ build-essential
 cabal-install
 calibre
 ccrypt
+cgroupfs-mount
 chromium
 command-not-found
 console-setup
@@ -27,13 +29,16 @@ desktop-base
 devscripts
 discover
 dns-root-data
+docker.io
 dosfstools
+dzen2
 emacs24
 emacs24-el
 equivs
 evince
 evtest
 exuberant-ctags
+fail2ban
 fakeroot
 firmware-iwlwifi
 firmware-linux-free
@@ -54,7 +59,6 @@ grub-efi
 gtk2-engines-moblin
 gucharmap
 hardening-includes
-hdparm
 hplip
 htop
 i3lock
@@ -63,6 +67,7 @@ imagemagick
 inkscape
 iotop
 iproute
+iptables-persistent
 irqbalance
 java-package
 jmtpfs
@@ -71,9 +76,8 @@ laptop-detect
 laptop-mode-tools
 less
 libblas-dev
-libboost-filesystem1.55.0
-libboost-program-options1.55.0
 libgcrypt11
+libghc-xmonad-contrib-dev
 libyajl2
 lightdm
 linux-headers-amd64
@@ -96,17 +100,17 @@ offlineimap
 openjdk-7-source
 openssh-client
 openssh-server
-oracle-java6-jdk
-oracle-java7-jdk
-oracle-java8-jdk
+oracle-java6-installer
+oracle-java7-unlimited-jce-policy
+oracle-java8-unlimited-jce-policy
 org-mode
 os-prober
 p7zip-full
 patchutils
 pavucontrol
 pciutils
-pdftk
 pepperflashplugin-nonfree
+pinentry-curses
 pngcrush
 potrace
 preload
@@ -120,7 +124,6 @@ rtkit
 rxvt-unicode
 sane-utils
 scrot
-sdparm
 silversearcher-ag
 smartmontools
 spotify-client
@@ -145,8 +148,10 @@ uuid-runtime
 va-driver-all
 virtualbox
 virtualbox-dkms
+virtualbox-guest-additions-iso
 virtualbox-qt
 visualvm
+vlc
 wavemon
 wbritish
 whois
@@ -169,5 +174,3 @@ xserver-xorg-input-mouse
 xserver-xorg-input-synaptics
 xvfb
 zip
--myspell-en-gb
--r-base-html
