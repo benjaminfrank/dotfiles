@@ -358,7 +358,7 @@ distributed under a different name than their function."
                   (plist-put (plist-put ;; TODO: clean up double plist-put
                               ensime-goto-test-config-defaults
                               :test-class-suffixes '("Spec" "Test" "Check"))
-                             :test-template-fn 'ensime-template-wordspec))))
+                             :test-template-fn 'ensime-goto-test--test-template-scalatest-flatspec))))
 (required 'scala-mode2)
 (required 'scala-outline-popup)
 (required 'sbt-mode)
@@ -400,21 +400,6 @@ distributed under a different name than their function."
             (required 'scala-outline-popup t)
             (git-gutter-mode)
             (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)))
-
-
-(defun ensime-template-wordspec ()
-  "ENSIME template for a ScalaCheck WordSpec style test."
-  "package %TESTPACKAGE%
-import org.scalatest._
-
-class %TESTCLASS% extends WordSpec with Matchers {
-  \"%IMPLCLASS%\" should {
-    \"have a test!\" in {
-      fail(\"no test\")
-    }
-  }
-}
-")
 
 (defun scala-start()
   "Easy way to initialise All The Things for a Scala project"
