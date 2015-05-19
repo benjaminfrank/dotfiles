@@ -1,0 +1,5 @@
+#name: ditaa
+# --
+#+BEGIN_SRC ditaa :file images/$0.png
+
+#+END_SRC
