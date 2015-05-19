@@ -486,7 +486,10 @@ class %TESTCLASS% extends WordSpec with Matchers {
   (yas-minor-mode)
   (local-set-key (kbd "C-c c") 'pandoc))
 (add-hook 'org-mode-hook (lambda()
-                           (markup-common-hooks)))
+                           (markup-common-hooks)
+                           (org-babel-do-load-languages
+                            'org-babel-load-languages
+                            '((ditaa . t)))))
 (add-hook 'markdown-mode-hook 'markup-common-hooks)
 
 ;;..............................................................................
