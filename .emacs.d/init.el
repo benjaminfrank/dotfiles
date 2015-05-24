@@ -1,8 +1,8 @@
-;;; .emacs --- Emacs configuration
+;;; init.el --- Emacs configuration
 ;; Copyright (C) 2014 - 2015 Sam Halliday (fommil)
 
 ;; Author: Sam Halliday <sam.halliday@gmail.com>
-;; URL: https://github.com/fommil/unix/blob/master/.emacs
+;; URL: https://github.com/fommil/unix/blob/master/.emacs.d/init.el
 
 ;;; Commentary:
 ;;
@@ -506,4 +506,4 @@ class %TESTCLASS% extends WordSpec with Matchers {
   (when (file-exists-p user-local)
     (load user-local)))
 
-;;; .emacs ends here
+;;; init.el ends here
