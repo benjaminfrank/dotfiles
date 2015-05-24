@@ -16,7 +16,7 @@ PROFILE="${FOMMIL}/Profiles/${HOSTNAME}"
 
 function fommil-links {
   cd "$1"
-  find . -type f ! -path "./.git/*" -path "./.*" ! -name .travis.yml ! -name emacs-test.el | \
+  find . -type f ! -path "./.git/*" -path "./.*" ! -name .travis.yml ! -name .emacs-test.el | \
     while read A ; do
         RELDIR=`dirname "$A" | sed -e 's|^[.]/||' -e 's|^[.]$||'`
         DIR=$HOME/$RELDIR
