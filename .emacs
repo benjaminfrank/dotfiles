@@ -48,6 +48,7 @@
       compilation-skip-threshold 2
       c-basic-offset 4
       source-directory (getenv "EMACS_SOURCE")
+      org-confirm-babel-evaluate nil
       nxml-slash-auto-complete-flag t
       sentence-end-double-space nil
       ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -59,7 +60,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
-(subword-mode 1)
+(global-subword-mode 1)
 (setenv "SBT_OPTS" (concat "-no-colors " (getenv "SBT_OPTS")))
 (global-auto-revert-mode 1)
 (substitute-key-definition
@@ -250,11 +251,9 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
-(global-set-key (kbd "M-<left>") 'subword-backward)
-(global-set-key (kbd "C-<left>") 'subword-backward)
-(global-set-key (kbd "M-<right>") 'subword-forward)
-(global-set-key (kbd "C-<right>") 'subword-forward)
-
+(global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "C-s-<left>") 'backward-sexp)
+(global-set-key (kbd "C-s-<right>") 'forward-sexp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
@@ -487,6 +486,7 @@ class %TESTCLASS% extends WordSpec with Matchers {
   (local-set-key (kbd "C-c c") 'pandoc))
 (add-hook 'org-mode-hook (lambda()
                            (markup-common-hooks)
+                           (local-set-key (kbd "s-c") 'picture-mode)
                            (org-babel-do-load-languages
                             'org-babel-load-languages
                             '((ditaa . t)))))
