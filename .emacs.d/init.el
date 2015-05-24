@@ -249,7 +249,6 @@ distributed under a different name than their function."
 (global-unset-key (kbd "C-z")) ;; I hate you so much C-z
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
-(global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'imenu)
 (global-set-key (kbd "C-s-<left>") 'backward-sexp)
