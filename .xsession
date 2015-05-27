@@ -26,6 +26,10 @@ if [ -f ~/.xsession.local ] ; then
   . ~/.xsession.local
 fi
 
+# http://askubuntu.com/questions/124815
+gconftool-2 --type=string --set /desktop/gnome/interface/gtk_key_theme Emacs
+gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
+
 # stops problems with virtual windows not re-rendering
 # https://github.com/chjj/compton/wiki/perf-guide
 #compton -b
