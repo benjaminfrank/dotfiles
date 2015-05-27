@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# self-compiled https://github.com/stathissideris/ditaa
+URL=https://github.com/fommil/ditaa/releases/download/v0.9-fommil/ditaa0_9.zip
+JAR=$HOME/.ditaa.jar
+
+if [ ! -f $JAR ] ; then
+    ZIP=/tmp/tmp.vIX5gFowOD
+    curl -o $ZIP -L $URL
+    unzip -p $ZIP ditaa0_9.jar > $JAR
+fi
+
+exec java -jar $JAR "$@"
