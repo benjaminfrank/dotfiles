@@ -185,9 +185,9 @@ distributed under a different name than their function."
                         (add-to-list 'clean-buffer-list-kill-never-regexps
                                      ".*\\*ENSIME-server.*")))
 (required 'persistent-scratch t (lambda() (persistent-scratch-setup-default)))
-(required 'autopair t (lambda() (autopair-global-mode)))
 (required 'highlight-symbol t
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
+(required 'smartparens t (lambda() (smartparens-global-strict-mode)))
 
 (setq guide-key/guide-key-sequence t)
 (required 'guide-key t (lambda() (guide-key-mode 1)))
@@ -252,7 +252,7 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'imenu)
-
+;; TODO C-<left, right> using smartparens (M- is for words)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
@@ -267,11 +267,13 @@ distributed under a different name than their function."
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
-(global-set-key (kbd "s-<up>") 'backward-list)   ; C-M-<up>
-(global-set-key (kbd "s-<down>") 'forward-list)  ; C-M-<down>
-(global-set-key (kbd "s-<left>") 'backward-sexp) ; C-M-<left>
-(global-set-key (kbd "s-<right>") 'forward-sexp) ; C-M-<right>
-(global-set-key (kbd "s-k") 'kill-sexp)          ; C-M-k
+;; https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#navigation-functions
+;; TODO: restrict sexp navigation in C derived languages to just the parenthesis
+(global-set-key (kbd "s-<up>") 'sp-previous-sexp)
+(global-set-key (kbd "s-<down>") 'sp-next-sexp)
+(global-set-key (kbd "s-<left>") 'sp-backward-sexp)
+(global-set-key (kbd "s-<right>") 'sp-forward-sexp)
+(global-set-key (kbd "s-k") 'sp-kill-sexp)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
