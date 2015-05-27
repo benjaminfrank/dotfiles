@@ -251,8 +251,7 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'imenu)
-(global-set-key (kbd "C-s-<left>") 'backward-sexp)
-(global-set-key (kbd "C-s-<right>") 'forward-sexp)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
@@ -261,17 +260,17 @@ distributed under a different name than their function."
 ;;(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-ag)
-;; projectile-find-tag is too slow: https://github.com/bbatsov/projectile/issues/668
 (global-set-key (kbd "M-.") 'find-tag)
 (global-set-key (kbd "s-b") 'magit-blame-mode)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
-(global-set-key (kbd "s-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "s-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "s-<down>") 'shrink-window)
-(global-set-key (kbd "s-<up>") 'enlarge-window)
+(global-set-key (kbd "s-<up>") 'backward-list)   ; C-M-<up>
+(global-set-key (kbd "s-<down>") 'forward-list)  ; C-M-<down>
+(global-set-key (kbd "s-<left>") 'backward-sexp) ; C-M-<left>
+(global-set-key (kbd "s-<right>") 'forward-sexp) ; C-M-<right>
+(global-set-key (kbd "s-k") 'kill-sexp)          ; C-M-k
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
