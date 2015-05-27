@@ -187,7 +187,9 @@ distributed under a different name than their function."
 (required 'persistent-scratch t (lambda() (persistent-scratch-setup-default)))
 (required 'highlight-symbol t
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
-(required 'smartparens t (lambda() (smartparens-global-strict-mode)))
+(required 'smartparens t (lambda()
+                           (require 'smartparens-config)
+                           (smartparens-global-strict-mode)))
 
 (setq guide-key/guide-key-sequence t)
 (required 'guide-key t (lambda() (guide-key-mode 1)))
@@ -252,7 +254,19 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'imenu)
-;; TODO C-<left, right> using smartparens (M- is for words)
+(define-key smartparens-mode-map (kbd "C-M-f") 'sp-forward-sexp)
+(define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-sexp)
+(define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
+(define-key smartparens-mode-map (kbd "C-M-a") 'sp-backward-down-sexp)
+(define-key smartparens-mode-map (kbd "C-S-d") 'sp-beginning-of-sexp)
+(define-key smartparens-mode-map (kbd "C-S-a") 'sp-end-of-sexp)
+(define-key smartparens-mode-map (kbd "C-M-e") 'sp-up-sexp)
+(define-key smartparens-mode-map (kbd "C-M-u") 'sp-backward-up-sexp)
+(define-key smartparens-mode-map (kbd "C-M-t") 'sp-transpose-sexp)
+(define-key smartparens-mode-map (kbd "C-M-n") 'sp-next-sexp)
+(define-key smartparens-mode-map (kbd "C-M-p") 'sp-previous-sexp)
+(define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
+(define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
@@ -269,11 +283,7 @@ distributed under a different name than their function."
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 ;; https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#navigation-functions
 ;; TODO: restrict sexp navigation in C derived languages to just the parenthesis
-(global-set-key (kbd "s-<up>") 'sp-previous-sexp)
-(global-set-key (kbd "s-<down>") 'sp-next-sexp)
-(global-set-key (kbd "s-<left>") 'sp-backward-sexp)
-(global-set-key (kbd "s-<right>") 'sp-forward-sexp)
-(global-set-key (kbd "s-k") 'sp-kill-sexp)
+;;(global-set-key (kbd "s-k") 'sp-kill-sexp)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -392,6 +402,14 @@ distributed under a different name than their function."
                              (interactive)
                              (newline-and-indent)
                              (scala-indent:insert-asterisk-on-multiline-comment)))
+
+            ;; TODO: extend scala-mode-map to all C-derived languages
+            ;; TODO: sp-backward/next aren't working as expected
+            (local-set-key (kbd "s-<up>") (sp-restrict-to-pairs-interactive "{" 'sp-backward-up-sexp))
+            (local-set-key (kbd "s-<down>") (sp-restrict-to-pairs-interactive "{" 'sp-end-of-sexp))
+            (local-set-key (kbd "s-<left>") (sp-restrict-to-pairs-interactive "{" 'sp-backward-sexp))
+            (local-set-key (kbd "s-<right>") (sp-restrict-to-pairs-interactive "{" 'sp-next-sexp))
+            
              ;;(local-set-key (kbd "C-<right>") 'scala-syntax:forward-token)
             ;;(local-set-key (kbd "C-<left>") 'scala-syntax:backward-token)
             ;;(local-set-key (kbd "C-c c") 'sbt-or-maker-command)
