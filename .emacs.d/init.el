@@ -48,6 +48,7 @@
       compilation-skip-threshold 2
       c-basic-offset 4
       source-directory (getenv "EMACS_SOURCE")
+      org-ditaa-jar-path "~/.ditaa.jar"
       org-confirm-babel-evaluate nil
       nxml-slash-auto-complete-flag t
       sentence-end-double-space nil
