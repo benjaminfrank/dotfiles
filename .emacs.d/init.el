@@ -254,6 +254,8 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'imenu)
+;; https://github.com/Fuco1/smartparens/issues/469
+;; https://github.com/Fuco1/.emacs.d/blob/master/files/smartparens.el
 (define-key smartparens-mode-map (kbd "C-M-f") 'sp-forward-sexp)
 (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-sexp)
 (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
@@ -267,12 +269,13 @@ distributed under a different name than their function."
 (define-key smartparens-mode-map (kbd "C-M-p") 'sp-previous-sexp)
 (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
 (define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
+(define-key smartparens-mode-map (kbd "M-<delete>") 'sp-unwrap-sexp)
+(define-key smartparens-mode-map (kbd "M-<backspace>") 'sp-backward-unwrap-sexp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
 ;; a short binding instead of their packager's preferred binding.
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand)
-;;(global-set-key (kbd "s-f") 'magit-find-file-completing-read)
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-ag)
 (global-set-key (kbd "M-.") 'find-tag)
@@ -283,7 +286,14 @@ distributed under a different name than their function."
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 ;; https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#navigation-functions
 ;; TODO: restrict sexp navigation in C derived languages to just the parenthesis
-;;(global-set-key (kbd "s-k") 'sp-kill-sexp)
+(global-set-key (kbd "s-<delete>") 'sp-kill-sexp)
+(global-set-key (kbd "s-<backspace>") 'sp-backward-kill-sexp)
+(global-set-key (kbd "s-<home>") 'sp-beginning-of-sexp)
+(global-set-key (kbd "s-<end>") 'sp-end-of-sexp)
+(global-set-key (kbd "s-<left>") 'sp-beginning-of-previous-sexp)
+(global-set-key (kbd "s-<right>") 'sp-next-sexp)
+(global-set-key (kbd "s-<up>") 'sp-backward-up-sexp)
+(global-set-key (kbd "s-<down>") 'sp-down-sexp)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -345,6 +355,7 @@ distributed under a different name than their function."
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
             (setq indent-tabs-mode nil tab-width 4 c-basic-offset 4)
             (rainbow-mode)
+            (whitespace-mode)
             (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
               (prettify-symbols-mode))
             (flyspell-prog-mode)
@@ -404,13 +415,20 @@ distributed under a different name than their function."
                              (scala-indent:insert-asterisk-on-multiline-comment)))
 
             ;; TODO: extend scala-mode-map to all C-derived languages
-            ;; TODO: sp-backward/next aren't working as expected
-            (local-set-key (kbd "s-<up>") (sp-restrict-to-pairs-interactive "{" 'sp-backward-up-sexp))
-            (local-set-key (kbd "s-<down>") (sp-restrict-to-pairs-interactive "{" 'sp-end-of-sexp))
-            (local-set-key (kbd "s-<left>") (sp-restrict-to-pairs-interactive "{" 'sp-backward-sexp))
-            (local-set-key (kbd "s-<right>") (sp-restrict-to-pairs-interactive "{" 'sp-next-sexp))
-            
-             ;;(local-set-key (kbd "C-<right>") 'scala-syntax:forward-token)
+            (defun sp-restrict-c (sym)
+              (sp-restrict-to-pairs-interactive "{([" sym))
+            (local-set-key (kbd "s-<delete>") (sp-restrict-c 'sp-kill-sexp))
+            (local-set-key (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
+            (local-set-key (kbd "s-<home>") (sp-restrict-c 'sp-beginning-of-sexp))
+            (local-set-key (kbd "s-<end>") (sp-restrict-c 'sp-end-of-sexp))
+            (local-set-key (kbd "s-<left>") (sp-restrict-c 'sp-beginning-of-previous-sexp))
+            ;; would prefer sp-next-sexp but restriction is broken
+            ;; https://github.com/Fuco1/smartparens/issues/468
+            (local-set-key (kbd "s-<right>") (sp-restrict-c 'sp-beginning-of-next-sexp))
+            (local-set-key (kbd "s-<up>") (sp-restrict-c 'sp-backward-up-sexp))
+            (local-set-key (kbd "s-<down>") (sp-restrict-c 'sp-down-sexp))
+
+            ;;(local-set-key (kbd "C-<right>") 'scala-syntax:forward-token)
             ;;(local-set-key (kbd "C-<left>") 'scala-syntax:backward-token)
             ;;(local-set-key (kbd "C-c c") 'sbt-or-maker-command)
             (local-set-key (kbd "C-c c") 'sbt-command)
