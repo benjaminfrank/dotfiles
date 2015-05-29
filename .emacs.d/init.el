@@ -190,7 +190,10 @@ distributed under a different name than their function."
 (required 'smartparens t (lambda()
                            (require 'smartparens-config)
                            (sp-use-smartparens-bindings)
-                           (smartparens-global-strict-mode)))
+                           (define-key smartparens-mode-map (kbd "C-<left>") 'subword-left)
+                           (define-key smartparens-mode-map (kbd "C-<right>") 'subword-right)
+                           ;; strict-mode does some crazy stuff
+                           (smartparens-global-mode)))
 
 (setq guide-key/guide-key-sequence t)
 (required 'guide-key t (lambda() (guide-key-mode 1)))
@@ -241,7 +244,14 @@ distributed under a different name than their function."
 (required 'ag)
 (setq projectile-use-native-indexing t
       projectile-use-git-grep t)
-(required 'projectile nil (lambda() (require 'vc-git)))
+(required 'projectile nil (lambda()
+                            ;; https://github.com/bbatsov/projectile/issues/755
+                            (require 'vc-git)
+                            ;; projectile-find-tag is *really* slow
+                            ;; https://github.com/bbatsov/projectile/issues/668
+                            ;; and broken
+                            ;; https://github.com/bbatsov/projectile/issues/683
+                            (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
 
 (required 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
@@ -347,6 +357,7 @@ distributed under a different name than their function."
             (flycheck-mode)
             (yas-minor-mode)
             (company-mode)
+            (smartparens-strict-mode)
             (turn-on-ctags-auto-update-mode)))
 
 
