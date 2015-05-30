@@ -304,7 +304,7 @@ distributed under a different name than their function."
       message-signature "Best regards,\nSam\n"
       notmuch-fcc-dirs nil
       notmuch-search-oldest-first nil
-      notmuch-address-command "google-contacts"
+      notmuch-address-command "notmuch-addrlookup"
       notmuch-saved-searches '(("inbox" . "tag:inbox")
                                ("unread" . "tag:unread")
                                ("flagged" . "tag:flagged")))
@@ -312,7 +312,6 @@ distributed under a different name than their function."
                          (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
                          (add-hook 'mml-mode (lambda() (auto-fill-mode)))))
 (required 'notmuch-address nil (lambda() (notmuch-address-message-insinuate)))
-
 
 ;;..............................................................................
 ;; elisp

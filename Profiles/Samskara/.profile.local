@@ -22,12 +22,16 @@ else
     eval `gpg-agent --daemon --no-grab --write-env-file $HOME/.gpg-agent-info`
 fi
 
+export GOPATH=$HOME/.go
+# alternative to grive
+# go get -u github.com/odeke-em/drive/cmd/drive
+
 # I prefer cabal for all my haskell apps (e.g. xmonad, pandoc) as this
 # avoids cabal-hell scenarios.
 # cabal update
 # cabal install xmonad xmonad-contrib pandoc
 
-export PATH=$HOME/.cabal/bin:$PATH
+export PATH=$HOME/.cabal/bin:$GOPATH/bin:$PATH
 
 # iMacs require some TLC for various drivers to work:
 # 1. sudo apt-get install nvidia-glx nvidia-kernel-dkms nvidia-xconfig
