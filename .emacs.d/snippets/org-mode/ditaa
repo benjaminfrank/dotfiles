@@ -1,5 +1,5 @@
 #name: ditaa
 # --
-#+BEGIN_SRC ditaa :file images/$0.png
+#+BEGIN_SRC ditaa :file images/$0.png :exports results :cmdline -T
 
 #+END_SRC
