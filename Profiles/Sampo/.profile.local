@@ -3,13 +3,24 @@
 export SCALA_HOME=/opt/scala-2.11.6
 export MAVEN_HOME=/opt/apache-maven-3.2.5
 
-export PATH=$SCALA_HOME/bin:$MAVEN_HOME/bin:$HOME/.cabal/bin:$PATH
+export PATH=$SCALA_HOME/bin:$MAVEN_HOME/bin:$PATH
 export PRINTER=PeterPrinter
 
 ## cd /opt && sudo apt-get source emacs24
 export EMACS_SOURCE=/opt/emacs24-24.4+1
 export EMACS_CLIENT="emacsclient -nw -s $HOME/.emacs.daemon -a ''"
 export EDITOR=$EMACS_CLIENT
+
+export GOPATH=$HOME/.go
+# alternative to grive
+# go get -u github.com/odeke-em/drive/cmd/drive
+
+# I prefer cabal for all my haskell apps (e.g. xmonad, pandoc) as this
+# avoids cabal-hell scenarios.
+# cabal update
+# cabal install xmonad xmonad-contrib pandoc
+
+export PATH=$HOME/.cabal/bin:$GOPATH/bin:$PATH
 
 # GnuPG passphrase caching. Oh, GPG, you so user-friendly...
 if test -f $HOME/.gpg-agent-info && \
