@@ -34,6 +34,7 @@ debsums
 desktop-base
 devscripts
 discover
+ditaa
 docker.io
 dosfstools
 dvipng
@@ -54,17 +55,18 @@ fortune-mod
 freetds-bin
 gdisk
 gfortran
-ghc-haddock
 gimp
 git
 gnome-brave-icon-theme
 gnome-mime-data
 gnome-system-monitor
+golang-go
 google-talkplugin
 gparted
 gpm
 gtk2-engines-moblin
 gucharmap
+handbrake
 haskell-platform
 hfsprogs
 hplip-data
@@ -101,6 +103,7 @@ liblapack-dev
 libltdl-dev
 libmtp-runtime
 libnotify-dev
+libnotmuch-dev
 libopenblas-dev
 libsane-extras
 libsane-hpaio
@@ -129,6 +132,8 @@ nvidia-driver
 offlineimap
 openjdk-7-doc
 openjdk-7-source
+openjdk-8-doc
+openjdk-8-source
 openssh-client
 openssh-server
 oracle-java6-installer
@@ -137,7 +142,6 @@ oracle-java8-installer
 org-mode
 os-prober
 p7zip-full
-pandoc
 parted
 patchutils
 pavucontrol
@@ -162,6 +166,7 @@ qpdf
 r-base
 r-base-html
 r-doc-html
+recordmydesktop
 remmina
 reportbug
 rng-tools
