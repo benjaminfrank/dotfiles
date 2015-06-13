@@ -32,7 +32,6 @@
       load-prefer-newer t
       x-select-enable-clipboard t
       interprogram-paste-function 'x-cut-buffer-or-selection-value
-      indent-tabs-mode nil
       tab-width 4
       column-number-mode t
       scroll-error-top-bottom t
@@ -263,7 +262,7 @@ distributed under a different name than their function."
 ;; This section is for overriding common emacs keybindings with tweaks.
 (global-unset-key (kbd "C-z")) ;; I hate you so much C-z
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
-(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
+;;(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'imenu)
 
@@ -347,7 +346,10 @@ distributed under a different name than their function."
           (lambda()
             (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
-            (setq indent-tabs-mode nil tab-width 4 c-basic-offset 4)
+            ;; indent-tabs-mode needs to be reset
+            (setq indent-tabs-mode nil
+                  tab-width 4
+                  c-basic-offset 4)
             (rainbow-mode)
             (whitespace-mode)
             (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
@@ -389,6 +391,27 @@ distributed under a different name than their function."
   (if (maker:find-root)
       (call-interactively 'maker-command)
     (call-interactively 'sbt-command)))
+
+;; https://github.com/Fuco1/smartparens/issues/480
+(defun scala-block-pad ()
+  "It is convenient for spaces following a brace to be space padded."
+  (when (and (eq major-mode 'scala-mode)
+             ;; ordered for performance
+             (looking-at "}") (looking-back "{[[:space:]]"))
+    (insert-char ?\s)
+    (backward-char)))
+(add-hook 'post-self-insert-hook 'scala-block-pad)
+
+(defun scala-block-indent ()
+  "It is convenient for newlines that follow a curly bracket to be indented."
+  (when (and (eq major-mode 'scala-mode)
+             ;; ordered for performance
+             (looking-at "}") (looking-back "{[[:space:]]*\n"))
+    (indent-according-to-mode)
+    (forward-line -1)
+    (move-end-of-line nil)
+    (newline-and-indent)))
+(add-hook 'post-self-insert-hook 'scala-block-indent)
 
 (add-hook 'scala-mode-hook
           (lambda()
