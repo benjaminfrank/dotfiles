@@ -406,7 +406,7 @@ distributed under a different name than their function."
   "It is convenient for newlines that follow a curly bracket to be indented."
   (when (and (eq major-mode 'scala-mode)
              ;; ordered for performance
-             (looking-at "}") (looking-back "{[[:space:]]*\n"))
+             (looking-at "[)}]") (looking-back "[{(][[:space:]]*\n"))
     (indent-according-to-mode)
     (forward-line -1)
     (move-end-of-line nil)
