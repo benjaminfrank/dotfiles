@@ -249,6 +249,10 @@ distributed under a different name than their function."
           (lambda()
             (require 'smartparens-config)
             (sp-use-smartparens-bindings)
+            ;; nice whitespace / indentation when creating statements
+            (sp-local-pair 'c-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
+            (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
+            (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
             (define-key smartparens-mode-map (kbd "C-<left>") 'subword-left)
             (define-key smartparens-mode-map (kbd "C-<right>") 'subword-right))
           'smartparens)
@@ -391,27 +395,6 @@ distributed under a different name than their function."
   (if (maker:find-root)
       (call-interactively 'maker-command)
     (call-interactively 'sbt-command)))
-
-;; https://github.com/Fuco1/smartparens/issues/480
-(defun scala-block-pad ()
-  "It is convenient for spaces following a brace to be space padded."
-  (when (and (eq major-mode 'scala-mode)
-             ;; ordered for performance
-             (looking-at "}") (looking-back "{[[:space:]]"))
-    (insert-char ?\s)
-    (backward-char)))
-(add-hook 'post-self-insert-hook 'scala-block-pad)
-
-(defun scala-block-indent ()
-  "It is convenient for newlines that follow a curly bracket to be indented."
-  (when (and (eq major-mode 'scala-mode)
-             ;; ordered for performance
-             (looking-at "[)}]") (looking-back "[{(][[:space:]]*\n"))
-    (indent-according-to-mode)
-    (forward-line -1)
-    (move-end-of-line nil)
-    (newline-and-indent)))
-(add-hook 'post-self-insert-hook 'scala-block-indent)
 
 (add-hook 'scala-mode-hook
           (lambda()
