@@ -250,7 +250,10 @@ distributed under a different name than their function."
             (require 'smartparens-config)
             (sp-use-smartparens-bindings)
             ;; nice whitespace / indentation when creating statements
+            (sp-local-pair 'c-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'c-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
+            (sp-local-pair 'java-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
+            (sp-local-pair 'java-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
             (define-key smartparens-mode-map (kbd "C-<left>") 'subword-left)
