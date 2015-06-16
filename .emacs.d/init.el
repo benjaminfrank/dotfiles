@@ -59,7 +59,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(show-paren-mode 1)
+(show-paren-mode 1) ;; show-smartparens is too slow
 (global-subword-mode 1)
 (setenv "SBT_OPTS" (concat "-no-colors " (getenv "SBT_OPTS")))
 (global-auto-revert-mode 1)
@@ -68,6 +68,13 @@
  'minibuffer-complete-word
  'self-insert-command
  minibuffer-local-completion-map)
+
+;; Disabling a few things that Emacs turns on by default (and I don't like)
+(electric-indent-mode 0)
+(global-auto-composition-mode 0)
+;;(auto-compression-mode 0) ;; breaks help / elisp navigation
+(auto-encryption-mode 0)
+(tooltip-mode 0)
 
 (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 (defun add-to-load-path (path)
