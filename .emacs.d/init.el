@@ -426,7 +426,8 @@ distributed under a different name than their function."
             (defun scala-indent:indent-on-parentheses ())
 
             ;; TODO: make whitespace warning project-specific
-            (set (make-local-variable 'whitespace-line-column) 116)
+            ;;(set (make-local-variable 'whitespace-line-column) 116)
+
             (whitespace-mode)
             (flyspell-prog-mode)
             (highlight-symbol-mode)
