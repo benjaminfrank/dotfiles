@@ -35,7 +35,7 @@
         cut = checkout -b
 	sith = push --force
         # unfortunately there is no git-config clean.exclude section
-	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .javahome -e *.conf
+	nuke = clean -fdx -e project/Build.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .javahome -e *.conf -e .dir-locals.el
         # for rebase operations (for merge, use --ours)
         my-way-or-the-highway="!ag '<<<<<<<' . | xargs git checkout --theirs"
 

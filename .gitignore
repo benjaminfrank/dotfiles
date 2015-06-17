@@ -1,10 +1,10 @@
 target/
 .idea/
-.idea_modules/
-lib_managed/
 
 .ensime*
 .javahome
 .sbtopts
+
+.dir-locals.el
 
 TAGS
