@@ -235,6 +235,13 @@ distributed under a different name than their function."
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
 (required 'whitespace-mode nil nil 'whitespace)
 
+;; local whitespace-line-column are ignored unless loaded late
+;; https://emacs.stackexchange.com/questions/7743
+(add-hook 'hack-local-variables-hook
+          (lambda() (when (member major-mode '('scala-mode 'emacs-lisp-mode))
+                 (whitespace-mode))))
+
+
 (setq ispell-dictionary "british"
       flyspell-prog-text-faces '(font-lock-doc-face))
 (required 'flyspell nil (lambda()
@@ -255,6 +262,7 @@ distributed under a different name than their function."
                             ;; and broken
                             ;; https://github.com/bbatsov/projectile/issues/683
                             (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
+(required 'idomenu)
 
 (required 'smartparens-mode nil
           (lambda()
@@ -282,7 +290,7 @@ distributed under a different name than their function."
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 ;;(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
-(global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "M-i") 'idomenu)
 (global-set-key (kbd "RET") 'newline-and-indent)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -369,7 +377,6 @@ distributed under a different name than their function."
                   tab-width 4
                   c-basic-offset 4)
             (rainbow-mode)
-            (whitespace-mode)
             (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
               (prettify-symbols-mode))
             (flyspell-prog-mode)
@@ -424,10 +431,6 @@ distributed under a different name than their function."
 
             ;; disable this post-self-insert-hook
             (defun scala-indent:indent-on-parentheses ())
-
-            ;; local whitespace-line-column are ignored unless loaded late
-            ;; https://emacs.stackexchange.com/questions/7743
-            (add-hook 'hack-local-variables-hook 'whitespace-mode)
 
             (flyspell-prog-mode)
             (highlight-symbol-mode)
