@@ -409,6 +409,13 @@ distributed under a different name than their function."
       (call-interactively 'maker-command)
     (call-interactively 'sbt-command)))
 
+(defun scala-mode:goto-start-of-code ()
+  "Go to the start of the real code in the file: object, class or trait."
+  (interactive)
+  (let* ((case-fold-search nil))
+    (search-forward-regexp "\\([[:space:]]+\\|^\\)\\(class\\|object\\|trait\\)" nil t)
+    (move-beginning-of-line nil)))
+
 (add-hook 'scala-mode-hook
           (lambda()
             (projectile-mode)
@@ -456,7 +463,9 @@ distributed under a different name than their function."
             (ensime-mode 1)
             (required 'scala-outline-popup t)
             (git-gutter-mode)
-            (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)))
+            (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)
+
+            (scala-mode:goto-start-of-code)))
 
 (defun scala-start()
   "Easy way to initialise All The Things for a Scala project"

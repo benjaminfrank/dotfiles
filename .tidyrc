@@ -2,7 +2,7 @@ input-xml: yes
 quiet: yes
 indent: yes
 indent-attributes: no
-indent-spaces: 4
+indent-spaces: 2
 char-encoding: utf8
 wrap: 0
 wrap-asp: no
