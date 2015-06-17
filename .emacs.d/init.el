@@ -25,6 +25,7 @@
 ;; This section is for global settings for built-in emacs parameters
 (setq inhibit-startup-screen t
       initial-scratch-message nil
+      enable-local-variables :safe
       ;;debug-on-error t
       enable-recursive-minibuffers t
       create-lockfiles nil
@@ -231,7 +232,8 @@ distributed under a different name than their function."
 
 (setq whitespace-style '(face trailing tab-mark lines-tail)
       whitespace-line-column 80)
-(required 'whitespace)
+(put 'whitespace-line-column 'safe-local-variable #'integerp)
+(required 'whitespace-mode nil nil 'whitespace)
 
 (setq ispell-dictionary "british"
       flyspell-prog-text-faces '(font-lock-doc-face))
@@ -419,16 +421,14 @@ distributed under a different name than their function."
 (add-hook 'scala-mode-hook
           (lambda()
             (projectile-mode)
-            ;; TODO https://github.com/hvesalai/scala-mode2/issues/75
-            ;;(set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
 
             ;; disable this post-self-insert-hook
             (defun scala-indent:indent-on-parentheses ())
 
-            ;; TODO: make whitespace warning project-specific
-            ;;(set (make-local-variable 'whitespace-line-column) 116)
+            ;; local whitespace-line-column are ignored unless loaded late
+            ;; https://emacs.stackexchange.com/questions/7743
+            (add-hook 'hack-local-variables-hook 'whitespace-mode)
 
-            (whitespace-mode)
             (flyspell-prog-mode)
             (highlight-symbol-mode)
             (smartparens-mode)
