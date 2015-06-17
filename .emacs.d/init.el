@@ -120,7 +120,6 @@ distributed under a different name than their function."
         (require function)
       (autoload function name nil 'interactive))))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for generic interactive convenience methods.
 ;; Arguably could be uploaded to MELPA as package 'fommil-utils.
@@ -194,8 +193,11 @@ distributed under a different name than their function."
 (required 'highlight-symbol t
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
 
-(setq guide-key/guide-key-sequence t)
-(required 'guide-key t (lambda() (guide-key-mode 1)))
+;; guide-key is a really great way to learn keybindings, but I've
+;; outgrown it and now fall back to `C-h m' when in doubt.
+;;
+;; (setq guide-key/guide-key-sequence t) (required 'guide-key t (lambda()
+;; (guide-key-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
@@ -279,6 +281,7 @@ distributed under a different name than their function."
 ;;(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "RET") 'newline-and-indent)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
@@ -302,7 +305,6 @@ distributed under a different name than their function."
 (global-set-key (kbd "s-<right>") 'sp-next-sexp)
 (global-set-key (kbd "s-<up>") 'sp-backward-up-sexp)
 (global-set-key (kbd "s-<down>") 'sp-down-sexp)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and configuring more involved
@@ -380,6 +382,7 @@ distributed under a different name than their function."
 ;;..............................................................................
 ;; Scala
 (setq scala-indent:use-javadoc-style t
+      scala-indent:align-parameters t
       popup-complete-enabled-modes '(scala-mode)
       ensime-default-buffer-prefix "ENSIME-"
       scala-outline-popup-select 'closest)
@@ -411,6 +414,10 @@ distributed under a different name than their function."
             (projectile-mode)
             ;; TODO https://github.com/hvesalai/scala-mode2/issues/75
             ;;(set (make-local-variable 'forward-word) 'scala-syntax:forward-token)
+
+            ;; disable this post-self-insert-hook
+            (defun scala-indent:indent-on-parentheses ())
+
             ;; TODO: make whitespace warning project-specific
             (set (make-local-variable 'whitespace-line-column) 116)
             (whitespace-mode)
