@@ -45,6 +45,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in packages that autoload
 (setq show-paren-delay 0
+      dabbrev-case-replace nil
       compilation-skip-threshold 2
       c-basic-offset 4
       source-directory (getenv "EMACS_SOURCE")
@@ -218,7 +219,6 @@ distributed under a different name than their function."
 (required 'magit-find-file)
 (required 'ctags-create-tags-table nil nil 'ctags)
 (required 'turn-on-ctags-auto-update-mode nil nil 'ctags-update)
-(required 'auto-complete-exuberant-ctags nil (lambda() (ac-exuberant-ctags-setup)))
 (required 'company-mode nil nil 'company)
 (required 'rainbow-mode)
 (required 'flycheck)
@@ -235,11 +235,10 @@ distributed under a different name than their function."
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
 (required 'whitespace-mode nil nil 'whitespace)
 
-;; local whitespace-line-column are ignored unless loaded late
+;; local whitespace-line-column are ignored unless loaded by
+;; hack-local-variables-hook
 ;; https://emacs.stackexchange.com/questions/7743
-(add-hook 'hack-local-variables-hook
-          (lambda() (when (member major-mode '('scala-mode 'emacs-lisp-mode))
-                 (whitespace-mode))))
+;; so make sure to load whitespace-mode in a buffer local hook
 
 
 (setq ispell-dictionary "british"
@@ -370,6 +369,7 @@ distributed under a different name than their function."
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
+            (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
             (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
             ;; indent-tabs-mode needs to be reset
@@ -418,16 +418,11 @@ distributed under a different name than their function."
       (call-interactively 'maker-command)
     (call-interactively 'sbt-command)))
 
-(defun scala-mode:goto-start-of-code ()
-  "Go to the start of the real code in the file: object, class or trait."
-  (interactive)
-  (let* ((case-fold-search nil))
-    (search-forward-regexp "\\([[:space:]]+\\|^\\)\\(class\\|object\\|trait\\)" nil t)
-    (move-beginning-of-line nil)))
-
 (add-hook 'scala-mode-hook
           (lambda()
             (projectile-mode)
+
+            (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
 
             ;; disable this post-self-insert-hook
             (defun scala-indent:indent-on-parentheses ())
@@ -463,11 +458,16 @@ distributed under a different name than their function."
             ;;(local-set-key (kbd "C-c c") 'sbt-or-maker-command)
             (local-set-key (kbd "C-c c") 'sbt-command)
             (local-set-key (kbd "C-c e") 'next-error)
-            (required 'ensime t)
-            (ensime-mode 1)
+
             (required 'scala-outline-popup t)
             (git-gutter-mode)
             (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)
+
+            (required 'ensime t)
+            (ensime-mode 1)
+
+            ;; too much magic...
+            ;;(set (make-local-variable 'company-backends) '((company-dabbrev ensime-company)))
 
             (scala-mode:goto-start-of-code)))
 
@@ -539,6 +539,9 @@ distributed under a different name than their function."
 (defun markup-common-hooks()
   (auto-fill-mode)
   (yas-minor-mode)
+  (company-mode)
+  ;; TODO: https://github.com/company-mode/company-mode/issues/364
+  ;;(set (make-local-variable 'company-backends) '((company-dabbrev company-ispell)))
   (local-set-key (kbd "C-c c") 'pandoc))
 (add-hook 'org-mode-hook (lambda()
                            (markup-common-hooks)
