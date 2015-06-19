@@ -45,7 +45,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in packages that autoload
 (setq show-paren-delay 0
-      dabbrev-case-replace nil
+      dabbrev-case-fold-search nil
+      ;;dabbrev-case-replace nil
       compilation-skip-threshold 2
       c-basic-offset 4
       source-directory (getenv "EMACS_SOURCE")
@@ -218,7 +219,15 @@ distributed under a different name than their function."
 
 (required 'magit-find-file)
 (required 'ctags-create-tags-table nil nil 'ctags)
-(required 'turn-on-ctags-auto-update-mode nil nil 'ctags-update)
+(required 'ctags-auto-update-mode nil nil 'ctags-update)
+
+;; TODO: create minimal company-backends list.
+;;
+;; For any given word completion, company-mode queries each backend
+;; and the first one that returns non-nil is then asked for a
+;; completion --- then completion terminates (even if no suggestions)
+(setq company-dabbrev-ignore-case nil
+      company-dabbrev-code-ignore-case nil)
 (required 'company-mode nil nil 'company)
 (required 'rainbow-mode)
 (required 'flycheck)
@@ -234,7 +243,6 @@ distributed under a different name than their function."
       whitespace-line-column 80)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
 (required 'whitespace-mode nil nil 'whitespace)
-
 ;; local whitespace-line-column are ignored unless loaded by
 ;; hack-local-variables-hook
 ;; https://emacs.stackexchange.com/questions/7743
@@ -295,7 +303,7 @@ distributed under a different name than their function."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
 ;; a short binding instead of their packager's preferred binding.
-(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
+(global-set-key (kbd "C-<tab>") 'dabbrev-expand) ;; fallback incase company-mode isn't available
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-ag)
 (global-set-key (kbd "M-.") 'find-tag)
@@ -385,7 +393,7 @@ distributed under a different name than their function."
             (yas-minor-mode)
             (company-mode)
             (smartparens-strict-mode)
-            (turn-on-ctags-auto-update-mode)))
+            (ctags-auto-update-mode)))
 
 
 ;;..............................................................................
@@ -466,8 +474,8 @@ distributed under a different name than their function."
             (required 'ensime t)
             (ensime-mode 1)
 
-            ;; too much magic...
-            ;;(set (make-local-variable 'company-backends) '((company-dabbrev ensime-company)))
+            (set (make-local-variable 'company-backends)
+                 '(ensime-company (company-keywords company-etags)))
 
             (scala-mode:goto-start-of-code)))
 
@@ -506,7 +514,7 @@ distributed under a different name than their function."
             (company-mode)
             (smartparens-mode)
             (local-set-key (kbd "C-c e") 'next-error)
-            (turn-on-ctags-auto-update-mode)))
+            (ctags-auto-update-mode)))
 
 
 ;;..............................................................................
@@ -516,7 +524,7 @@ distributed under a different name than their function."
                          (projectile-mode)
                          (company-mode)
                          (smartparens-mode)
-                         (turn-on-ctags-auto-update-mode)))
+                         (ctags-auto-update-mode)))
 
 ;;..............................................................................
 ;; org-mode
@@ -540,8 +548,8 @@ distributed under a different name than their function."
   (auto-fill-mode)
   (yas-minor-mode)
   (company-mode)
-  ;; TODO: https://github.com/company-mode/company-mode/issues/364
-  ;;(set (make-local-variable 'company-backends) '((company-dabbrev company-ispell)))
+  (set (make-local-variable 'company-backends)
+       '(company-ispell)) ;; only dictionary completions
   (local-set-key (kbd "C-c c") 'pandoc))
 (add-hook 'org-mode-hook (lambda()
                            (markup-common-hooks)
