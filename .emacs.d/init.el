@@ -47,6 +47,7 @@
 (setq show-paren-delay 0
       dabbrev-case-fold-search nil
       ;;dabbrev-case-replace nil
+      tags-case-fold-search nil
       compilation-skip-threshold 2
       c-basic-offset 4
       source-directory (getenv "EMACS_SOURCE")
@@ -196,12 +197,6 @@ distributed under a different name than their function."
 (required 'highlight-symbol t
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
 
-;; guide-key is a really great way to learn keybindings, but I've
-;; outgrown it and now fall back to `C-h m' when in doubt.
-;;
-;; (setq guide-key/guide-key-sequence t) (required 'guide-key t (lambda()
-;; (guide-key-mode 1)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
@@ -218,6 +213,9 @@ distributed under a different name than their function."
 ;;                       (magit-change-popup-key 'magit-push-popup :actions ?e ?P)))
 
 (required 'magit-find-file)
+(setq git-timemachine-abbreviation-length 4)
+(required 'git-timemachine)
+
 (required 'ctags-create-tags-table nil nil 'ctags)
 (required 'ctags-auto-update-mode nil nil 'ctags-update)
 
@@ -227,7 +225,8 @@ distributed under a different name than their function."
 ;; and the first one that returns non-nil is then asked for a
 ;; completion --- then completion terminates (even if no suggestions)
 (setq company-dabbrev-ignore-case nil
-      company-dabbrev-code-ignore-case nil)
+      company-dabbrev-code-ignore-case nil
+      company-dabbrev-downcase nil)
 (required 'company-mode nil nil 'company)
 (required 'rainbow-mode)
 (required 'flycheck)
@@ -239,7 +238,8 @@ distributed under a different name than their function."
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
 (required 'erc)
 
-(setq whitespace-style '(face trailing tab-mark lines-tail)
+(setq whitespace-style '(face trailing tabs lines-tail)
+      ;;whitespace-style '(face trailing tab-mark lines-tail)
       whitespace-line-column 80)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
 (required 'whitespace-mode nil nil 'whitespace)
@@ -264,9 +264,8 @@ distributed under a different name than their function."
 (required 'projectile nil (lambda()
                             ;; https://github.com/bbatsov/projectile/issues/755
                             (require 'vc-git)
-                            ;; projectile-find-tag is *really* slow
+                            ;; projectile-find-tag can be slow/broken for big TAGS
                             ;; https://github.com/bbatsov/projectile/issues/668
-                            ;; and broken
                             ;; https://github.com/bbatsov/projectile/issues/683
                             (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
 (required 'idomenu)
@@ -290,6 +289,12 @@ distributed under a different name than their function."
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 (required 'dockerfile-mode)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+
+;; guide-key is a really great way to learn keybindings, but I've
+;; outgrown it and now fall back to `C-h m' when in doubt.
+;;
+(setq guide-key/guide-key-sequence t)
+(required 'guide-key-mode nil nil 'guide-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
@@ -377,6 +382,9 @@ distributed under a different name than their function."
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
+            ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
+            (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
+
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
             (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
@@ -408,6 +416,7 @@ distributed under a different name than their function."
     (add-to-list 'load-path local-ensime)))
 (required 'ensime nil
           (lambda()
+            (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
             (setq ensime-goto-test-config-defaults
                   (plist-put (plist-put ;; TODO: clean up double plist-put
                               ensime-goto-test-config-defaults
@@ -428,6 +437,9 @@ distributed under a different name than their function."
 
 (add-hook 'scala-mode-hook
           (lambda()
+            ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
+            (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
+
             (projectile-mode)
 
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
@@ -545,7 +557,6 @@ distributed under a different name than their function."
       (shell-command command-file))))
 
 (defun markup-common-hooks()
-  (auto-fill-mode)
   (yas-minor-mode)
   (company-mode)
   (set (make-local-variable 'company-backends)
@@ -553,11 +564,15 @@ distributed under a different name than their function."
   (local-set-key (kbd "C-c c") 'pandoc))
 (add-hook 'org-mode-hook (lambda()
                            (markup-common-hooks)
+                           (auto-fill-mode)
                            (local-set-key (kbd "s-c") 'picture-mode)
                            (org-babel-do-load-languages
                             'org-babel-load-languages
                             '((ditaa . t)))))
-(add-hook 'markdown-mode-hook 'markup-common-hooks)
+(add-hook 'markdown-mode-hook (lambda()
+                                (markup-common-hooks)
+                                ;; github interprets newlines
+                                (visual-line-mode)))
 
 ;;..............................................................................
 ;; R
