@@ -1,6 +1,7 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ICCCMFocus
+--import XMonad.Hooks.ICCCMFocus
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 import XMonad.Util.EZConfig
@@ -14,23 +15,24 @@ myFocusedBorderColor = "#000000"
 
 -- don't forget to follow http://youtrack.jetbrains.com/issue/IDEA-101072
 
-main = xmonad $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
+main = xmonad $ ewmh $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
               $ defaultConfig {
 	      terminal = "urxvt"
               , startupHook = setWMName "LG3D"
-              , logHook = takeTopFocus
+--              , logHook = takeTopFocus
               , normalBorderColor  = myNormalBorderColor
               , focusedBorderColor = myFocusedBorderColor
               , modMask = mod4Mask
               , keys = keys'
               , manageHook = manageHook'
+              , handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
 	    }
 
 manageHook' :: ManageHook
 manageHook' = composeAll 
               [ className =? "Xmessage" --> doFloat
               , className =? "Gimp" --> doFloat
-              , className =? "Ediff" --> doFloat
+              , className =? "Inkscape" --> doFloat
 	      , title     =? "Downloads" --> doFloat
               , title     =? "Save As..." --> doFloat
               , title     =? "Open" --> doFloat
