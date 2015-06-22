@@ -48,6 +48,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,               xK_p     ), spawn "dmenu_run") -- %! Launch dmenu
     , ((modMask .|. shiftMask, xK_c     ), kill) -- %! Close the focused window
     , ((modMask,               xK_Return), windows W.swapMaster) -- %! Set the focused window as master
+    , ((modMask,               xK_Tab   ), windows W.focusDown) -- %! Move focus to the next window
     , ((modMask,               xK_minus ), sendMessage Shrink) -- %! Shrink the master area
     , ((modMask,               xK_equal ), sendMessage Expand) -- %! Expand the master area
     , ((modMask,               xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
