@@ -1,6 +1,6 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
---import XMonad.Hooks.ICCCMFocus
+import XMonad.Hooks.ICCCMFocus
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
@@ -19,7 +19,7 @@ main = xmonad $ ewmh $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgre
               $ defaultConfig {
 	      terminal = "urxvt"
               , startupHook = setWMName "LG3D"
---              , logHook = takeTopFocus
+              , logHook = takeTopFocus
               , normalBorderColor  = myNormalBorderColor
               , focusedBorderColor = myFocusedBorderColor
               , modMask = mod4Mask
