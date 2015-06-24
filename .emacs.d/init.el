@@ -119,7 +119,7 @@ distributed under a different name than their function."
     (unless (locate-library name)
       (package-install sym))
     (when hook
-      (eval-after-load (locate-library name) hook))
+      (eval-after-load name hook))
     (if force
         (require function)
       (autoload function name nil 'interactive))))
