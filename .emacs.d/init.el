@@ -212,7 +212,6 @@ distributed under a different name than their function."
 ;;                       (magit-remove-popup-key 'magit-push-popup :actions ?P)))
 ;;                       (magit-change-popup-key 'magit-push-popup :actions ?e ?P)))
 
-(required 'magit-find-file)
 (setq git-timemachine-abbreviation-length 4)
 (required 'git-timemachine)
 
