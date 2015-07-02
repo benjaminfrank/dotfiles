@@ -206,6 +206,7 @@ distributed under a different name than their function."
 (required 'multiple-cursors)
 (required 'git-gutter)
 
+(setq magit-revert-buffers t)
 (required 'magit)
 
 (setq git-timemachine-abbreviation-length 4)
