@@ -348,6 +348,11 @@ distributed under a different name than their function."
 (required 'notmuch-address nil (lambda() (notmuch-address-message-insinuate)))
 
 ;;..............................................................................
+;; shell scripts
+(add-hook 'sh-mode-hook (lambda()
+                          (electric-indent-local-mode)))
+
+;;..............................................................................
 ;; elisp
 (defun describe-foo-at-point ()
   ;;; http://www.emacswiki.org/emacs/DescribeThingAtPoint
