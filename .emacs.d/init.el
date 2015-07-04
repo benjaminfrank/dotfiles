@@ -410,7 +410,6 @@ distributed under a different name than their function."
 ;; Scala
 (setq scala-indent:use-javadoc-style t
       scala-indent:align-parameters t
-      popup-complete-enabled-modes '(scala-mode)
       ensime-default-buffer-prefix "ENSIME-"
       scala-outline-popup-select 'closest)
 (let* ((local-ensime (concat user-emacs-directory "ensime-emacs")))
