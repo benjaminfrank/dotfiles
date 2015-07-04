@@ -232,7 +232,11 @@ distributed under a different name than their function."
 (required 'tidy-buffer nil nil 'tidy)
 (required 'darkroom-mode nil nil 'darkroom)
 
-(setq erc-hide-list '("JOIN" "PART" "QUIT"))
+(setq erc-prompt-for-password nil ;; prefer ~/.authinfo for passwords
+      erc-hide-list '("JOIN" "PART" "QUIT")
+      erc-autojoin-channels-alist
+      '(("irc.freenode.net" "#emacs")
+        ("irc.gitter.im" "#ensime/ensime-server" "#ensime/ensime-emacs")))
 (required 'erc)
 
 (setq whitespace-style '(face trailing tabs lines-tail)
@@ -581,6 +585,17 @@ distributed under a different name than their function."
 ;; bad packaging means we have to manually setup R-mode
 (autoload 'R-mode "ess-site" nil t)
 (add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
+
+;;..............................................................................
+;; Chat rooms
+(defun gitter()
+  "Connect to Gitter."
+  (interactive)
+  (erc-tls :server "irc.gitter.im" :port 6697))
+(defun freenode()
+  "Connect to Freenode."
+  (interactive)
+  (erc :server "irc.freenode.net" :port 6667))
 
 
 ;;..............................................................................
