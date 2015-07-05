@@ -102,9 +102,7 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;; TODO: try various obvious permutations on `function` => `package`
-;; mapping, such as dropping `-mode` from the name
-(defun required (function &optional force hook package)
+(defun required (function &optional force hook package filename)
   "`autoload' an interactive FUNCTION :symbol, installing if not present.
 
 FORCE :boolean will use `require' instead of `autoload'.
@@ -112,10 +110,13 @@ FORCE :boolean will use `require' instead of `autoload'.
 Runs a HOOK :lambda when the file is loaded.
 
 PACKAGE :symbol is used to workaround packages that have been
-distributed under a different name than their function."
+distributed under a different name than their function.
+
+FILENAME :string is only needed if the filename on disk is not
+the package or function name."
   (interactive)
   (let* ((sym (or package function))
-         (name (symbol-name sym)))
+         (name (or filename (symbol-name sym))))
     (unless (locate-library name)
       (package-install sym))
     (when hook
@@ -548,7 +549,7 @@ distributed under a different name than their function."
 ;; 'org is a system install and has a default binding to .org files
 (required 'org-mode nil
           (lambda() (require 'ox-taskjuggler))
-          'org-plus-contrib)
+          'org-plus-contrib "org")
 (required 'markdown-mode)
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
@@ -560,7 +561,15 @@ distributed under a different name than their function."
     (when (file-exists-p command-file)
       (shell-command command-file))))
 
+(defun darkroom-ask ()
+  "Interactively ask if the user wants to go into darkroom-mode."
+  (interactive)
+  (when (y-or-n-p "Go into darkroom-mode? ")
+    (delete-other-windows)
+    (darkroom-mode)))
+
 (defun markup-common-hooks()
+  (darkroom-ask)
   (yas-minor-mode)
   (company-mode)
   (set (make-local-variable 'company-backends)
