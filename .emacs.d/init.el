@@ -351,6 +351,8 @@ the package or function name."
                          (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
                          (add-hook 'mml-mode (lambda() (auto-fill-mode)))))
 (required 'notmuch-address nil (lambda() (notmuch-address-message-insinuate)))
+(add-hook 'message-mode-hook (lambda() (darkroom-mode)))
+
 
 ;;..............................................................................
 ;; shell scripts
