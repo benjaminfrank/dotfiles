@@ -230,6 +230,7 @@ distributed under a different name than their function."
 (required 'elnode)
 (required 'tidy-buffer nil nil 'tidy)
 (required 'darkroom-mode nil nil 'darkroom)
+(required 'scratch)
 
 (setq erc-prompt-for-password nil ;; prefer ~/.authinfo for passwords
       erc-hide-list '("JOIN" "PART" "QUIT")
