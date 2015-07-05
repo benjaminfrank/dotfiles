@@ -86,8 +86,6 @@
   "Add PATH to LOAD-PATH if PATH exists."
   (when (file-exists-p path)
     (add-to-list 'load-path path)))
-(add-to-load-path "/usr/local/share/emacs/site-lisp")
-(add-to-load-path "/usr/share/org-mode/lisp")
 (add-to-load-path (concat user-emacs-directory "lisp"))
 
 
@@ -97,8 +95,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setting up the MELPA package manager
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")
+                         ("melpa" . "http://melpa.org/packages/")))
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -546,10 +545,9 @@ distributed under a different name than their function."
 ;;..............................................................................
 ;; org-mode
 ;; 'org is a system install and has a default binding to .org files
-;;(required 'org)
-;; ox-taskjuggler isn't available on MELPA, must be a system install
-(when (locate-library "ox-taskjuggler")
-  (require 'ox-taskjuggler))
+(required 'org-mode nil
+          (lambda() (require 'ox-taskjuggler))
+          'org-plus-contrib)
 (required 'markdown-mode)
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
