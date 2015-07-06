@@ -548,10 +548,10 @@ the package or function name."
 
 ;;..............................................................................
 ;; org-mode
-;; 'org is a system install and has a default binding to .org files
-(required 'org-mode nil
-          (lambda() (require 'ox-taskjuggler))
-          'org-plus-contrib "org")
+;; 'org is a system install but doing a 'required on taskjuggler forces
+;; an install of org-plus-contrib from ELPA
+(required 'org-taskjuggler-export nil nil 'org-plus-contrib)
+
 (required 'markdown-mode)
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
