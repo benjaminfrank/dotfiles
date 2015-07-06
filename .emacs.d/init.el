@@ -209,6 +209,14 @@ the package or function name."
 
 (setq magit-revert-buffers t)
 (required 'magit)
+(defun magit-blame-toggle()
+  "WORKAROUND https://github.com/magit/magit/issues/1987"
+  (interactive)
+  (let* ((active (--filter (and (boundp it) (symbol-value it)) minor-mode-list)))
+    (if (member 'magit-blame-mode active)
+        (magit-blame-quit)
+      (magit-blame nil buffer-file-name))))
+
 
 (setq git-timemachine-abbreviation-length 4)
 (required 'git-timemachine)
@@ -314,7 +322,7 @@ the package or function name."
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-ag)
 (global-set-key (kbd "M-.") 'find-tag)
-(global-set-key (kbd "s-b") 'magit-blame-mode)
+(global-set-key (kbd "s-b") 'magit-blame-toggle)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
