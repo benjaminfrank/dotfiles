@@ -1,0 +1,13 @@
+image: ensime/ensime:latest
+
+before_install:
+  - export PATH=$PWD/bin:$PATH
+
+script:
+  # only testing emacs starts up ok for now
+  # bit hacky, should really install aspell in docker
+  - apt-get install -y aspell-en &&
+    $EMACS -batch --no-init-file --load .emacs-test.el --load .emacs.d/init.el --eval '(kill-emacs 0)'
+
+env:
+  - EMACS=/opt/emacs-24.5/bin/emacs
