@@ -91,7 +91,8 @@
 
 
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode))
-(fset 'html-mode 'nxml-mode)
+;; WORKAROUND http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16449
+(add-hook 'nxml-mode-hook (lambda() (flyspell-mode -1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setting up the MELPA package manager
