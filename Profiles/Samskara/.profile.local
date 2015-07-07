@@ -7,11 +7,11 @@ export PATH=$SCALA_HOME/bin:$MAVEN_HOME/bin:$HOME/.cabal/bin:$PATH
 export PRINTER=PeterPrinter
 
 # debian jessie doesn't have emacs-24.5 yet
-export PATH=/opt/emacs-24.5/bin:$PATH
-export EMACS_SOURCE=/opt/emacs-24.5
+#export PATH=/opt/emacs-24.5/bin:$PATH
+#export EMACS_SOURCE=/opt/emacs-24.5
 
 ## cd /opt && sudo apt-get source emacs24
-#export EMACS_SOURCE=/opt/emacs24-24.4+1
+export EMACS_SOURCE=/opt/emacs24-24.4+1
 export EMACS_CLIENT="emacsclient -nw -s $HOME/.emacs.daemon -a ''"
 export EDITOR=$EMACS_CLIENT
 

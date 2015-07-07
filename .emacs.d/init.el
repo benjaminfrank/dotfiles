@@ -27,6 +27,7 @@
       initial-scratch-message nil
       enable-local-variables :safe
       ;;debug-on-error t
+      ;;debug-on-quit t
       enable-recursive-minibuffers t
       create-lockfiles nil
       make-backup-files nil
