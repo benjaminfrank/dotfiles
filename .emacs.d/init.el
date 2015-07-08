@@ -139,6 +139,13 @@ the package or function name."
     (indent-region (point-min) (point-max) nil)
     (untabify (point-min) (point-max))))
 
+(defun unfill-paragraph (&optional region)
+  ;; http://www.emacswiki.org/emacs/UnfillParagraph
+  "Transforms a paragraph in REGION into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil region)))
+
 (defun contextual-backspace ()
   "Hungry whitespace or delete word depending on context."
   (interactive)
@@ -331,6 +338,8 @@ the package or function name."
 (global-set-key (kbd "s-<right>") 'sp-next-sexp)
 (global-set-key (kbd "s-<up>") 'sp-backward-up-sexp)
 (global-set-key (kbd "s-<down>") 'sp-down-sexp)
+(global-set-key (kbd "M-Q") 'unfill-paragraph)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and configuring more involved
@@ -564,6 +573,13 @@ the package or function name."
                               ".pandoc")))
     (when (file-exists-p command-file)
       (shell-command command-file))))
+
+(defun soft-wrap-buffer ()
+  "Turn on function `visual-line-mode' and unwrap the buffer."
+  (interactive)
+  (visual-line-mode)
+  (let ((fill-column (point-max)))
+    (fill-region 0 (point-max))))
 
 (defun darkroom-ask ()
   "Interactively ask if the user wants to go into darkroom-mode."
