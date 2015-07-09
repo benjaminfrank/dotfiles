@@ -97,6 +97,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setting up the MELPA package manager
 (require 'package)
+(require 'cl-lib)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")
                          ("melpa" . "http://melpa.org/packages/")))
@@ -104,25 +105,38 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;; TODO change the parameter order to be (defn hook force) where defn is either:
-;; function; (function package); or (function package filename)
-(defun required (function &optional force hook package filename)
-  "`autoload' an interactive FUNCTION :symbol, installing if not present.
+(defun required (feature &optional hook force)
+  "`autoload' an interactive FEATURE, which is either:
 
-FORCE :boolean will use `require' instead of `autoload'.
+- function :symbol
+  a symbol with consistent package and file name.
+- (function:symbol package:symbol)
+  a function with a different package (file name is package).
+- (function:symbol package:symbol name:string)
+  a function with inconsistent package name and file name.
+
+The package will be downloaded using function `package-install'
+if not found locally.
 
 Runs a HOOK :lambda when the file is loaded.
 
-PACKAGE :symbol is used to workaround packages that have been
-distributed under a different name than their function.
-
-FILENAME :string is only needed if the filename on disk is not
-the package or function name."
+FORCE :boolean will use `require' instead of `autoload'."
   (interactive)
-  (let* ((sym (or package function))
-         (name (or filename (symbol-name sym))))
+  (cl-multiple-value-bind (function package name)
+      (cond ((symbolp feature)
+             (list feature
+                   feature
+                   (symbol-name feature)))
+            ((= 2 (length feature))
+             (list (car feature)
+                   (cadr feature)
+                   (symbol-name (cadr feature))))
+            ((= 3 (length feature))
+             (list (car feature)
+                   (cadr feature)
+                   (symbol-name (nth 2 feature)))))
     (unless (locate-library name)
-      (package-install sym))
+      (package-install package))
     (when hook
       (eval-after-load name hook))
     (if force
@@ -198,16 +212,16 @@ the package or function name."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
-(required 'midnight t (lambda()
-                        (add-to-list 'clean-buffer-list-kill-regexps
-                                     "\\`\\*magit.*\\*\\'")
-                        (add-to-list 'clean-buffer-list-kill-never-regexps
-                                     ".*\\*sbt.*")
-                        (add-to-list 'clean-buffer-list-kill-never-regexps
-                                     ".*\\*ENSIME-server.*")))
-(required 'persistent-scratch t (lambda() (persistent-scratch-setup-default)))
-(required 'highlight-symbol t
-          (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))))
+(required 'midnight (lambda()
+                      (add-to-list 'clean-buffer-list-kill-regexps
+                                   "\\`\\*magit.*\\*\\'")
+                      (add-to-list 'clean-buffer-list-kill-never-regexps
+                                   ".*\\*sbt.*")
+                      (add-to-list 'clean-buffer-list-kill-never-regexps
+                                   ".*\\*ENSIME-server.*")) t)
+(required 'persistent-scratch (lambda() (persistent-scratch-setup-default)) t)
+(required 'highlight-symbol
+          (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))) t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
@@ -224,8 +238,8 @@ the package or function name."
 (setq git-timemachine-abbreviation-length 4)
 (required 'git-timemachine)
 
-(required 'ctags-create-tags-table nil nil 'ctags)
-(required 'ctags-auto-update-mode nil nil 'ctags-update)
+(required (list 'ctags-create-tags-table 'ctags))
+(required (list 'ctags-auto-update-mode 'ctags-update))
 
 ;; TODO: create minimal company-backends list.
 ;;
@@ -235,12 +249,12 @@ the package or function name."
 (setq company-dabbrev-ignore-case nil
       company-dabbrev-code-ignore-case nil
       company-dabbrev-downcase nil)
-(required 'company-mode nil nil 'company)
+(required (list 'company-mode 'company))
 (required 'rainbow-mode)
 (required 'flycheck)
-(required 'yas-minor-mode nil (lambda() (yas-reload-all)) 'yasnippet)
+(required (list 'yas-minor-mode 'yasnippet) (lambda() (yas-reload-all)))
 (required 'elnode)
-(required 'tidy-buffer nil nil 'tidy)
+(required (list 'tidy-buffer 'tidy))
 
 ;; no writeroom-mode-hook to attach to in start or close
 ;; https://github.com/joostkremers/writeroom-mode/issues/18
@@ -262,7 +276,7 @@ the package or function name."
       ;;whitespace-style '(face trailing tab-mark lines-tail)
       whitespace-line-column 80)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
-(required 'whitespace-mode nil nil 'whitespace)
+(required (list 'whitespace-mode 'whitespace))
 ;; local whitespace-line-column are ignored unless loaded by
 ;; hack-local-variables-hook
 ;; https://emacs.stackexchange.com/questions/7743
@@ -271,26 +285,26 @@ the package or function name."
 
 (setq ispell-dictionary "british"
       flyspell-prog-text-faces '(font-lock-doc-face))
-(required 'flyspell nil (lambda()
-                          (put 'text-mode
-                               'flyspell-mode-predicate
-                               'flyspell-ignore-http-and-https)))
+(required 'flyspell (lambda()
+                      (put 'text-mode
+                           'flyspell-mode-predicate
+                           'flyspell-ignore-http-and-https)))
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 
 (setq ag-reuse-window 't)
 (required 'ag)
 (setq projectile-use-native-indexing t
       projectile-use-git-grep t)
-(required 'projectile nil (lambda()
-                            ;; https://github.com/bbatsov/projectile/issues/755
-                            (require 'vc-git)
-                            ;; projectile-find-tag can be slow/broken for big TAGS
-                            ;; https://github.com/bbatsov/projectile/issues/668
-                            ;; https://github.com/bbatsov/projectile/issues/683
-                            (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
+(required 'projectile (lambda()
+                        ;; https://github.com/bbatsov/projectile/issues/755
+                        (require 'vc-git)
+                        ;; projectile-find-tag can be slow/broken for big TAGS
+                        ;; https://github.com/bbatsov/projectile/issues/668
+                        ;; https://github.com/bbatsov/projectile/issues/683
+                        (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
 (required 'idomenu)
 
-(required 'smartparens-mode nil
+(required (list 'smartparens-mode 'smartparens)
           (lambda()
             (require 'smartparens-config)
             (sp-use-smartparens-bindings)
@@ -302,8 +316,7 @@ the package or function name."
             (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
             (define-key smartparens-mode-map (kbd "C-<left>") 'subword-left)
-            (define-key smartparens-mode-map (kbd "C-<right>") 'subword-right))
-          'smartparens)
+            (define-key smartparens-mode-map (kbd "C-<right>") 'subword-right)))
 
 (required 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
@@ -314,7 +327,7 @@ the package or function name."
 ;; outgrown it and now fall back to `C-h m' when in doubt.
 ;;
 (setq guide-key/guide-key-sequence t)
-(required 'guide-key-mode nil nil 'guide-key)
+(required (list 'guide-key-mode 'guide-key))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
@@ -368,9 +381,8 @@ the package or function name."
                                ("unread" . "tag:unread")
                                ("flagged" . "tag:flagged")
                                ("all" . "*")))
-(required 'notmuch nil (lambda()
-                         (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)))
-(required 'notmuch-address nil (lambda() (notmuch-address-message-insinuate)))
+(required 'notmuch (lambda() (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)))
+(required 'notmuch-address (lambda() (notmuch-address-message-insinuate)))
 (add-hook 'message-mode-hook (lambda()
                                ;; hmm, undecided about filling emails...
                                ;;(auto-fill-mode -1)
@@ -445,7 +457,7 @@ the package or function name."
 (let* ((local-ensime (concat user-emacs-directory "ensime-emacs")))
   (when (file-exists-p local-ensime)
     (add-to-list 'load-path local-ensime)))
-(required 'ensime nil
+(required 'ensime
           (lambda()
             (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
             (setq ensime-goto-test-config-defaults
@@ -510,11 +522,11 @@ the package or function name."
             (local-set-key (kbd "C-c c") 'sbt-command)
             (local-set-key (kbd "C-c e") 'next-error)
 
-            (required 'scala-outline-popup t)
+            (required 'scala-outline-popup nil t)
             (git-gutter-mode)
             (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)
 
-            (required 'ensime t)
+            (required 'ensime nil t)
             (ensime-mode 1)
 
             (set (make-local-variable 'company-backends)
@@ -573,7 +585,7 @@ the package or function name."
 ;; org-mode
 ;; 'org is a system install but doing a 'required on taskjuggler forces
 ;; an install of org-plus-contrib from ELPA
-(required 'org-taskjuggler-export nil nil 'org-plus-contrib)
+(required (list 'org-taskjuggler-export 'org-plus-contrib))
 
 (required 'markdown-mode)
 (defun pandoc ()
@@ -622,7 +634,7 @@ the package or function name."
 
 ;;..............................................................................
 ;; R
-(required 'ess-site nil nil 'ess)
+(required (list 'ess-site 'ess))
 ;; bad packaging means we have to manually setup R-mode
 (autoload 'R-mode "ess-site" nil t)
 (add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
