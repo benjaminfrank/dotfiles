@@ -104,6 +104,8 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+;; TODO change the parameter order to be (defn hook force) where defn is either:
+;; function; (function package); or (function package filename)
 (defun required (function &optional force hook package filename)
   "`autoload' an interactive FUNCTION :symbol, installing if not present.
 
@@ -239,7 +241,14 @@ the package or function name."
 (required 'yas-minor-mode nil (lambda() (yas-reload-all)) 'yasnippet)
 (required 'elnode)
 (required 'tidy-buffer nil nil 'tidy)
-(required 'darkroom-mode nil nil 'darkroom)
+
+;; no writeroom-mode-hook to attach to in start or close
+;; https://github.com/joostkremers/writeroom-mode/issues/18
+;; also, incompatible with company-mode
+;; https://github.com/company-mode/company-mode/issues/376
+;; (set (make-local-variable 'buffer-face-mode-face) '(:height 175))
+;; (buffer-face-mode 1)
+(required 'writeroom-mode)
 (required 'scratch)
 
 (setq erc-prompt-for-password nil ;; prefer ~/.authinfo for passwords
@@ -360,9 +369,10 @@ the package or function name."
                                ("flagged" . "tag:flagged")))
 (required 'notmuch nil (lambda()
                          (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
-                         (add-hook 'mml-mode (lambda() (auto-fill-mode)))))
+                         (add-hook 'mml-mode (lambda()
+                                               (visual-line-mode)
+                                               (writeroom-mode)))))
 (required 'notmuch-address nil (lambda() (notmuch-address-message-insinuate)))
-(add-hook 'message-mode-hook (lambda() (darkroom-mode)))
 
 
 ;;..............................................................................
@@ -574,30 +584,31 @@ the package or function name."
     (when (file-exists-p command-file)
       (shell-command command-file))))
 
-(defun soft-wrap-buffer ()
-  "Turn on function `visual-line-mode' and unwrap the buffer."
+(defun unwrap-buffer ()
+  "Unwrap the buffer for function `visual-line-mode'."
   (interactive)
-  (visual-line-mode)
   (let ((fill-column (point-max)))
     (fill-region 0 (point-max))))
 
-(defun darkroom-ask ()
-  "Interactively ask if the user wants to go into darkroom-mode."
+(defun writeroom-ask ()
+  "Interactively ask if the user wants to go into writeroom-mode."
   (interactive)
-  (when (y-or-n-p "Go into darkroom-mode? ")
+  (when (y-or-n-p "Go into writeroom-mode? ")
     (delete-other-windows)
-    (darkroom-mode)))
+    (visual-line-mode)
+    (writeroom-mode)))
 
 (defun markup-common-hooks()
-  (darkroom-ask)
+  (writeroom-ask)
   (yas-minor-mode)
   (company-mode)
+  ;;(auto-fill-mode)
+
   (set (make-local-variable 'company-backends)
        '(company-ispell)) ;; only dictionary completions
   (local-set-key (kbd "C-c c") 'pandoc))
 (add-hook 'org-mode-hook (lambda()
                            (markup-common-hooks)
-                           (auto-fill-mode)
                            (local-set-key (kbd "s-c") 'picture-mode)
                            (org-babel-do-load-languages
                             'org-babel-load-languages
