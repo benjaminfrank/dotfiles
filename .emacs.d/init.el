@@ -366,14 +366,16 @@ the package or function name."
       notmuch-address-command "notmuch-addrlookup"
       notmuch-saved-searches '(("inbox" . "tag:inbox")
                                ("unread" . "tag:unread")
-                               ("flagged" . "tag:flagged")))
+                               ("flagged" . "tag:flagged")
+                               ("all" . "*")))
 (required 'notmuch nil (lambda()
-                         (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
-                         (add-hook 'mml-mode (lambda()
-                                               (visual-line-mode)
-                                               (writeroom-mode)))))
+                         (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)))
 (required 'notmuch-address nil (lambda() (notmuch-address-message-insinuate)))
-
+(add-hook 'message-mode-hook (lambda()
+                               ;; hmm, undecided about filling emails...
+                               ;;(auto-fill-mode -1)
+                               ;;(visual-line-mode)
+                               (writeroom-mode)))
 
 ;;..............................................................................
 ;; shell scripts
