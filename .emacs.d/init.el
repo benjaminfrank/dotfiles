@@ -238,8 +238,8 @@ FORCE :boolean will use `require' instead of `autoload'."
 (setq git-timemachine-abbreviation-length 4)
 (required 'git-timemachine)
 
-(required (list 'ctags-create-tags-table 'ctags))
-(required (list 'ctags-auto-update-mode 'ctags-update))
+(required '(ctags-create-tags-table ctags))
+(required '(ctags-auto-update-mode ctags-update))
 
 ;; TODO: create minimal company-backends list.
 ;;
@@ -249,12 +249,12 @@ FORCE :boolean will use `require' instead of `autoload'."
 (setq company-dabbrev-ignore-case nil
       company-dabbrev-code-ignore-case nil
       company-dabbrev-downcase nil)
-(required (list 'company-mode 'company))
+(required '(company-mode company))
 (required 'rainbow-mode)
 (required 'flycheck)
-(required (list 'yas-minor-mode 'yasnippet) (lambda() (yas-reload-all)))
+(required '(yas-minor-mode yasnippet) (lambda() (yas-reload-all)))
 (required 'elnode)
-(required (list 'tidy-buffer 'tidy))
+(required '(tidy-buffer tidy))
 
 ;; no writeroom-mode-hook to attach to in start or close
 ;; https://github.com/joostkremers/writeroom-mode/issues/18
@@ -276,7 +276,7 @@ FORCE :boolean will use `require' instead of `autoload'."
       ;;whitespace-style '(face trailing tab-mark lines-tail)
       whitespace-line-column 80)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
-(required (list 'whitespace-mode 'whitespace))
+(required '(whitespace-mode whitespace))
 ;; local whitespace-line-column are ignored unless loaded by
 ;; hack-local-variables-hook
 ;; https://emacs.stackexchange.com/questions/7743
@@ -304,7 +304,7 @@ FORCE :boolean will use `require' instead of `autoload'."
                         (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
 (required 'idomenu)
 
-(required (list 'smartparens-mode 'smartparens)
+(required '(smartparens-mode smartparens)
           (lambda()
             (require 'smartparens-config)
             (sp-use-smartparens-bindings)
@@ -326,8 +326,8 @@ FORCE :boolean will use `require' instead of `autoload'."
 ;; guide-key is a really great way to learn keybindings, but I've
 ;; outgrown it and now fall back to `C-h m' when in doubt.
 ;;
-(setq guide-key/guide-key-sequence t)
-(required (list 'guide-key-mode 'guide-key))
+;;(setq guide-key/guide-key-sequence t)
+;;(required '(guide-key-mode guide-key))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
@@ -522,17 +522,17 @@ FORCE :boolean will use `require' instead of `autoload'."
             (local-set-key (kbd "C-c c") 'sbt-command)
             (local-set-key (kbd "C-c e") 'next-error)
 
-            (required 'scala-outline-popup nil t)
             (git-gutter-mode)
             (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)
-
-            (required 'ensime nil t)
-            (ensime-mode 1)
 
             (set (make-local-variable 'company-backends)
                  '(ensime-company (company-keywords company-etags)))
 
-            (scala-mode:goto-start-of-code)))
+            (scala-mode:goto-start-of-code)
+
+            ;; forces load of ensime
+            (required 'ensime nil t)
+            (ensime-mode 1)))
 
 (defun scala-start()
   "Easy way to initialise All The Things for a Scala project"
@@ -585,7 +585,7 @@ FORCE :boolean will use `require' instead of `autoload'."
 ;; org-mode
 ;; 'org is a system install but doing a 'required on taskjuggler forces
 ;; an install of org-plus-contrib from ELPA
-(required (list 'org-taskjuggler-export 'org-plus-contrib))
+(required '(org-taskjuggler-export org-plus-contrib))
 
 (required 'markdown-mode)
 (defun pandoc ()
@@ -634,7 +634,7 @@ FORCE :boolean will use `require' instead of `autoload'."
 
 ;;..............................................................................
 ;; R
-(required (list 'ess-site 'ess))
+(required '(ess-site ess))
 ;; bad packaging means we have to manually setup R-mode
 (autoload 'R-mode "ess-site" nil t)
 (add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
