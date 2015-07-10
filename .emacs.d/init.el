@@ -109,11 +109,11 @@
   "`autoload' an interactive FEATURE, which is either:
 
 - function :symbol
-  a symbol with consistent package and file name.
+  a symbol with consistent package and filename.
 - (function:symbol package:symbol)
-  a function with a different package (file name is package).
+  a function with a different package (filename is package).
 - (function:symbol package:symbol name:string)
-  a function with inconsistent package name and file name.
+  a function with inconsistent package name and filename.
 
 The package will be downloaded using function `package-install'
 if not found locally.
@@ -122,7 +122,7 @@ Runs a HOOK :lambda when the file is loaded.
 
 FORCE :boolean will use `require' instead of `autoload'."
   (interactive)
-  (cl-multiple-value-bind (function package name)
+  (cl-multiple-value-bind (function package filename)
       (cond ((symbolp feature)
              (list feature
                    feature
@@ -134,14 +134,14 @@ FORCE :boolean will use `require' instead of `autoload'."
             ((= 3 (length feature))
              (list (car feature)
                    (cadr feature)
-                   (symbol-name (nth 2 feature)))))
-    (unless (locate-library name)
+                   (nth 2 feature))))
+    (unless (locate-library filename)
       (package-install package))
     (when hook
-      (eval-after-load name hook))
+      (eval-after-load filename hook))
     (if force
         (require function)
-      (autoload function name nil 'interactive))))
+      (autoload function filename nil 'interactive))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for generic interactive convenience methods.
