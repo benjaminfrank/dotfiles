@@ -1,1 +1,1 @@
-(required 'darcula-theme t (lambda() (set-frame-font "Inconsolata-16")))
+(required 'darcula-theme (lambda() (set-frame-font "Inconsolata-16")) t)
