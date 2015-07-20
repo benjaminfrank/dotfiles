@@ -227,6 +227,7 @@ FORCE :boolean will use `require' instead of `autoload'."
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
 ;; context or when explicitly called by the user.
+(required '(package-utils-upgrade-all package-utils))
 (required 'hungry-delete)
 (required 'misc-cmds)
 (required 'multiple-cursors)
