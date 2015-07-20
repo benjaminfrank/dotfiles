@@ -1,6 +1,4 @@
 # m h  dom mon dow   command
-#0,20,40 * * * * /usr/bin/offlineimap -u quiet
 5,25,45 * * * * /usr/bin/notmuch new --quiet
-#*/1 * * * * /home/fommil/.fommil/bin/wifi-reconnector >/dev/null 2>&1
-0 19 * * * /usr/local/bin/goobook reload
+0 0 * * * /usr/bin/emacs -batch -u fommil -f package-utils-upgrade-all --kill >/dev/null
 

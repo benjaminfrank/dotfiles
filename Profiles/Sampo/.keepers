@@ -1,4 +1,3 @@
-accountsservice
 anacron
 ant
 apt-file
@@ -28,6 +27,7 @@ debsums
 desktop-base
 devscripts
 discover
+ditaa
 dns-root-data
 docker.io
 dosfstools
@@ -52,6 +52,7 @@ ghc-haddock
 gimp
 git
 gnome-system-monitor
+golang-go
 google-talkplugin
 gparted
 gpm
@@ -78,7 +79,6 @@ less
 libblas-dev
 libgcrypt11
 libghc-xmonad-contrib-dev
-libyajl2
 lightdm
 linux-headers-amd64
 linux-image-amd64
@@ -94,6 +94,7 @@ ncurses-term
 nethogs
 network-manager
 notmuch
+notmuch-addrlookup
 npm
 ntp
 offlineimap
@@ -106,6 +107,7 @@ oracle-java8-unlimited-jce-policy
 org-mode
 os-prober
 p7zip-full
+pandoc
 patchutils
 pavucontrol
 pciutils
@@ -113,6 +115,7 @@ pepperflashplugin-nonfree
 pinentry-curses
 pngcrush
 potrace
+powertop
 preload
 preview-latex-style
 printer-driver-postscript-hp
@@ -120,6 +123,7 @@ pulseaudio
 pulseaudio-module-x11
 qbittorrent
 r-base
+reportbug
 rtkit
 rxvt-unicode
 sane-utils
