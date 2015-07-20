@@ -123,18 +123,10 @@ Runs a HOOK :lambda when the file is loaded.
 FORCE :boolean will use `require' instead of `autoload'."
   (interactive)
   (cl-multiple-value-bind (function package filename)
-      (cond ((symbolp feature)
-             (list feature
-                   feature
-                   (symbol-name feature)))
-            ((= 2 (length feature))
-             (list (car feature)
-                   (cadr feature)
-                   (symbol-name (cadr feature))))
-            ((= 3 (length feature))
-             (list (car feature)
-                   (cadr feature)
-                   (nth 2 feature))))
+      (pcase feature
+        ((pred symbolp)   (list feature feature (symbol-name feature)))
+        (`(,fn ,pkg)      (list fn pkg (symbol-name pkg)))
+        (`(,fn ,pkg ,nm)  (list fn pkg nm)))
     (unless (locate-library filename)
       (package-install package))
     (when hook
