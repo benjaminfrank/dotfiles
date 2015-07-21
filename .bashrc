@@ -18,7 +18,13 @@ if [ -x "`which dircolors 2>/dev/null`" ] ; then
         eval `dircolors`
     fi
 fi
-if [ -x "`which fortune 2>/dev/null`" ] ; then fortune ; fi
+if [ -x "`which fortune 2>/dev/null`" ] ; then
+    if [ -x "`which cowsay 2>/dev/null`" ] ; then
+        fortune | cowsay -f koala
+    else
+        fortune
+    fi
+fi
 
 # PS1 Colours
 Black="\[\033[0;30m\]"
