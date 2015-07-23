@@ -316,6 +316,21 @@ FORCE :boolean will use `require' instead of `autoload'."
 (required 'dockerfile-mode)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 
+(required 'hydra)
+(defun hydra-splitter/body ()
+  "Defines a Hydra to resize the windows."
+  ;; overwrites the original keymapping and function
+  ;; https://github.com/abo-abo/hydra/issues/149
+  (interactive)
+  (require 'hydra-examples)
+  (defhydra hydra-splitter (global-map "C-M-s")
+    "splitter"
+    ("<left>" hydra-move-splitter-left)
+    ("<down>" hydra-move-splitter-down)
+    ("<up>" hydra-move-splitter-up)
+    ("<right>" hydra-move-splitter-right))
+  (hydra-splitter/body))
+
 ;; guide-key is a really great way to learn keybindings, but I've
 ;; outgrown it and now fall back to `C-h m' when in doubt.
 ;;
@@ -354,7 +369,7 @@ FORCE :boolean will use `require' instead of `autoload'."
 (global-set-key (kbd "s-<up>") 'sp-backward-up-sexp)
 (global-set-key (kbd "s-<down>") 'sp-down-sexp)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
-
+(global-set-key (kbd "C-M-s") 'hydra-splitter/body)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and configuring more involved
