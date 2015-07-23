@@ -319,17 +319,16 @@ FORCE :boolean will use `require' instead of `autoload'."
 (required 'hydra)
 (defun hydra-splitter/body ()
   "Defines a Hydra to resize the windows."
-  ;; overwrites the original keymapping and function
+  ;; overwrites the original function and calls it
   ;; https://github.com/abo-abo/hydra/issues/149
   (interactive)
   (require 'hydra-examples)
-  (defhydra hydra-splitter (global-map "C-M-s")
-    "splitter"
-    ("<left>" hydra-move-splitter-left)
-    ("<down>" hydra-move-splitter-down)
-    ("<up>" hydra-move-splitter-up)
-    ("<right>" hydra-move-splitter-right))
-  (hydra-splitter/body))
+  (funcall
+   (defhydra hydra-splitter nil "splitter"
+     ("<left>" hydra-move-splitter-left)
+     ("<down>" hydra-move-splitter-down)
+     ("<up>" hydra-move-splitter-up)
+     ("<right>" hydra-move-splitter-right))))
 
 ;; guide-key is a really great way to learn keybindings, but I've
 ;; outgrown it and now fall back to `C-h m' when in doubt.
