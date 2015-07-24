@@ -225,7 +225,8 @@ FORCE :boolean will use `require' instead of `autoload'."
 (required 'multiple-cursors)
 (required 'git-gutter)
 
-(setq magit-revert-buffers t)
+(setq magit-revert-buffers t
+      magit-push-always-verify nil)
 (required 'magit)
 
 (setq git-timemachine-abbreviation-length 4)
