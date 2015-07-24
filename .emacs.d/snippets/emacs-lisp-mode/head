@@ -1,0 +1,12 @@
+#name: elisp file header
+# --
+;;; `(file-name-nondirectory (buffer-file-name))` --- ${1:Summary}
+;;; Commentary:
+;;
+;;  ${2:Musings}
+;;
+;;; Code:
+
+$3
+
+;;; `(file-name-nondirectory (buffer-file-name))` ends here
