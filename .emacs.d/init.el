@@ -440,6 +440,7 @@ FORCE :boolean will use `require' instead of `autoload'."
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
             (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
+            (local-set-key (kbd "C-c C-c") 'ert)
             ;; indent-tabs-mode needs to be reset
             (setq indent-tabs-mode nil
                   tab-width 4
