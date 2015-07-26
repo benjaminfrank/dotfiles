@@ -437,6 +437,18 @@ FORCE :boolean will use `require' instead of `autoload'."
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
 
+            ;; Unfortunately, autoloading and require do not work for
+            ;; projects that are not explicitly on the load-path.
+            ;; Since it is unlikely that I would ever want to visit an
+            ;; elisp file in my home directory without its directory
+            ;; being on the load-path, add it.
+            (when (and
+                   (not (equal default-directory user-emacs-directory))
+                   (file-in-directory-p buffer-file-name (getenv "HOME"))
+                   (not (member default-directory load-path)))
+              (message "Adding %s to the load-path" default-directory)
+              (add-to-list 'load-path default-directory))
+
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
             (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
