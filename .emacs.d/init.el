@@ -450,8 +450,7 @@ FORCE :boolean will use `require' instead of `autoload'."
                    (not (member default-directory load-path)))
               (message "Adding %s to the load-path" default-directory)
               (add-to-list 'load-path default-directory)
-              (set (make-local-variable 'flycheck-emacs-lisp-load-path)
-                   (list default-directory)))
+              (setq flycheck-emacs-lisp-load-path (list default-directory)))
 
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
             (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
