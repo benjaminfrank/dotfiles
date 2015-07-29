@@ -464,6 +464,7 @@ FORCE :boolean will use `require' instead of `autoload'."
             ;; Flycheck will still fail to detect external packages
             ;; unless using cask.
             (when (and
+                   buffer-file-name ;; needed for batch-mode
                    (not (file-in-directory-p buffer-file-name user-emacs-directory))
                    (file-in-directory-p buffer-file-name (getenv "HOME"))
                    (not (member default-directory load-path)))
