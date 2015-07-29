@@ -302,10 +302,7 @@ FORCE :boolean will use `require' instead of `autoload'."
           (lambda()
             (require 'smartparens-config)
             (sp-use-smartparens-bindings)
-            (defun sp-wrap-with-parens (&optional arg)
-              "Add parens around the next s-expression or universal ARG."
-              (interactive "P") (sp-wrap-with-pair "("))
-
+            (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
             ;; nice whitespace / indentation when creating statements
             (sp-local-pair 'c-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'c-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
@@ -313,7 +310,6 @@ FORCE :boolean will use `require' instead of `autoload'."
             (sp-local-pair 'java-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
-            (define-key smartparens-mode-map (kbd "C-(") 'sp-wrap-with-parens)
             (define-key smartparens-mode-map (kbd "C-<left>") 'subword-left)
             (define-key smartparens-mode-map (kbd "C-<right>") 'subword-right)))
 
