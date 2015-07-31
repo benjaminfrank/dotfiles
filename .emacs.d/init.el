@@ -457,6 +457,10 @@ FORCE :boolean will use `require' instead of `autoload'."
             (smartparens-strict-mode)
             (ctags-auto-update-mode)
 
+            (when (eq 0 (buffer-size))
+              (insert "head")
+              (yas-expand))
+
             ;; `autoload' and `require' do not work for projects that
             ;; are not explicitly in `load-path'. Since it is unlikely
             ;; that I would ever want to visit an elisp file in my
