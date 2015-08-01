@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+#name: elisp file template
+# --
+;;; `(buffer-name)` --- ${1:Summary}
+;; Copyright (C) `(format-time-string "%Y")` `user-full-name`
+;; Author: `user-full-name` <`user-mail-address`>
+;;; Commentary:
+;;
+;;  ${2:Musings}
+;;
+;;; Code:
+
+$0
+
+;;; `(buffer-name)` ends here

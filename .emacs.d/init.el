@@ -457,8 +457,9 @@ FORCE :boolean will use `require' instead of `autoload'."
             (smartparens-strict-mode)
             (ctags-auto-update-mode)
 
+            ;; WORKAROUND https://github.com/capitaomorte/yasnippet/issues/595
             (when (eq 0 (buffer-size))
-              (insert "head")
+              (insert "newfile")
               (yas-expand))
 
             ;; `autoload' and `require' do not work for projects that
