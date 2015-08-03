@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-#name: elisp file template
+#name: newfile
 # --
 ;;; `(buffer-name)` --- ${1:Summary}
 ;; Copyright (C) `(format-time-string "%Y")` `user-full-name`

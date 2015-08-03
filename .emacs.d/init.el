@@ -201,6 +201,14 @@ FORCE :boolean will use `require' instead of `autoload'."
       (forward-char)
       (not (looking-at "https?\\b")))))
 
+(defun newfile-template ()
+  "Populate with a yasnippet template called `newfile' for the `major-mode'."
+  (when (eq 0 (buffer-size))
+    (require 'yasnippet)
+    (let ((snippet (yas-lookup-snippet "newfile" major-mode 'noerror)))
+      (when snippet
+        (yas-expand-snippet snippet)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
@@ -247,6 +255,8 @@ FORCE :boolean will use `require' instead of `autoload'."
 (required 'rainbow-mode)
 (required 'flycheck)
 (required '(yas-minor-mode yasnippet) (lambda() (yas-reload-all)))
+(add-hook 'find-file-hook 'newfile-template)
+
 (required 'elnode)
 (required '(tidy-buffer tidy))
 
@@ -456,11 +466,6 @@ FORCE :boolean will use `require' instead of `autoload'."
             (company-mode)
             (smartparens-strict-mode)
             (ctags-auto-update-mode)
-
-            ;; WORKAROUND https://github.com/capitaomorte/yasnippet/issues/595
-            (when (eq 0 (buffer-size))
-              (insert "newfile")
-              (yas-expand))
 
             ;; `autoload' and `require' do not work for projects that
             ;; are not explicitly in `load-path'. Since it is unlikely
