@@ -7,6 +7,8 @@ export HISTCONTROL=ignoredups
 export WINEARCH=win32
 export WINEDEBUG=fixme-all,warn+cursor
 
+export COWPATH=$HOME/.cows:/usr/share/cowsay/cows
+
 # place local system fixes in here
 if [ -f $HOME/.profile.local ] ; then
     . $HOME/.profile.local
