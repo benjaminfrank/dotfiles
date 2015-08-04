@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+#name: newfile
+# --
+// Copyright (C) `(format-time-string "%Y")` `user-full-name`
+// See LICENSE for further legal information.
+`(let ((package (mvn-package-for-buffer)))
+  (unless (string= "" package)
+     (concat "package " package)))`
+
+$0

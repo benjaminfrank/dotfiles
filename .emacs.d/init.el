@@ -201,13 +201,41 @@ FORCE :boolean will use `require' instead of `autoload'."
       (forward-char)
       (not (looking-at "https?\\b")))))
 
+(defun minor-modes-active ()
+  "The minor modes that are enabled in the current buffer."
+  (interactive)
+  (let (active-modes)
+    (dolist (mode minor-mode-list active-modes)
+      (if (and (boundp mode) (symbol-value mode))
+          (add-to-list 'active-modes mode)))))
+
 (defun newfile-template ()
   "Populate with a yasnippet template called `newfile' for the `major-mode'."
   (when (eq 0 (buffer-size))
-    (require 'yasnippet)
-    (let ((snippet (yas-lookup-snippet "newfile" major-mode 'noerror)))
-      (when snippet
-        (yas-expand-snippet snippet)))))
+    (let ((yas-on (member 'yas-minor-mode (minor-modes-active))))
+      (unless yas-on
+        (yas-minor-mode 1))
+      (let ((snippet (yas-lookup-snippet "newfile" major-mode 'noerror)))
+        (when snippet
+          (yas-expand-snippet snippet)))
+      (unless yas-on
+        (yas-minor-mode -1)))))
+
+(defun mvn-package-for-buffer ()
+  "Calculate the expected package name for the buffer;
+assuming it is in a maven-style project."
+  ;; TODO: not Windows friendly
+  (interactive)
+  (let ((kind (file-name-extension buffer-file-name)))
+    (require 'subr-x) ;; maybe we should just use 's
+    (replace-regexp-in-string
+     (regexp-quote "/") "."
+     (string-remove-suffix "/"
+                           (string-remove-prefix
+                            (expand-file-name (concat (locate-dominating-file default-directory kind) "/" kind "/"))
+                            default-directory))
+     nil 'literal)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
