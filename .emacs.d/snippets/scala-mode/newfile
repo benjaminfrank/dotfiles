@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 #name: newfile
 # --
-// Copyright (C) `(format-time-string "%Y")` `(or (and (boundp 'copyright-owner) copyright-owner) user-full-name)`
+// Copyright (C) `(format-time-string "%Y")` `(copyright-owner)`
 // See LICENSE for further legal information.
 `(let ((package (mvn-package-for-buffer)))
   (unless (string= "" package)

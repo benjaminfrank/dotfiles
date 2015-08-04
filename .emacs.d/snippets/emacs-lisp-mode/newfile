@@ -2,7 +2,7 @@
 #name: newfile
 # --
 ;;; `(buffer-name)` --- ${1:Summary}
-;; Copyright (C) `(format-time-string "%Y")` `user-full-name`
+;; Copyright (C) `(format-time-string "%Y")` `(copyright-owner)`
 ;; Author: `user-full-name` <`user-mail-address`>
 ;;; Commentary:
 ;;

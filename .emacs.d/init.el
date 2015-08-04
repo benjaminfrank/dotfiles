@@ -209,6 +209,12 @@ FORCE :boolean will use `require' instead of `autoload'."
       (if (and (boundp mode) (symbol-value mode))
           (add-to-list 'active-modes mode)))))
 
+(defun copyright-owner ()
+  "The copyright owner for the buffer.
+e.g. when `dir-locals.el' provides a `copyright-owner' variable.
+Particularly useful in yasnippet templates."
+  (or (and (boundp 'copyright-owner) copyright-owner) user-full-name))
+
 (defun newfile-template ()
   "Populate with a yasnippet template called `newfile' for the `major-mode'."
   (when (eq 0 (buffer-size))
