@@ -308,6 +308,7 @@ assuming it is in a maven-style project."
       ;;whitespace-style '(face trailing tab-mark lines-tail)
       whitespace-line-column 80)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
+(put 'copyright-owner 'safe-local-variable #'stringp)
 (required '(whitespace-mode whitespace))
 ;; local whitespace-line-column are ignored unless loaded by
 ;; hack-local-variables-hook
