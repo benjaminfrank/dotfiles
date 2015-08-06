@@ -348,6 +348,9 @@ assuming it is in a maven-style project."
             (require 'smartparens-config)
             (sp-use-smartparens-bindings)
             (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
+            (sp-pair "[" "]" :wrap "s-[") ;; C-[ sends ESC
+            (sp-pair "{" "}" :wrap "C-{")
+
             ;; nice whitespace / indentation when creating statements
             (sp-local-pair 'c-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
             (sp-local-pair 'c-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
@@ -528,6 +531,7 @@ assuming it is in a maven-style project."
       scala-indent:align-parameters t
       ensime-default-buffer-prefix "ENSIME-"
       scala-outline-popup-select 'closest)
+
 (let* ((local-ensime (concat user-emacs-directory "ensime-emacs")))
   (when (file-exists-p local-ensime)
     (add-to-list 'load-path local-ensime)))
