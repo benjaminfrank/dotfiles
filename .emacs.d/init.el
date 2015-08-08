@@ -287,6 +287,7 @@ assuming it is in a maven-style project."
       company-dabbrev-downcase nil)
 (required '(company-mode company))
 (required 'rainbow-mode)
+(required '(flycheck-cask-setup flycheck-cask))
 (required 'flycheck)
 (required '(yas-minor-mode yasnippet) (lambda() (yas-reload-all)))
 (add-hook 'find-file-hook 'newfile-template)
@@ -491,37 +492,18 @@ assuming it is in a maven-style project."
             (local-set-key (kbd "s-q") 'describe-foo-at-point)
             (local-set-key (kbd "C-c c") 'ert)
             ;; indent-tabs-mode needs to be reset
-            (setq indent-tabs-mode nil
-                  tab-width 4
-                  c-basic-offset 4)
+            (setq indent-tabs-mode nil)
             (rainbow-mode)
             (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
               (prettify-symbols-mode))
             (flyspell-prog-mode)
             (eldoc-mode)
             (flycheck-mode)
+            (flycheck-cask-setup)
             (yas-minor-mode)
             (company-mode)
             (smartparens-strict-mode)
             (ctags-auto-update-mode)
-
-            ;; `autoload' and `require' do not work for projects that
-            ;; are not explicitly in `load-path'. Since it is unlikely
-            ;; that I would ever want to visit an elisp file in my
-            ;; home directory without its directory being on the
-            ;; load-path, add it, and also tell flycheck about it.
-            ;; Flycheck will still fail to detect external packages
-            ;; unless using cask.
-            (when (and
-                   buffer-file-name ;; needed for batch-mode
-                   (not (file-in-directory-p buffer-file-name user-emacs-directory))
-                   (file-in-directory-p buffer-file-name (getenv "HOME"))
-                   (not (member default-directory load-path)))
-              (message "Adding %s to the load-path" default-directory)
-              (add-to-list 'load-path default-directory)
-              (add-to-list 'flycheck-emacs-lisp-load-path default-directory))
-              ;; (if (listp flycheck-emacs-lisp-load-path)
-              ;;   (setq flycheck-emacs-lisp-load-path (list default-directory))))
             ))
 
 

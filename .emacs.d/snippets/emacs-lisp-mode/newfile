@@ -2,8 +2,10 @@
 #name: newfile
 # --
 ;;; `(buffer-name)` --- ${1:Summary}
+
 ;; Copyright (C) `(format-time-string "%Y")` `(copyright-owner)`
-;; Author: `user-full-name` <`user-mail-address`>
+;; License: http://www.gnu.org/licenses/gpl.html
+
 ;;; Commentary:
 ;;
 ;;  ${2:Musings}

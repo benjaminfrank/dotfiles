@@ -15,6 +15,10 @@ export EMACS_SOURCE=/opt/emacs24-24.5+1
 export EMACS_CLIENT="emacsclient -nw -s $HOME/.emacs.daemon -a ''"
 export EDITOR=$EMACS_CLIENT
 
+# https://github.com/cask/cask
+# curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+export PATH=/home/fommil/.cask/bin:$PATH
+
 export YOURKIT_HOME=/opt/yjp-2015-build-15056
 export YOURKIT_AGENT=$YOURKIT_HOME/bin/linux-x86-64/libyjpagent.so
 
