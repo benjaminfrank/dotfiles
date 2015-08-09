@@ -17,15 +17,9 @@ RUN\
 ################################################
 # Base System
 RUN\
-  apt-get install -y curl locales &&\
+  apt-get install -y git curl locales &&\
   echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen &&\
   locale-gen &&\
-  apt-get clean
-
-################################################
-# Git
-RUN\
-  apt-get install -y git &&\
   apt-get clean
 
 ################################################
@@ -35,6 +29,8 @@ RUN\
 # need to take a debfoster snapshot of before and agressively purge
 # once we have done the compiles. Having the additional system emacs
 # ensures we have all runtime deps for our builds.
+#
+# NOTE: 24.1 does not compile due to use of a removed glibc function.
 RUN\
   apt-get install -y emacs24 &&\
   apt-get clean
@@ -43,8 +39,6 @@ RUN\
   debfoster -q &&\
   apt-get build-dep -y emacs24 &&\
   mkdir /tmp/emacs-build &&\
-  curl http://ftp.gnu.org/gnu/emacs/emacs-24.1.tar.bz2 -o /tmp/emacs-24.1.tar.bz2 &&\
-  cd /tmp && tar xf emacs-24.1.tar.bz2 && cd emacs-24.1 && ./configure --prefix=/opt/emacs-24.1 && make && make install &&\
   curl http://ftp.gnu.org/gnu/emacs/emacs-24.2.tar.xz -o /tmp/emacs-24.2.tar.xz &&\
   cd /tmp && tar xf emacs-24.2.tar.xz && cd emacs-24.2 && ./configure --prefix=/opt/emacs-24.2 && make && make install &&\
   curl http://ftp.gnu.org/gnu/emacs/emacs-24.3.tar.xz -o /tmp/emacs-24.3.tar.xz &&\
@@ -56,11 +50,12 @@ RUN\
   echo Y | debfoster -f &&\
   rm -rf /tmp/emacs* &&\
   apt-get clean
+ENV PATH /opt/emacs-24.5/bin:${PATH}
 
 ################################################
 # Cask
 RUN\
   apt-get install -y python &&\
-  apt-get clean &&\
-  curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+  curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python \&&
+  apt-get clean
 ENV PATH /root/.cask/bin:${PATH}
