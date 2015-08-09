@@ -583,7 +583,6 @@ assuming it is in a maven-style project."
             (local-set-key (kbd "C-c e") 'next-error)
 
             (git-gutter-mode)
-            (define-key popup-isearch-keymap (kbd "s-o") 'popup-isearch-cancel)
 
             (set (make-local-variable 'company-backends)
                  '(ensime-company (company-keywords company-etags)))
