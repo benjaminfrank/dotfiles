@@ -58,3 +58,9 @@ RUN\
   curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python &&\
   apt-get clean
 ENV PATH /root/.cask/bin:${PATH}
+
+################################################
+# Aspell (dependency of Emacs flycheck)
+RUN\
+  apt-get install -y aspell-en &&\
+  apt-get clean
