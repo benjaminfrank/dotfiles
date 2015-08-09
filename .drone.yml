@@ -1,4 +1,4 @@
-image: ensime/ensime:latest
+image: fommil/dotfiles
 
 before_install:
   - export PATH=$PWD/bin:$PATH
