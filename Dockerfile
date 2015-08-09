@@ -7,9 +7,6 @@ MAINTAINER Sam Halliday, sam.halliday@gmail.com
 ################################################
 # Package Management
 RUN\
-  echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main' >> /etc/apt/sources.list &&\
-  echo 'deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main' >> /etc/apt/sources.list &&\
-  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 &&\
   cat /etc/apt/sources.list | sed 's/^deb /deb-src /' >> /etc/apt/sources.list &&\
   echo 'APT::Install-Recommends "0";' >> /etc/apt/apt.conf &&\
   echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf &&\
@@ -20,25 +17,31 @@ RUN\
 ################################################
 # Base System
 RUN\
-  apt-get install -y git-core locales &&\
+  apt-get install -y locales &&\
   echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen &&\
   locale-gen &&\
   apt-get clean
 
 ################################################
+# Git
+RUN\
+  apt-get install -y git &&\
+  apt-get clean
+
+################################################
 # Emacs
 #
-# This involves installing the build-deps for emacs23. To clean up we
+# This involves installing the build-deps for emacs24. To clean up we
 # need to take a debfoster snapshot of before and agressively purge
 # once we have done the compiles. Having the additional system emacs
 # ensures we have all runtime deps for our builds.
 RUN\
-  apt-get install -y emacs23 &&\
+  apt-get install -y emacs24 &&\
   apt-get clean
 RUN\
   apt-get install -y debfoster &&\
   debfoster -q &&\
-  apt-get build-dep -y emacs23 &&\
+  apt-get build-dep -y emacs24 &&\
   mkdir /tmp/emacs-build &&\
   curl http://ftp.gnu.org/gnu/emacs/emacs-24.1.tar.bz2 -o /tmp/emacs-24.1.tar.bz2 &&\
   cd /tmp && tar xf emacs-24.1.tar.bz2 && cd emacs-24.1 && ./configure --prefix=/opt/emacs-24.1 && make && make install &&\
@@ -61,9 +64,3 @@ RUN\
   apt-get clean &&\
   curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
 ENV PATH /root/.cask/bin:${PATH}
-
-################################################
-# Git
-RUN\
-  apt-get install -y git &&\
-  apt-get clean
