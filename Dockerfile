@@ -17,7 +17,7 @@ RUN\
 ################################################
 # Base System
 RUN\
-  apt-get install -y locales &&\
+  apt-get install -y curl locales &&\
   echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen &&\
   locale-gen &&\
   apt-get clean
