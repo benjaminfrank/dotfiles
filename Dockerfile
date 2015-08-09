@@ -39,14 +39,13 @@ RUN\
   debfoster -q &&\
   apt-get build-dep -y emacs24 &&\
   mkdir /tmp/emacs-build &&\
-  curl http://ftp.gnu.org/gnu/emacs/emacs-24.2.tar.xz -o /tmp/emacs-24.2.tar.xz &&\
-  cd /tmp && tar xf emacs-24.2.tar.xz && cd emacs-24.2 && ./configure --prefix=/opt/emacs-24.2 && make && make install &&\
-  curl http://ftp.gnu.org/gnu/emacs/emacs-24.3.tar.xz -o /tmp/emacs-24.3.tar.xz &&\
-  cd /tmp && tar xf emacs-24.3.tar.xz && cd emacs-24.3 && ./configure --prefix=/opt/emacs-24.3 && make && make install &&\
-  curl http://ftp.gnu.org/gnu/emacs/emacs-24.4.tar.xz -o /tmp/emacs-24.4.tar.xz &&\
-  cd /tmp && tar xf emacs-24.4.tar.xz && cd emacs-24.4 && ./configure --prefix=/opt/emacs-24.4 && make && make install &&\
-  curl http://ftp.gnu.org/gnu/emacs/emacs-24.5.tar.xz -o /tmp/emacs-24.5.tar.xz &&\
-  cd /tmp && tar xf emacs-24.5.tar.xz && cd emacs-24.5 && ./configure --prefix=/opt/emacs-24.5 && make && make install &&\
+  for EMACS_VERSION in 24.2 24.3 24.4 24.5 ; do\
+    curl http://ftp.gnu.org/gnu/emacs/emacs-${EMACS_VERSION}.tar.xz -o /tmp/emacs-${EMACS_VERSION}.tar.xz &&\
+    cd /tmp && tar xf emacs-${EMACS_VERSION}.tar.xz &&\
+    cd emacs-${EMACS_VERSION} &&\
+    ./configure --prefix=/opt/emacs-${EMACS_VERSION} &&\
+    make && make install ;\
+  done &&\
   echo Y | debfoster -f &&\
   rm -rf /tmp/emacs* &&\
   apt-get clean
