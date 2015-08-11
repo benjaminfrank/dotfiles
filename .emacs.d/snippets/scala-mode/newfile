@@ -7,4 +7,6 @@
   (unless (string= "" package)
      (concat "package " package)))`
 
+import Predef.{any2stringadd => _, _}
+
 $0

@@ -1,5 +1,7 @@
 ;;; init.el --- Emacs configuration
+
 ;; Copyright (C) 2014 - 2015 Sam Halliday (fommil)
+;; License: http://www.gnu.org/licenses/gpl.html
 
 ;; Author: Sam Halliday <sam.halliday@gmail.com>
 ;; URL: https://github.com/fommil/unix/blob/master/.emacs.d/init.el
@@ -218,14 +220,10 @@ Particularly useful in yasnippet templates."
 (defun newfile-template ()
   "Populate with a yasnippet template called `newfile' for the `major-mode'."
   (when (eq 0 (buffer-size))
-    (let ((yas-on (member 'yas-minor-mode (minor-modes-active))))
-      (unless yas-on
-        (yas-minor-mode 1))
+    (when (member 'yas-minor-mode (minor-modes-active))
       (let ((snippet (yas-lookup-snippet "newfile" major-mode 'noerror)))
         (when snippet
-          (yas-expand-snippet snippet)))
-      (unless yas-on
-        (yas-minor-mode -1)))))
+          (yas-expand-snippet snippet))))))
 
 (defun mvn-package-for-buffer ()
   "Calculate the expected package name for the buffer;
@@ -289,6 +287,8 @@ assuming it is in a maven-style project."
 (required 'rainbow-mode)
 (required '(flycheck-cask-setup flycheck-cask))
 (required 'flycheck)
+
+;; TODO yas/company-mode compatibility http://emacs.stackexchange.com/questions/7908/
 (required '(yas-minor-mode yasnippet) (lambda() (yas-reload-all)))
 (add-hook 'find-file-hook 'newfile-template)
 
@@ -514,29 +514,61 @@ assuming it is in a maven-style project."
       ensime-default-buffer-prefix "ENSIME-"
       scala-outline-popup-select 'closest)
 
+(defun sp-restrict-c (sym)
+  ;; TODO: extend mode-map to all C-derived languages
+  (sp-restrict-to-pairs-interactive "{([" sym))
+
 (let* ((local-ensime (concat user-emacs-directory "ensime-emacs")))
   (when (file-exists-p local-ensime)
     (add-to-list 'load-path local-ensime)))
+
+(required 'scala-mode2
+          (lambda ()
+            (require 'smartparens)
+            (define-key scala-mode-map (kbd "s-o") 'scala-outline-popup)
+            (define-key scala-mode-map (kbd "RET")
+                           (lambda()
+                             (interactive)
+                             (newline-and-indent)
+                             (scala-indent:insert-asterisk-on-multiline-comment)))
+
+            (define-key scala-mode-map (kbd "s-<delete>") (sp-restrict-c 'sp-kill-sexp))
+            (define-key scala-mode-map (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
+            (define-key scala-mode-map (kbd "s-<home>") (sp-restrict-c 'sp-beginning-of-sexp))
+            (define-key scala-mode-map (kbd "s-<end>") (sp-restrict-c 'sp-end-of-sexp))
+            (define-key scala-mode-map (kbd "s-<left>") (sp-restrict-c 'sp-beginning-of-previous-sexp))
+            ;; would prefer sp-next-sexp but restriction is broken
+            ;; https://github.com/Fuco1/smartparens/issues/468
+            (define-key scala-mode-map (kbd "s-<right>") (sp-restrict-c 'sp-beginning-of-next-sexp))
+            (define-key scala-mode-map (kbd "s-<up>") (sp-restrict-c 'sp-backward-up-sexp))
+            (define-key scala-mode-map (kbd "s-<down>") (sp-restrict-c 'sp-down-sexp))
+
+            (define-key scala-mode-map (kbd "C-c c") 'sbt-command)
+            (define-key scala-mode-map (kbd "C-c e") 'next-error)))
+
 (required 'ensime
           (lambda()
             (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
+
+            (define-key ensime-mode-map (kbd "s-n") 'ensime-search)
+            (define-key ensime-mode-map (kbd "s-i") 'ensime-print-type-at-point)
+            (define-key ensime-mode-map (kbd "M-.") 'ensime-edit-definition-with-fallback)
+
             (setq ensime-goto-test-config-defaults
                   (plist-put (plist-put ;; TODO: clean up double plist-put
                               ensime-goto-test-config-defaults
                               :test-class-suffixes '("Spec" "Test" "Check"))
                              :test-template-fn 'ensime-goto-test--test-template-scalatest-flatspec))))
-(required 'scala-mode2)
+
 (required 'scala-outline-popup)
 (required 'sbt-mode)
-(required 'maker-mode)
 
-;;(autoload 'maker:find-root "maker-mode")
-(defun sbt-or-maker-command ()
-  "Find and launch `maker-command', falling back to `sbt-command'."
+(defun ensime-edit-definition-with-fallback ()
+  "Variant of `ensime-edit-definition' with ctags if ENSIME is not available."
   (interactive)
-  (if (maker:find-root)
-      (call-interactively 'maker-command)
-    (call-interactively 'sbt-command)))
+  (if (ensime-connection-or-nil)
+      (ensime-edit-definition)
+    (call-interactively 'find-tag)))
 
 (add-hook 'scala-mode-hook
           (lambda()
@@ -553,45 +585,19 @@ assuming it is in a maven-style project."
             (flyspell-prog-mode)
             (highlight-symbol-mode)
             (smartparens-mode)
-            (local-set-key (kbd "s-n") 'ensime-search)
-            (local-set-key (kbd "s-i") 'ensime-print-type-at-point)
-            (local-set-key (kbd "s-o") 'scala-outline-popup)
-            (local-set-key (kbd "RET")
-                           (lambda()
-                             (interactive)
-                             (newline-and-indent)
-                             (scala-indent:insert-asterisk-on-multiline-comment)))
-
-            ;; TODO: extend scala-mode-map to all C-derived languages
-            (defun sp-restrict-c (sym)
-              (sp-restrict-to-pairs-interactive "{([" sym))
-            (local-set-key (kbd "s-<delete>") (sp-restrict-c 'sp-kill-sexp))
-            (local-set-key (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
-            (local-set-key (kbd "s-<home>") (sp-restrict-c 'sp-beginning-of-sexp))
-            (local-set-key (kbd "s-<end>") (sp-restrict-c 'sp-end-of-sexp))
-            (local-set-key (kbd "s-<left>") (sp-restrict-c 'sp-beginning-of-previous-sexp))
-            ;; would prefer sp-next-sexp but restriction is broken
-            ;; https://github.com/Fuco1/smartparens/issues/468
-            (local-set-key (kbd "s-<right>") (sp-restrict-c 'sp-beginning-of-next-sexp))
-            (local-set-key (kbd "s-<up>") (sp-restrict-c 'sp-backward-up-sexp))
-            (local-set-key (kbd "s-<down>") (sp-restrict-c 'sp-down-sexp))
-
-            ;;(local-set-key (kbd "C-<right>") 'scala-syntax:forward-token)
-            ;;(local-set-key (kbd "C-<left>") 'scala-syntax:backward-token)
-            ;;(local-set-key (kbd "C-c c") 'sbt-or-maker-command)
-            (local-set-key (kbd "C-c c") 'sbt-command)
-            (local-set-key (kbd "C-c e") 'next-error)
-
+            (yas-minor-mode)
             (git-gutter-mode)
-
-            (set (make-local-variable 'company-backends)
-                 '(ensime-company (company-keywords company-etags)))
-
-            (scala-mode:goto-start-of-code)
 
             ;; forces load of ensime
             (required 'ensime nil t)
-            (ensime-mode 1)))
+            (ensime-mode 1)
+
+            (scala-mode:goto-start-of-code)))
+
+(add-hook 'ensime-mode-hook
+          (lambda ()
+            (set (make-local-variable 'company-backends)
+                 '(ensime-company (company-keywords company-etags)))))
 
 (defun scala-start()
   "Easy way to initialise All The Things for a Scala project"

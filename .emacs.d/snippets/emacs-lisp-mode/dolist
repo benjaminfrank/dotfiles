@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+#name: dolist
+#key: dolist
+#key: dol
+# --
+(dolist ($1)
+ $0
+ )
