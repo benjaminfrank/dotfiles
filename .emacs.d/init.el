@@ -286,7 +286,7 @@ assuming it is in a maven-style project."
 (required '(company-mode company)
           (lambda ()
             ;; disables TAB in company-mode, freeing it for yasnippet
-            (define-key company-active-map 'company-complete-common nil)))
+            (define-key company-active-map [tab] nil)))
 
 (required 'rainbow-mode)
 (required '(flycheck-cask-setup flycheck-cask))
