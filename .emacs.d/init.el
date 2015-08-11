@@ -283,12 +283,15 @@ assuming it is in a maven-style project."
 (setq company-dabbrev-ignore-case nil
       company-dabbrev-code-ignore-case nil
       company-dabbrev-downcase nil)
-(required '(company-mode company))
+(required '(company-mode company)
+          (lambda ()
+            ;; disables TAB in company-mode, freeing it for yasnippet
+            (define-key company-active-map 'company-complete-common nil)))
+
 (required 'rainbow-mode)
 (required '(flycheck-cask-setup flycheck-cask))
 (required 'flycheck)
 
-;; TODO yas/company-mode compatibility http://emacs.stackexchange.com/questions/7908/
 (required '(yas-minor-mode yasnippet) (lambda() (yas-reload-all)))
 (add-hook 'find-file-hook 'newfile-template)
 
