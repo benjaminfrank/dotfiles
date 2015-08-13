@@ -58,6 +58,8 @@
       org-confirm-babel-evaluate nil
       nxml-slash-auto-complete-flag t
       sentence-end-double-space nil
+      browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "sensible-browser"
       ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -319,6 +321,7 @@ assuming it is in a maven-style project."
       whitespace-line-column 80)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
 (put 'copyright-owner 'safe-local-variable #'stringp)
+
 (required '(whitespace-mode whitespace))
 ;; local whitespace-line-column are ignored unless loaded by
 ;; hack-local-variables-hook
@@ -457,43 +460,35 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; elisp
-(defun describe-foo-at-point ()
-  ;;; http://www.emacswiki.org/emacs/DescribeThingAtPoint
-  "Show the documentation of the function and variable near point."
-  (interactive)
-  (let (sym)
-    (cond ((setq sym (ignore-errors
-                       (with-syntax-table emacs-lisp-mode-syntax-table
-                         (save-excursion
-                           (or (not (zerop (skip-syntax-backward "_w")))
-                               (eq (char-syntax (char-after (point))) ?w)
-                               (eq (char-syntax (char-after (point))) ?_)
-                               (forward-sexp -1))
-                           (skip-chars-forward "`'")
-                           (let ((obj (read (current-buffer))))
-                             (and (symbolp obj) (fboundp obj) obj))))))
-           (describe-function sym))
-          ((setq sym (variable-at-point)) (describe-variable sym))
-          ((setq sym (function-at-point)) (describe-function sym)))))
-
 (defun elisp-find-tag-or-find-func ()
   ;;; Could be a lot smarter for non-function symbols (variables, faces, packages, etc)
-  "Use `find-tag' to find symbol at point, falling back to `find-func' features."
+  "Use `find-func' to find symbol at point, falling back to `find-tag' features."
   (interactive)
-  (let* ((fun (function-called-at-point)))
+  (let ((fun (function-called-at-point)))
     (if (and fun (find-function-noselect fun (not source-directory)))
         (find-function-do-it fun nil 'switch-to-buffer)
       (find-tag (symbol-name (symbol-at-point))))))
+
+(defun add-default-directory-to-load-path ()
+  "Add the current working directory to the `load-path'.
+Useful for interactive elisp projects."
+  (interactive)
+  (add-to-list 'load-path default-directory))
+
+(eval-after-load "lisp-mode"
+  (lambda ()
+    (define-key emacs-lisp-mode-map (kbd "M-.") 'elisp-find-tag-or-find-func)
+    (define-key emacs-lisp-mode-map (kbd "RET") 'comment-indent-new-line)
+    (define-key emacs-lisp-mode-map (kbd "C-c c") 'compile)))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
 
+            ;; allows dir-locals for whitespace settings
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
-            (local-set-key (kbd "M-.") 'elisp-find-tag-or-find-func)
-            (local-set-key (kbd "s-q") 'describe-foo-at-point)
-            (local-set-key (kbd "C-c c") 'ert)
+
             ;; indent-tabs-mode needs to be reset
             (setq indent-tabs-mode nil)
             (rainbow-mode)
@@ -529,11 +524,11 @@ assuming it is in a maven-style project."
           (lambda ()
             (require 'smartparens)
             (define-key scala-mode-map (kbd "s-o") 'scala-outline-popup)
-            (define-key scala-mode-map (kbd "RET")
-                           (lambda()
-                             (interactive)
-                             (newline-and-indent)
-                             (scala-indent:insert-asterisk-on-multiline-comment)))
+            ;; (define-key scala-mode-map (kbd "RET")
+            ;;                (lambda()
+            ;;                  (interactive)
+            ;;                  (newline-and-indent)
+            ;;                  (scala-indent:insert-asterisk-on-multiline-comment)))
 
             (define-key scala-mode-map (kbd "s-<delete>") (sp-restrict-c 'sp-kill-sexp))
             (define-key scala-mode-map (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
