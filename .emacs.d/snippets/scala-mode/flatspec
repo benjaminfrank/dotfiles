@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+#name: flatspec
+# --
+import org.scalatest._
+
+class `(file-name-sans-extension (buffer-name))` extends FlatSpec with Matchers {
+  "`(file-name-sans-extension (buffer-name))`" should "$1" in {
+    $0
+  }
+}

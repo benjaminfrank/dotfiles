@@ -3,7 +3,7 @@
 # --
 ;;; `(buffer-name)` --- ${1:Summary}
 
-;; Copyright (C) `(format-time-string "%Y")` `(copyright-owner)`
+;; Copyright (C) `(format-time-string "%Y")` `copyright-owner`
 ;; License: http://www.gnu.org/licenses/gpl.html
 
 ;;; Commentary:

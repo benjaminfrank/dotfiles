@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name: spec
+# --
+${1:it} should "$2" in {
+    $0
+}
