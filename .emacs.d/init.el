@@ -225,7 +225,10 @@ Particularly useful in yasnippet templates."
     (when (member 'yas-minor-mode (minor-modes-active))
       (let ((snippet (yas-lookup-snippet "newfile" major-mode 'noerror)))
         (when snippet
-          (yas-expand-snippet snippet))))))
+          (yas-expand-snippet snippet)
+          ;; saving and reverting means we load the File-Variables
+          (save-buffer)
+          (revert-buffer nil t))))))
 
 (defun mvn-package-for-buffer ()
   "Calculate the expected package name for the buffer;
