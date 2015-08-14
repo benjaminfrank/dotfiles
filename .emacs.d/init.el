@@ -225,9 +225,7 @@ Particularly useful in yasnippet templates.")
       (let ((snippet (yas-lookup-snippet "newfile" major-mode 'noerror)))
         (when snippet
           (yas-expand-snippet snippet)
-          ;; saving and reverting means we load the File-Variables
-          (save-buffer)
-          (revert-buffer nil t))))))
+          (hack-local-variables))))))
 
 (defun mvn-package-for-buffer ()
   "Calculate the expected package name for the buffer;
@@ -598,7 +596,9 @@ Useful for interactive elisp projects."
 (add-hook 'ensime-mode-hook
           (lambda ()
             (set (make-local-variable 'company-backends)
-                 '(ensime-company (company-yasnippet company-keywords company-etags)))))
+                 ;; https://github.com/company-mode/company-mode/issues/390
+                 '(ensime-company
+                   (company-keywords company-etags company-yasnippet)))))
 
 (defun scala-start()
   "Easy way to initialise All The Things for a Scala project"
