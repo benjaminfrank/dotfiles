@@ -586,6 +586,7 @@ Useful for interactive elisp projects."
             (smartparens-mode)
             (yas-minor-mode)
             (git-gutter-mode)
+            (ctags-auto-update-mode)
 
             ;; forces load of ensime
             (required 'ensime nil t)
@@ -597,7 +598,7 @@ Useful for interactive elisp projects."
           (lambda ()
             (set (make-local-variable 'company-backends)
                  ;; https://github.com/company-mode/company-mode/issues/390
-                 '(ensime-company
+                 '((ensime-company :with company-yasnippet)
                    (company-keywords company-etags company-yasnippet)))))
 
 (defun scala-start()
