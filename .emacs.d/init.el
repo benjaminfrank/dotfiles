@@ -598,7 +598,8 @@ Useful for interactive elisp projects."
           (lambda ()
             (set (make-local-variable 'company-backends)
                  ;; https://github.com/company-mode/company-mode/issues/390
-                 '((ensime-company :with company-yasnippet)
+                 ;; (ensime-company :with company-yasnippet)
+                 '(ensime-company
                    (company-keywords company-etags company-yasnippet)))))
 
 (defun scala-start()
