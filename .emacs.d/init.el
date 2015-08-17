@@ -51,6 +51,8 @@
       dabbrev-case-fold-search nil
       ;;dabbrev-case-replace nil
       tags-case-fold-search nil
+      tags-revert-without-query t
+      tags-add-tables nil
       compilation-skip-threshold 2
       c-basic-offset 4
       source-directory (getenv "EMACS_SOURCE")
@@ -184,11 +186,6 @@ FORCE :boolean will use `require' instead of `autoload'."
           (save-buffers-kill-emacs)
         (message-box "use 'M-x exit'")))))
 
-(defun kill-current-buffer-and-its-windows ()
-  "Kill without confirm."
-  (interactive)
-  (kill-buffer-and-its-windows (current-buffer)))
-
 (defun declare-buffer-bankruptcy()
   "Declare buffer bankruptcy and clean up everything."
   (interactive)
@@ -284,12 +281,16 @@ assuming it is in a maven-style project."
 ;; completion --- then completion terminates (even if no suggestions)
 (setq company-dabbrev-ignore-case nil
       company-dabbrev-code-ignore-case nil
-      company-dabbrev-downcase nil)
+      company-dabbrev-downcase nil
+      company-idle-delay 0
+      company-minimum-prefix-length 2)
 (required '(company-mode company)
           (lambda ()
             (require 'company-yasnippet)
             ;; disables TAB in company-mode, freeing it for yasnippet
             (define-key company-active-map [tab] nil)))
+(setq company-quickhelp-delay 1.0)
+(required '(company-quickhelp-mode company-quickhelp))
 
 (required 'rainbow-mode)
 (required '(flycheck-cask-setup flycheck-cask))
@@ -398,7 +399,6 @@ assuming it is in a maven-style project."
 ;; This section is for overriding common emacs keybindings with tweaks.
 (global-unset-key (kbd "C-z")) ;; I hate you so much C-z
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
-;;(global-set-key (kbd "C-x k") 'kill-buffer-and-its-windows)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'idomenu)
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -410,6 +410,7 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-ag)
 (global-set-key (kbd "M-.") 'find-tag)
+(global-set-key (kbd "M-,") 'pop-tag-mark)
 (global-set-key (kbd "s-b") 'magit-blame)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
@@ -461,14 +462,35 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; elisp
-(defun elisp-find-tag-or-find-func ()
-  ;;; Could be a lot smarter for non-function symbols (variables, faces, packages, etc)
-  "Use `find-func' to find symbol at point, falling back to `find-tag' features."
+(defun find-tag-exact ()
+  "`find-tag' for exact symbol at point, returning nil if nothing is found.
+Also pushes the original point to the `global-mark-ring'.
+
+Remember that `find-tag' will search the description string, not
+the tag name, so this is not appropriate for densely packed
+languages (e.g. Scala) as it will affect the logic for
+prioritising results.
+
+http://emacs.stackexchange.com/questions/14808"
   (interactive)
-  (let ((fun (function-called-at-point)))
-    (if (and fun (find-function-noselect fun (not source-directory)))
-        (find-function-do-it fun nil 'switch-to-buffer)
-      (find-tag (symbol-name (symbol-at-point))))))
+  (condition-case nil
+      (let ((thing (concat "\\_<" (regexp-quote (thing-at-point 'symbol)) "\\_>")))
+        (find-tag-regexp thing))
+    ;; find-tag signals an error if it doesn't find anything, convert to nil
+    ('error)))
+
+(defun elisp-find-tag-or-find-func ()
+  ;; Could be a lot smarter for non-function symbols (variables, faces, packages, etc)
+  "Use `find-tag' to find symbol at point (i.e. prefer your project), falling back to `find-func' (i.e. search the repl)."
+  (interactive)
+  ;; find-tag moves the buffer and point even if it fails, so we have to store it
+  (let ((buffer (buffer-name))
+        (point (point)))
+    (unless (find-tag-exact)
+      (switch-to-buffer buffer)
+      (goto-char point)
+      (ring-insert find-tag-marker-ring (copy-marker (mark-marker)))
+      (find-function-do-it (function-called-at-point) nil 'switch-to-buffer))))
 
 (defun add-default-directory-to-load-path ()
   "Add the current working directory to the `load-path'.
@@ -495,12 +517,19 @@ Useful for interactive elisp projects."
             (rainbow-mode)
             (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
               (prettify-symbols-mode))
+
+            (projectile-mode)
+
             (flyspell-prog-mode)
             (eldoc-mode)
             (flycheck-mode)
             (flycheck-cask-setup)
             (yas-minor-mode)
             (company-mode)
+
+            ;; CAVEAT only for REPL https://github.com/expez/company-quickhelp/issues/23
+            (company-quickhelp-mode 1)
+
             (smartparens-strict-mode)
             (ctags-auto-update-mode)
             ))
