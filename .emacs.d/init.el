@@ -352,6 +352,7 @@ assuming it is in a maven-style project."
                         (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
 (required 'idomenu)
 
+(required '(rainbow-delimiters-mode rainbow-delimiters))
 (required '(smartparens-mode smartparens)
           (lambda()
             (require 'smartparens-config)
@@ -531,8 +532,9 @@ Useful for interactive elisp projects."
             (company-quickhelp-mode 1)
 
             (smartparens-strict-mode)
-            (ctags-auto-update-mode)
-            ))
+            (rainbow-delimiters-mode)
+
+            (ctags-auto-update-mode)))
 
 
 ;;..............................................................................
@@ -554,11 +556,12 @@ Useful for interactive elisp projects."
           (lambda ()
             (require 'smartparens)
             (define-key scala-mode-map (kbd "s-o") 'scala-outline-popup)
-            ;; (define-key scala-mode-map (kbd "RET")
-            ;;                (lambda()
-            ;;                  (interactive)
-            ;;                  (newline-and-indent)
-            ;;                  (scala-indent:insert-asterisk-on-multiline-comment)))
+            (define-key scala-mode-map (kbd "RET")
+                           (lambda()
+                             (interactive)
+                             (newline-and-indent)
+                             (scala-indent:insert-asterisk-on-multiline-comment)))
+            ;;(define-key scala-mode-map (kbd "RET") 'comment-indent-new-line)
 
             (define-key scala-mode-map (kbd "s-<delete>") (sp-restrict-c 'sp-kill-sexp))
             (define-key scala-mode-map (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
