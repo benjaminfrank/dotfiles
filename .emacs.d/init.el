@@ -1,10 +1,9 @@
-;;; init.el --- Emacs configuration
+;;; init.el --- Emacs configuration -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 - 2015 Sam Halliday (fommil)
 ;; License: http://www.gnu.org/licenses/gpl.html
 
-;; Author: Sam Halliday <sam.halliday@gmail.com>
-;; URL: https://github.com/fommil/unix/blob/master/.emacs.d/init.el
+;; URL: https://github.com/fommil/dotfiles/blob/master/.emacs.d/init.el
 
 ;;; Commentary:
 ;;
@@ -27,7 +26,7 @@
 ;; This section is for global settings for built-in emacs parameters
 (setq inhibit-startup-screen t
       initial-scratch-message nil
-      enable-local-variables :safe
+      enable-local-variables t ;; :safe when it gets too noisy
       ;;debug-on-error t
       ;;debug-on-quit t
       enable-recursive-minibuffers t
@@ -36,7 +35,6 @@
       load-prefer-newer t
       x-select-enable-clipboard t
       interprogram-paste-function 'x-cut-buffer-or-selection-value
-      tab-width 4
       column-number-mode t
       scroll-error-top-bottom t
       show-trailing-whitespace t
@@ -44,6 +42,11 @@
       user-mail-address "Sam.Halliday@gmail.com"
       user-full-name "Sam Halliday"
       send-mail-function 'smtpmail-send-it)
+
+;; buffer local variables
+(setq-default
+ indent-tabs-mode nil
+ tab-width 4)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in packages that autoload
@@ -54,7 +57,6 @@
       tags-revert-without-query t
       tags-add-tables nil
       compilation-skip-threshold 2
-      c-basic-offset 4
       source-directory (getenv "EMACS_SOURCE")
       org-ditaa-jar-path "~/.ditaa.jar"
       org-confirm-babel-evaluate nil
@@ -64,10 +66,12 @@
       browse-url-generic-program "sensible-browser"
       ediff-window-setup-function 'ediff-setup-windows-plain)
 
+(setq-default
+ c-basic-offset 4)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setup functions that are built-in to emacs
 (defalias 'yes-or-no-p 'y-or-n-p)
-(setq-default indent-tabs-mode nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -208,11 +212,18 @@ FORCE :boolean will use `require' instead of `autoload'."
   (let (active-modes)
     (dolist (mode minor-mode-list active-modes)
       (if (and (boundp mode) (symbol-value mode))
-          (add-to-list 'active-modes mode)))))
+          (push mode active-modes)))))
 
-(defvar copyright-owner user-full-name
+(defvar-local copyright-owner user-full-name
   "The copyright owner for the buffer.
 e.g. when `dir-locals.el' provides a `copyright-owner' variable.
+Particularly useful in yasnippet templates.")
+
+(defvar-local license-url "see the LICENSE file"
+  "The license url for the buffer.
+It is always better to explicitly list the license per file than
+to refer to the LICENSE file.
+e.g. when `dir-locals.el' provides a `license-url' variable.
 Particularly useful in yasnippet templates.")
 
 (defun newfile-template ()
@@ -229,15 +240,17 @@ Particularly useful in yasnippet templates.")
 assuming it is in a maven-style project."
   ;; TODO: not Windows friendly
   (interactive)
-  (let ((kind (file-name-extension buffer-file-name)))
-    (require 'subr-x) ;; maybe we should just use 's
-    (replace-regexp-in-string
-     (regexp-quote "/") "."
-     (string-remove-suffix "/"
-                           (string-remove-prefix
-                            (expand-file-name (concat (locate-dominating-file default-directory kind) "/" kind "/"))
-                            default-directory))
-     nil 'literal)))
+  (let* ((kind (file-name-extension buffer-file-name))
+         (root (locate-dominating-file default-directory kind)))
+    (when root
+      (require 'subr-x) ;; maybe we should just use 's
+      (replace-regexp-in-string
+       (regexp-quote "/") "."
+       (string-remove-suffix "/"
+                             (string-remove-prefix
+                              (expand-file-name (concat root "/" kind "/"))
+                              default-directory))
+       nil 'literal))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -323,6 +336,7 @@ assuming it is in a maven-style project."
       whitespace-line-column 80)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
 (put 'copyright-owner 'safe-local-variable #'stringp)
+(put 'license-url 'safe-local-variable #'stringp)
 
 (required '(whitespace-mode whitespace))
 ;; local whitespace-line-column are ignored unless loaded by
@@ -513,8 +527,8 @@ Useful for interactive elisp projects."
             ;; allows dir-locals for whitespace settings
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
 
-            ;; indent-tabs-mode needs to be reset
-            (setq indent-tabs-mode nil)
+            (setq license-url "http://www.gnu.org/licenses/gpl.html")
+
             (rainbow-mode)
             (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
               (prettify-symbols-mode))
@@ -659,11 +673,6 @@ Useful for interactive elisp projects."
 ;; Java: watch out for https://github.com/ensime/ensime-server/issues/345
 (add-hook 'java-mode-hook
           (lambda()
-            ;; http://www.emacswiki.org/emacs/IndentingJava
-            ;; java-mode resets all the default tab settings. dick.
-            (setq indent-tabs-mode nil
-                  tab-width 4
-                  c-basic-offset 4)
             (yas-minor-mode)
             (projectile-mode)
             (company-mode)

@@ -1,10 +1,10 @@
 # -*- mode: snippet -*-
 #name: newfile
 # --
-;;; `(buffer-name)` --- ${1:Summary}
+;;; `(buffer-name)` --- ${1:Summary} -*- lexical-binding: t -*-
 
 ;; Copyright (C) `(format-time-string "%Y")` `copyright-owner`
-;; License: http://www.gnu.org/licenses/gpl.html
+;; License: `license-url`
 
 ;;; Commentary:
 ;;
@@ -14,7 +14,10 @@
 
 $0
 
+(provide '`(buffer-name)`)
+
 ;; Local Variables:
 ;; compile-command: "cask exec ert-runner `(buffer-name)`"
 ;; End:
+
 ;;; `(buffer-name)` ends here

@@ -2,9 +2,9 @@
 #name: newfile
 # --
 // Copyright (C) `(format-time-string "%Y")` `copyright-owner`
-// See LICENSE for further legal information.
+// License: `license-url`
 `(let ((package (mvn-package-for-buffer)))
-  (unless (string= "" package)
+  (when (and package (not (string= "" package)))
      (concat "package " package)))`
 
 import Predef.{any2stringadd => _, _}
