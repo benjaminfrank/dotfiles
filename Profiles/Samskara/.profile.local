@@ -43,10 +43,11 @@ export PATH=$HOME/.cabal/bin:$PATH
 
 # iMacs require some TLC for various drivers to work:
 # 1. sudo apt-get install nvidia-glx nvidia-kernel-dkms nvidia-xconfig
-#    (version 304.116 known to work)
+#    (version 304.116 known to work, this may just be for debian jessie)
 # 2. sudo m-a a-i broadcom-sta
 #    (but prefer an ethernet connection... debian unstable might want nvidia-driver as well)
-# 3. iSight firmware is in
+# 3. sudo m-a a-i nvidia-kernel
+# 4. iSight firmware is in
 #    /System/Library/Extensions/IOUSBFamilyekext/Contents/PlugIns/AppleUSBVideoSupport.kext/Contents/MacOS/AppleUSBVideoSupport
 
 # speakers and headphones:
