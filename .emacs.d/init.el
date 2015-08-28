@@ -50,7 +50,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in packages that autoload
-(setq show-paren-delay 0
+(setq show-paren-delay 0.5
       dabbrev-case-fold-search nil
       ;;dabbrev-case-replace nil
       tags-case-fold-search nil
@@ -535,7 +535,7 @@ Useful for interactive elisp projects."
 
             (projectile-mode)
 
-            (flyspell-prog-mode)
+            ;;(flyspell-prog-mode)
             (eldoc-mode)
             (flycheck-mode)
             (flycheck-cask-setup)
@@ -627,7 +627,7 @@ Useful for interactive elisp projects."
             ;; disable this post-self-insert-hook
             (defun scala-indent:indent-on-parentheses ())
 
-            (flyspell-prog-mode)
+            ;;(flyspell-prog-mode)
             (highlight-symbol-mode)
             (smartparens-mode)
             (yas-minor-mode)
