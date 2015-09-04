@@ -5,8 +5,18 @@
 ;;
 ;;; Code:
 
-(required 'darcula-theme (lambda() (set-frame-font "Inconsolata-18")) t)
-;; REMINDER: to change theme `M-x load-theme RET TAB' (leuven is nice)
+(required 'darcula-theme)
+
+(defun dark-theme ()
+  "A dark coloured theme for hacking when there is no screen glare."
+  (load-theme 'darcula t)
+  (set-frame-font "Inconsolata-22"))
+(dark-theme)
+
+(defun light-theme ()
+  "A light coloured theme for hacking when there is lots of screen glare."
+  (load-theme 'leuven t)
+  (set-frame-font "Inconsolata-22"))
 
 ;; I'll usually want access to these..
 (find-file "~/Projects/")
