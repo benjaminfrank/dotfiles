@@ -267,6 +267,9 @@ assuming it is in a maven-style project."
 (required 'highlight-symbol
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))) t)
 
+(required '(global-undo-tree-mode undo-tree) t)
+(global-undo-tree-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
@@ -430,6 +433,7 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-h") 'highlight-symbol-at-point)
+(global-set-key (kbd "s-/") 'undo-tree-visualize)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 ;; https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#navigation-functions
 ;; TODO: restrict sexp navigation in C derived languages to just the parenthesis
