@@ -267,8 +267,9 @@ assuming it is in a maven-style project."
 (required 'highlight-symbol
           (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))) t)
 
-(required '(global-undo-tree-mode undo-tree) t)
-(global-undo-tree-mode)
+(required 'undo-tree
+          (lambda () (global-undo-tree-mode)) t)
+;; consider volatile-highlights-mode
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
