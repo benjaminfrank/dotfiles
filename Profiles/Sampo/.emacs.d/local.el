@@ -9,12 +9,14 @@
 
 (defun dark-theme ()
   "A dark coloured theme for hacking when there is no screen glare."
+  (interactive)
   (load-theme 'darcula t)
   (set-frame-font "Inconsolata-22"))
 (dark-theme)
 
 (defun light-theme ()
   "A light coloured theme for hacking when there is lots of screen glare."
+  (interactive)
   (load-theme 'leuven t)
   (set-frame-font "Inconsolata-22"))
 
