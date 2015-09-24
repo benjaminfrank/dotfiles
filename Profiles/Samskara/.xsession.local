@@ -6,7 +6,7 @@
 # prefer to set this system-wide http://askubuntu.com/questions/8506
 
 # natural scroll
-xmodmap -e "pointer = 1 2 3 5 4 7 6 8 9 10 11 12"
+#xmodmap -e "pointer = 1 2 3 5 4 7 6 8 9 10 11 12"
 
 # brightness
 xrandr --output DP-2 --brightness 0.7
