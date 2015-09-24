@@ -33,8 +33,6 @@
       create-lockfiles nil
       make-backup-files nil
       load-prefer-newer t
-      x-select-enable-clipboard t
-      interprogram-paste-function 'x-cut-buffer-or-selection-value
       column-number-mode t
       scroll-error-top-bottom t
       show-trailing-whitespace t
@@ -42,6 +40,13 @@
       user-mail-address "Sam.Halliday@gmail.com"
       user-full-name "Sam Halliday"
       send-mail-function 'smtpmail-send-it)
+
+(cond
+ ((eq system-type 'gnu/linux)
+  (setq x-select-enable-clipboard t
+        interprogram-paste-function 'x-cut-buffer-or-selection-value))
+ (t nil))
+
 
 ;; buffer local variables
 (setq-default
@@ -77,7 +82,6 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1) ;; show-smartparens is too slow
 (global-subword-mode 1)
-(setenv "SBT_OPTS" (concat "-no-colors " (getenv "SBT_OPTS")))
 (global-auto-revert-mode 1)
 (substitute-key-definition
  ;; allows using SPACE when in the minibuffer
@@ -111,6 +115,14 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")
                          ("melpa" . "http://melpa.org/packages/")))
+(when (eq system-type 'windows-nt)
+  ;; HACK: my work is on git 1.8
+  (add-to-list 'package-archives
+               '("magit-v1" . "http://magit.vc/elpa/v1/packages/") t)
+  (add-to-list 'package-pinned-packages '(magit . "magit-v1"))
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (defalias 'git-blame 'git-blame-mode))
+
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
