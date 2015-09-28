@@ -23,6 +23,12 @@
 
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; High Priority Site Local
+(let ((user-local (concat user-emacs-directory "local-preinit.el")))
+  (when (file-exists-p user-local)
+    (load user-local)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in emacs parameters
 (setq inhibit-startup-screen t
       initial-scratch-message nil
@@ -63,7 +69,6 @@
       tags-add-tables nil
       compilation-skip-threshold 2
       source-directory (getenv "EMACS_SOURCE")
-      org-ditaa-jar-path "~/.ditaa.jar"
       org-confirm-babel-evaluate nil
       nxml-slash-auto-complete-flag t
       sentence-end-double-space nil
@@ -115,13 +120,6 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")
                          ("melpa" . "http://melpa.org/packages/")))
-(when (eq system-type 'windows-nt)
-  ;; HACK: my work is on git 1.8
-  (add-to-list 'package-archives
-               '("magit-v1" . "http://magit.vc/elpa/v1/packages/") t)
-  (add-to-list 'package-pinned-packages '(magit . "magit-v1"))
-  (setq magit-last-seen-setup-instructions "1.4.0")
-  (defalias 'git-blame 'git-blame-mode))
 
 (package-initialize)
 (when (not package-archive-contents)
@@ -295,7 +293,7 @@ assuming it is in a maven-style project."
 
 (setq magit-revert-buffers t
       magit-push-always-verify nil)
-(required 'magit)
+(required '(magit-status magit))
 
 (setq git-timemachine-abbreviation-length 4)
 (required 'git-timemachine)
@@ -312,7 +310,7 @@ assuming it is in a maven-style project."
       company-dabbrev-code-ignore-case nil
       company-dabbrev-downcase nil
       company-idle-delay 0
-      company-minimum-prefix-length 2)
+      company-minimum-prefix-length 4)
 (required '(company-mode company)
           (lambda ()
             (require 'company-yasnippet)
@@ -445,7 +443,7 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "s-b") 'magit-blame)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
-(global-set-key (kbd "s-h") 'highlight-symbol-at-point)
+(global-set-key (kbd "s-h") 'highlight-symbol)
 (global-set-key (kbd "s-/") 'undo-tree-visualize)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 ;; https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#navigation-functions
@@ -711,7 +709,11 @@ Useful for interactive elisp projects."
 ;; org-mode
 ;; 'org is a system install but doing a 'required on taskjuggler forces
 ;; an install of org-plus-contrib from ELPA
-(required '(org-taskjuggler-export org-plus-contrib))
+(when (not (eq system-type 'windows-nt))
+  ;; doesn't work on Windows
+  ;; Debugger entered--Lisp error: (overflow-error "100000000")
+  ;; eval-buffer(#<buffer  *load*-834341> nil "d:/.emacs.d/elpa/org-plus-contrib-20150921/org-footnote.el" nil t)  ; Reading at buffer position 20900
+  (required '(org-taskjuggler-export org-plus-contrib)))
 
 (required 'markdown-mode)
 (defun pandoc ()
@@ -736,6 +738,7 @@ Useful for interactive elisp projects."
   (when (y-or-n-p "Go into writeroom-mode? ")
     (delete-other-windows)
     (visual-line-mode)
+    ;; NOTE weird sizing bug in writeroom
     (writeroom-mode)))
 
 (defun markup-common-hooks()
@@ -743,9 +746,6 @@ Useful for interactive elisp projects."
   (yas-minor-mode)
   (company-mode)
   ;;(auto-fill-mode)
-
-  (set (make-local-variable 'company-backends)
-       '(company-ispell)) ;; only dictionary completions
   (local-set-key (kbd "C-c c") 'pandoc))
 (add-hook 'org-mode-hook (lambda()
                            (markup-common-hooks)
@@ -777,7 +777,7 @@ Useful for interactive elisp projects."
   (erc :server "irc.freenode.net" :port 6667))
 
 
-;;..............................................................................
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; User Site Local
 (let ((user-local (concat user-emacs-directory "local.el")))
   (when (file-exists-p user-local)
