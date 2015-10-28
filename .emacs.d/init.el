@@ -262,6 +262,11 @@ assuming it is in a maven-style project."
                               default-directory))
        nil 'literal))))
 
+(defun projectile-etags-select-find-tag ()
+  "Run `etags-select-find-tag' in the current projectile context."
+  (interactive)
+  (projectile-visit-project-tags-table)
+  (etags-select-find-tag))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
@@ -298,8 +303,7 @@ assuming it is in a maven-style project."
 (setq git-timemachine-abbreviation-length 4)
 (required 'git-timemachine)
 
-(required '(ctags-create-tags-table ctags))
-(required '(ctags-auto-update-mode ctags-update))
+(required '(etags-select-find-tag etags-select))
 
 ;; TODO: create minimal company-backends list.
 ;;
@@ -377,7 +381,7 @@ assuming it is in a maven-style project."
                         ;; projectile-find-tag can be slow/broken for big TAGS
                         ;; https://github.com/bbatsov/projectile/issues/668
                         ;; https://github.com/bbatsov/projectile/issues/683
-                        (define-key projectile-mode-map (kbd "C-c p j") 'find-tag)))
+                        (define-key projectile-mode-map (kbd "C-c p j") 'projectile-etags-select-find-tag)))
 (required 'idomenu)
 
 (required '(rainbow-delimiters-mode rainbow-delimiters))
@@ -431,6 +435,8 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "M-i") 'idomenu)
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "M-.") 'projectile-etags-select-find-tag)
+(global-set-key (kbd "M-,") 'pop-tag-mark)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
@@ -438,8 +444,6 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "C-<tab>") 'dabbrev-expand) ;; fallback incase company-mode isn't available
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-ag)
-(global-set-key (kbd "M-.") 'find-tag)
-(global-set-key (kbd "M-,") 'pop-tag-mark)
 (global-set-key (kbd "s-b") 'magit-blame)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "s-g") 'magit-status)
@@ -561,9 +565,7 @@ Useful for interactive elisp projects."
             (company-quickhelp-mode 1)
 
             (smartparens-strict-mode)
-            (rainbow-delimiters-mode)
-
-            (ctags-auto-update-mode)))
+            (rainbow-delimiters-mode)))
 
 
 ;;..............................................................................
@@ -629,7 +631,7 @@ Useful for interactive elisp projects."
   (interactive)
   (if (ensime-connection-or-nil)
       (ensime-edit-definition)
-    (call-interactively 'find-tag)))
+    (call-interactively 'projectile-etags-select-find-tag)))
 
 (add-hook 'scala-mode-hook
           (lambda()
@@ -648,7 +650,6 @@ Useful for interactive elisp projects."
             (smartparens-mode)
             (yas-minor-mode)
             (git-gutter-mode)
-            (ctags-auto-update-mode)
 
             ;; forces load of ensime
             (required 'ensime nil t)
@@ -693,8 +694,7 @@ Useful for interactive elisp projects."
             (projectile-mode)
             (company-mode)
             (smartparens-mode)
-            (local-set-key (kbd "C-c e") 'next-error)
-            (ctags-auto-update-mode)))
+            (local-set-key (kbd "C-c e") 'next-error)))
 
 
 ;;..............................................................................
@@ -703,8 +703,7 @@ Useful for interactive elisp projects."
                          (yas-minor-mode)
                          (projectile-mode)
                          (company-mode)
-                         (smartparens-mode)
-                         (ctags-auto-update-mode)))
+                         (smartparens-mode)))
 
 ;;..............................................................................
 ;; org-mode
