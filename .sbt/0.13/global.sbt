@@ -6,3 +6,5 @@ addCommandAlias("pluginDependencyUpdates", "; reload plugins; dependencyUpdates;
 net.virtualvoid.sbt.graph.Plugin.graphSettings
 
 useGpgAgent := true
+
+cancelable in Global := true

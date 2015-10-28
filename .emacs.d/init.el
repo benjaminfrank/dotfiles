@@ -571,6 +571,7 @@ Useful for interactive elisp projects."
 (setq scala-indent:use-javadoc-style t
       scala-indent:align-parameters t
       ensime-default-buffer-prefix "ENSIME-"
+      ensime-prefer-noninteractive t
       scala-outline-popup-select 'closest)
 
 (defun sp-restrict-c (sym)
