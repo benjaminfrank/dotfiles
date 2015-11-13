@@ -38,7 +38,7 @@
       enable-recursive-minibuffers t
       create-lockfiles nil
       make-backup-files nil
-      load-prefer-newer t
+      ;;load-prefer-newer t
       column-number-mode t
       scroll-error-top-bottom t
       show-trailing-whitespace t
@@ -125,6 +125,7 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+;; DEPRECATED: https://github.com/jwiegley/use-package
 (defun required (feature &optional hook force)
   "`autoload' an interactive FEATURE, which is either:
 
@@ -249,6 +250,7 @@ Particularly useful in yasnippet templates.")
   "Calculate the expected package name for the buffer;
 assuming it is in a maven-style project."
   ;; TODO: not Windows friendly
+  ;; TODO: support shared code roots (e.g. "src", "main", "tests-unit")
   (interactive)
   (let* ((kind (file-name-extension buffer-file-name))
          (root (locate-dominating-file default-directory kind)))
@@ -267,6 +269,25 @@ assuming it is in a maven-style project."
   (interactive)
   (projectile-visit-project-tags-table)
   (etags-select-find-tag))
+
+(defun unwrap-buffer ()
+  "Unwrap the buffer for function `visual-line-mode'."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-region 0 (point-max))))
+
+(defun revert-buffer-no-confirm ()
+  ;; http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+  "Revert buffer without confirmation."
+  (interactive)
+  (revert-buffer t t))
+
+(defun company-or-dabbrav-complete ()
+  "Force a `company-complete' or `dabbrev-expand' if company is not loaded."
+  (interactive)
+  (if (member 'company-mode (minor-modes-active))
+      (company-complete)
+    (dabbrev-expand)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
@@ -290,10 +311,7 @@ assuming it is in a maven-style project."
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
 ;; context or when explicitly called by the user.
-(required '(package-utils-upgrade-all package-utils))
 (required 'hungry-delete)
-(required 'misc-cmds)
-(required 'multiple-cursors)
 (required 'git-gutter)
 
 (setq magit-revert-buffers t
@@ -305,8 +323,6 @@ assuming it is in a maven-style project."
 
 (required '(etags-select-find-tag etags-select))
 
-;; TODO: create minimal company-backends list.
-;;
 ;; For any given word completion, company-mode queries each backend
 ;; and the first one that returns non-nil is then asked for a
 ;; completion --- then completion terminates (even if no suggestions)
@@ -320,34 +336,17 @@ assuming it is in a maven-style project."
             (require 'company-yasnippet)
             ;; disables TAB in company-mode, freeing it for yasnippet
             (define-key company-active-map [tab] nil)))
-(setq company-quickhelp-delay 1.0)
-(required '(company-quickhelp-mode company-quickhelp))
 
 (required 'rainbow-mode)
-(required '(flycheck-cask-setup flycheck-cask))
 (required 'flycheck)
 
 (required '(yas-minor-mode yasnippet) (lambda() (yas-reload-all)))
 (add-hook 'find-file-hook 'newfile-template)
 
-(required 'elnode)
-(required '(tidy-buffer tidy))
-
-;; no writeroom-mode-hook to attach to in start or close
+;; BUGs to be aware of:
 ;; https://github.com/joostkremers/writeroom-mode/issues/18
-;; also, incompatible with company-mode
 ;; https://github.com/company-mode/company-mode/issues/376
-;; (set (make-local-variable 'buffer-face-mode-face) '(:height 175))
-;; (buffer-face-mode 1)
 (required 'writeroom-mode)
-(required 'scratch)
-
-(setq erc-prompt-for-password nil ;; prefer ~/.authinfo for passwords
-      erc-hide-list '("JOIN" "PART" "QUIT")
-      erc-autojoin-channels-alist
-      '(("irc.freenode.net" "#emacs")
-        ("irc.gitter.im" "#ensime/ensime-server" "#ensime/ensime-emacs")))
-(required 'erc)
 
 (setq whitespace-style '(face trailing tabs lines-tail)
       ;;whitespace-style '(face trailing tab-mark lines-tail)
@@ -371,8 +370,6 @@ assuming it is in a maven-style project."
                            'flyspell-ignore-http-and-https)))
 (add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
 
-(setq ag-reuse-window 't)
-(required 'ag)
 (setq projectile-use-native-indexing t
       projectile-use-git-grep t)
 (required 'projectile (lambda()
@@ -403,11 +400,6 @@ assuming it is in a maven-style project."
             (define-key smartparens-mode-map (kbd "C-<left>") 'subword-left)
             (define-key smartparens-mode-map (kbd "C-<right>") 'subword-right)))
 
-(required 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-(required 'dockerfile-mode)
-(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
-
 (required 'hydra)
 (defun hydra-splitter/body ()
   "Defines a Hydra to resize the windows."
@@ -422,12 +414,6 @@ assuming it is in a maven-style project."
      ("<up>" hydra-move-splitter-up)
      ("<right>" hydra-move-splitter-right))))
 
-;; guide-key is a really great way to learn keybindings, but I've
-;; outgrown it and now fall back to `C-h m' when in doubt.
-;;
-;;(setq guide-key/guide-key-sequence t)
-;;(required '(guide-key-mode guide-key))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
 (global-unset-key (kbd "C-z")) ;; I hate you so much C-z
@@ -441,7 +427,7 @@ assuming it is in a maven-style project."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
 ;; a short binding instead of their packager's preferred binding.
-(global-set-key (kbd "C-<tab>") 'dabbrev-expand) ;; fallback incase company-mode isn't available
+(global-set-key (kbd "C-<tab>") 'company-or-dabbrav-complete)
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-F") 'projectile-ag)
 (global-set-key (kbd "s-b") 'magit-blame)
@@ -462,37 +448,6 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "s-<down>") 'sp-down-sexp)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 (global-set-key (kbd "C-M-s") 'hydra-splitter/body)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; This section is for loading and configuring more involved
-;; task/function-specific modes, organised by task or function.
-;;..............................................................................
-;; Email
-(setq smtpmail-stream-type 'ssl
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 465
-      message-auto-save-directory (concat user-emacs-directory "drafts")
-      message-kill-buffer-on-exit t
-      message-signature "Best regards,\nSam\n"
-      notmuch-fcc-dirs nil
-      notmuch-search-oldest-first nil
-      notmuch-address-command "notmuch-addrlookup"
-      notmuch-saved-searches '(("inbox" . "tag:inbox")
-                               ("unread" . "tag:unread")
-                               ("flagged" . "tag:flagged")
-                               ("all" . "*")))
-(required 'notmuch (lambda() (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)))
-(required 'notmuch-address (lambda() (notmuch-address-message-insinuate)))
-(add-hook 'message-mode-hook (lambda()
-                               ;; hmm, undecided about filling emails...
-                               ;;(auto-fill-mode -1)
-                               ;;(visual-line-mode)
-                               (writeroom-mode)))
-
-;;..............................................................................
-;; shell scripts
-(add-hook 'sh-mode-hook (lambda()
-                          (electric-indent-local-mode)))
 
 ;;..............................................................................
 ;; elisp
@@ -557,12 +512,12 @@ Useful for interactive elisp projects."
             ;;(flyspell-prog-mode)
             (eldoc-mode)
             (flycheck-mode)
-            (flycheck-cask-setup)
+
+            (when (fboundp 'flycheck-cask-setup)
+              (flycheck-cask-setup))
+
             (yas-minor-mode)
             (company-mode)
-
-            ;; CAVEAT only for REPL https://github.com/expez/company-quickhelp/issues/23
-            (company-quickhelp-mode 1)
 
             (smartparens-strict-mode)
             (rainbow-delimiters-mode)))
@@ -623,7 +578,6 @@ Useful for interactive elisp projects."
                               :test-class-suffixes '("Spec" "Test" "Check"))
                              :test-template-fn 'ensime-goto-test--test-template-scalatest-flatspec))))
 
-(required 'scala-outline-popup)
 (required 'sbt-mode)
 
 (defun ensime-edit-definition-with-fallback ()
@@ -631,7 +585,7 @@ Useful for interactive elisp projects."
   (interactive)
   (if (ensime-connection-or-nil)
       (ensime-edit-definition)
-    (call-interactively 'projectile-etags-select-find-tag)))
+    (projectile-etags-select-find-tag)))
 
 (add-hook 'scala-mode-hook
           (lambda()
@@ -650,6 +604,8 @@ Useful for interactive elisp projects."
             (smartparens-mode)
             (yas-minor-mode)
             (git-gutter-mode)
+
+            (company-mode)
 
             ;; forces load of ensime
             (required 'ensime nil t)
@@ -676,9 +632,6 @@ Useful for interactive elisp projects."
                            (local-set-key (kbd "C-c c") 'sbt-command)
                            (local-set-key (kbd "C-c e") 'next-error)
                            (local-set-key (kbd "M-RET") 'comint-accumulate)))
-(add-hook 'maker-mode-hook (lambda()
-                             (local-set-key (kbd "C-c c") 'maker-command)
-                             (local-set-key (kbd "C-c e") 'next-error)))
 (add-hook 'dired-mode-hook (lambda()
                              (projectile-mode)
                              ;; a workflow optimisation too far?
@@ -707,30 +660,7 @@ Useful for interactive elisp projects."
 
 ;;..............................................................................
 ;; org-mode
-;; 'org is a system install but doing a 'required on taskjuggler forces
-;; an install of org-plus-contrib from ELPA
-(when (not (eq system-type 'windows-nt))
-  ;; doesn't work on Windows
-  ;; Debugger entered--Lisp error: (overflow-error "100000000")
-  ;; eval-buffer(#<buffer  *load*-834341> nil "d:/.emacs.d/elpa/org-plus-contrib-20150921/org-footnote.el" nil t)  ; Reading at buffer position 20900
-  (required '(org-taskjuggler-export org-plus-contrib)))
-
 (required 'markdown-mode)
-(defun pandoc ()
-  "If a hidden .pandoc file exists for the file, run it."
-  ;; this effectively replaces pandoc-mode for me
-  (interactive)
-  (let ((command-file (concat (file-name-directory buffer-file-name)
-                              "." (file-name-nondirectory buffer-file-name)
-                              ".pandoc")))
-    (when (file-exists-p command-file)
-      (shell-command command-file))))
-
-(defun unwrap-buffer ()
-  "Unwrap the buffer for function `visual-line-mode'."
-  (interactive)
-  (let ((fill-column (point-max)))
-    (fill-region 0 (point-max))))
 
 (defun writeroom-ask ()
   "Interactively ask if the user wants to go into writeroom-mode."
@@ -765,17 +695,11 @@ Useful for interactive elisp projects."
 (autoload 'R-mode "ess-site" nil t)
 (add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
 
-;;..............................................................................
-;; Chat rooms
-(defun gitter()
-  "Connect to Gitter."
-  (interactive)
-  (erc-tls :server "irc.gitter.im" :port 6697))
-(defun freenode()
-  "Connect to Freenode."
-  (interactive)
-  (erc :server "irc.freenode.net" :port 6667))
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; OS specific
+(pcase system-type
+  (`gnu/linux
+   (load (concat user-emacs-directory "init-linux.el"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; User Site Local
