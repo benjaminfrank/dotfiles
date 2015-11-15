@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name: pimp
+# --
+implicit class Rich${1:}(val v: $1) extends AnyVal {
+  $0
+}

@@ -285,9 +285,11 @@ assuming it is in a maven-style project."
 (defun company-or-dabbrav-complete ()
   "Force a `company-complete' or `dabbrev-expand' if company is not loaded."
   (interactive)
-  (if (member 'company-mode (minor-modes-active))
-      (company-complete)
-    (dabbrev-expand)))
+  (let ((active (minor-modes-active)))
+    (if (and (not (member 'ensime-mode active))
+             (member 'company-mode active))
+        (company-complete)
+      (call-interactively 'dabbrev-expand))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
@@ -619,7 +621,7 @@ Useful for interactive elisp projects."
                  ;; https://github.com/company-mode/company-mode/issues/390
                  ;; (ensime-company :with company-yasnippet)
                  '(ensime-company
-                   (company-keywords company-etags company-yasnippet)))))
+                   (company-keywords company-dabbrev-code company-etags company-yasnippet)))))
 
 (defun scala-start()
   "Easy way to initialise All The Things for a Scala project"
