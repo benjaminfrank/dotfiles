@@ -30,51 +30,40 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in emacs parameters
-(setq inhibit-startup-screen t
-      initial-scratch-message nil
-      enable-local-variables t ;; :safe when it gets too noisy
-      ;;debug-on-error t
-      ;;debug-on-quit t
-      enable-recursive-minibuffers t
-      create-lockfiles nil
-      make-backup-files nil
-      ;;load-prefer-newer t
-      column-number-mode t
-      scroll-error-top-bottom t
-      show-trailing-whitespace t
-      mail-user-agent 'message-user-agent
-      user-mail-address "Sam.Halliday@gmail.com"
-      user-full-name "Sam Halliday"
-      send-mail-function 'smtpmail-send-it)
-
-(cond
- ((eq system-type 'gnu/linux)
-  (setq x-select-enable-clipboard t
-        interprogram-paste-function 'x-cut-buffer-or-selection-value))
- (t nil))
-
+(setq
+ inhibit-startup-screen t
+ initial-scratch-message nil
+ enable-local-variables t
+ enable-recursive-minibuffers t
+ create-lockfiles nil
+ make-backup-files nil
+ load-prefer-newer t
+ column-number-mode t
+ scroll-error-top-bottom t
+ user-full-name "Sam Halliday")
 
 ;; buffer local variables
 (setq-default
+ show-trailing-whitespace t
  indent-tabs-mode nil
  tab-width 4)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in packages that autoload
-(setq show-paren-delay 0.5
-      dabbrev-case-fold-search nil
-      ;;dabbrev-case-replace nil
-      tags-case-fold-search nil
-      tags-revert-without-query t
-      tags-add-tables nil
-      compilation-skip-threshold 2
-      source-directory (getenv "EMACS_SOURCE")
-      org-confirm-babel-evaluate nil
-      nxml-slash-auto-complete-flag t
-      sentence-end-double-space nil
-      browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "sensible-browser"
-      ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq
+ show-paren-delay 0.5
+ dabbrev-case-fold-search nil
+ tags-case-fold-search nil
+ tags-revert-without-query t
+ tags-add-tables nil
+ compilation-skip-threshold 2
+ source-directory (getenv "EMACS_SOURCE")
+ org-confirm-babel-evaluate nil
+ nxml-slash-auto-complete-flag t
+ sentence-end-double-space nil
+ browse-url-browser-function 'browse-url-generic
+ browse-url-generic-program "sensible-browser"
+ ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (setq-default
  c-basic-offset 4)
@@ -125,6 +114,8 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+(package-install 'use-package)
+(require 'use-package)
 ;; DEPRECATED: https://github.com/jwiegley/use-package
 (defun required (feature &optional hook force)
   "`autoload' an interactive FEATURE, which is either:
@@ -174,6 +165,18 @@ FORCE :boolean will use `require' instead of `autoload'."
   (interactive (progn (barf-if-buffer-read-only) '(t)))
   (let ((fill-column (point-max)))
     (fill-paragraph nil region)))
+
+(defun unfill-buffer ()
+  "Unfill the buffer for function `visual-line-mode'."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-region 0 (point-max))))
+
+(defun revert-buffer-no-confirm ()
+  ;; http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+  "Revert buffer without confirmation."
+  (interactive)
+  (revert-buffer t t))
 
 (defun contextual-backspace ()
   "Hungry whitespace or delete word depending on context."
@@ -270,24 +273,11 @@ assuming it is in a maven-style project."
   (projectile-visit-project-tags-table)
   (etags-select-find-tag))
 
-(defun unwrap-buffer ()
-  "Unwrap the buffer for function `visual-line-mode'."
-  (interactive)
-  (let ((fill-column (point-max)))
-    (fill-region 0 (point-max))))
-
-(defun revert-buffer-no-confirm ()
-  ;; http://www.emacswiki.org/emacs-en/download/misc-cmds.el
-  "Revert buffer without confirmation."
-  (interactive)
-  (revert-buffer t t))
-
 (defun company-or-dabbrav-complete ()
   "Force a `company-complete' or `dabbrev-expand' if company is not loaded."
   (interactive)
   (let ((active (minor-modes-active)))
-    (if (and (not (member 'ensime-mode active))
-             (member 'company-mode active))
+    (if (member 'company-mode active)
         (company-complete)
       (call-interactively 'dabbrev-expand))))
 
@@ -506,21 +496,12 @@ Useful for interactive elisp projects."
             (setq license-url "http://www.gnu.org/licenses/gpl.html")
 
             (rainbow-mode)
-            (when (fboundp 'prettify-symbols-mode) ;; added in 24.4
-              (prettify-symbols-mode))
-
+            (prettify-symbols-mode)
             (projectile-mode)
-
-            ;;(flyspell-prog-mode)
             (eldoc-mode)
             (flycheck-mode)
-
-            (when (fboundp 'flycheck-cask-setup)
-              (flycheck-cask-setup))
-
             (yas-minor-mode)
             (company-mode)
-
             (smartparens-strict-mode)
             (rainbow-delimiters-mode)))
 
@@ -550,7 +531,6 @@ Useful for interactive elisp projects."
                              (interactive)
                              (newline-and-indent)
                              (scala-indent:insert-asterisk-on-multiline-comment)))
-            ;;(define-key scala-mode-map (kbd "RET") 'comment-indent-new-line)
 
             (define-key scala-mode-map (kbd "s-<delete>") (sp-restrict-c 'sp-kill-sexp))
             (define-key scala-mode-map (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
@@ -563,10 +543,13 @@ Useful for interactive elisp projects."
             (define-key scala-mode-map (kbd "s-<up>") (sp-restrict-c 'sp-backward-up-sexp))
             (define-key scala-mode-map (kbd "s-<down>") (sp-restrict-c 'sp-down-sexp))
 
+            ;; i.e. bypass company-mode
+            (define-key scala-mode-map (kbd "C-<tab>") 'dabbrev-expand)
+
             (define-key scala-mode-map (kbd "C-c c") 'sbt-command)
             (define-key scala-mode-map (kbd "C-c e") 'next-error)))
 
-(required 'ensime
+(required '(ensime-mode ensime)
           (lambda()
             (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
 
@@ -606,12 +589,8 @@ Useful for interactive elisp projects."
             (smartparens-mode)
             (yas-minor-mode)
             (git-gutter-mode)
-
             (company-mode)
-
-            ;; forces load of ensime
-            (required 'ensime nil t)
-            (ensime-mode 1)
+            (ensime-mode)
 
             (scala-mode:goto-start-of-code)))
 

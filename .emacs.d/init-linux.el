@@ -15,8 +15,18 @@
 ;; used in a variety of contexts, but can be lazily loaded based on
 ;; context or when explicitly called by the user.
 
+(setq
+ mail-user-agent 'message-user-agent
+ user-mail-address "Sam.Halliday@gmail.com"
+ send-mail-function 'smtpmail-send-it
+ x-select-enable-clipboard t
+ interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
 (required '(package-utils-upgrade-all package-utils))
+
 (required '(flycheck-cask-setup flycheck-cask))
+(add-hook 'emacs-lisp-mode-hook (lambda() (flycheck-cask-setup)))
+
 (required 'elnode)
 (required '(tidy-buffer tidy))
 
