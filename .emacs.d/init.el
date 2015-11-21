@@ -115,7 +115,9 @@
   (package-refresh-contents))
 
 (package-install 'use-package)
+(setq use-package-always-ensure t)
 (require 'use-package)
+
 ;; DEPRECATED: https://github.com/jwiegley/use-package
 (defun required (feature &optional hook force)
   "`autoload' an interactive FEATURE, which is either:
@@ -284,31 +286,41 @@ assuming it is in a maven-style project."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
-(required 'midnight (lambda()
-                      (add-to-list 'clean-buffer-list-kill-regexps
-                                   "\\`\\*magit.*\\*\\'")
-                      (add-to-list 'clean-buffer-list-kill-never-regexps
-                                   ".*\\*sbt.*")
-                      (add-to-list 'clean-buffer-list-kill-never-regexps
-                                   ".*\\*ENSIME-server.*")) t)
-(required 'persistent-scratch (lambda() (persistent-scratch-setup-default)) t)
-(required 'highlight-symbol
-          (lambda() (add-hook 'find-file-hook (lambda() (highlight-symbol-mode)))) t)
+(use-package midnight
+  :config
+  (add-to-list 'clean-buffer-list-kill-regexps "\\`\\*magit.*\\*\\'")
+  (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*sbt.*")
+  (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*ENSIME-server.*"))
 
-(required 'undo-tree
-          (lambda () (global-undo-tree-mode)) t)
-;; consider volatile-highlights-mode
+(use-package persistent-scratch
+  :config
+  (persistent-scratch-setup-default))
+
+(use-package highlight-symbol
+  :config
+  (add-hook 'find-file-hook (lambda() (highlight-symbol-mode))))
+
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
+;; TODO consider volatile-highlights-mode
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
 ;; context or when explicitly called by the user.
-(required 'hungry-delete)
-(required 'git-gutter)
+(use-package hungry-delete
+  :commands hungry-delete)
+(use-package git-gutter
+  :commands git-gutter-mode)
 
-(setq magit-revert-buffers t
-      magit-push-always-verify nil)
-(required '(magit-status magit))
+
+(use-package magit
+  :commands magit-status
+  :init
+  (setq magit-revert-buffers nil ;; performance optimisation
+        magit-push-always-verify nil)
+  :bind ("s-g" . magit-status))
 
 (setq git-timemachine-abbreviation-length 4)
 (required 'git-timemachine)
@@ -424,7 +436,6 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "s-F") 'projectile-ag)
 (global-set-key (kbd "s-b") 'magit-blame)
 (global-set-key (kbd "s-s") 'replace-string)
-(global-set-key (kbd "s-g") 'magit-status)
 (global-set-key (kbd "s-h") 'highlight-symbol)
 (global-set-key (kbd "s-/") 'undo-tree-visualize)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
