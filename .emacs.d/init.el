@@ -39,6 +39,7 @@
  load-prefer-newer t
  column-number-mode t
  scroll-error-top-bottom t
+ scroll-margin 15
  user-full-name "Sam Halliday")
 
 ;; buffer local variables
@@ -240,7 +241,19 @@ FORCE :boolean will use `require' instead of `autoload'."
 
 (use-package undo-tree
   :diminish undo-tree-mode
-  :config (global-undo-tree-mode))
+  :config (global-undo-tree-mode)
+  :bind ("s-/" . undo-tree-visualize))
+
+(use-package projectile
+  ;; nice to have it on the modeline
+  :init (setq
+         projectile-use-git-grep t)
+  :config
+  (bind-key "C-c p j" 'projectile-etags-select-find-tag projectile-mode-map)
+  (projectile-global-mode)
+  :bind
+  (("s-f" . projectile-find-file)
+   ("s-F" . projectile-ag)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
@@ -248,7 +261,8 @@ FORCE :boolean will use `require' instead of `autoload'."
 ;; context or when explicitly called by the user.
 (use-package highlight-symbol
   :diminish highlight-symbol-mode
-  :commands highlight-symbol)
+  :commands highlight-symbol
+  :bind ("s-h" . highlight-symbol))
 
 (use-package hungry-delete
   :commands hungry-delete)
@@ -261,7 +275,8 @@ FORCE :boolean will use `require' instead of `autoload'."
   :init (setq
          magit-revert-buffers nil
          magit-push-always-verify nil)
-  :bind ("s-g" . magit-status))
+  :bind (("s-g" . magit-status)
+         ("s-b" . magit-blame)))
 
 (use-package git-timemachine
   :commands git-timemachine
@@ -320,7 +335,7 @@ with `dir-locals.el'.")
   ;; BUGs to be aware of:
   ;; https://github.com/joostkremers/writeroom-mode/issues/18
   ;; https://github.com/company-mode/company-mode/issues/376
-  :diminish writeroom-mode
+  ;;:diminish writeroom-mode
   :commands writeroom-mode)
 
 (use-package whitespace
@@ -352,17 +367,9 @@ with `dir-locals.el'.")
       (forward-char)
       (not (looking-at "https?\\b")))))
 
-
-(use-package projectile
-  ;; nice to have it on the modeline
-  :commands projectile-mode
-  :init (setq
-         projectile-use-git-grep t)
-  :config
-  (bind-key "C-c p j" 'projectile-etags-select-find-tag projectile-mode-map))
-
 (use-package idomenu
-  :commands idomenu)
+  :commands idomenu
+  :bind ("M-i" . idomenu))
 
 (use-package rainbow-delimiters
   :diminish rainbow-delimiters-mode
@@ -401,7 +408,9 @@ with `dir-locals.el'.")
   (bind-key "s-<right>" 'sp-down-sexp smartparens-mode-map))
 
 (use-package hydra
-  :commands defhydra)
+  :commands defhydra
+  :bind ("C-M-s" . hydra-splitter/body))
+
 (defun hydra-splitter/body ()
   "Defines a Hydra to resize the windows."
   ;; overwrites the original function and calls it
@@ -420,7 +429,6 @@ with `dir-locals.el'.")
 (global-unset-key (kbd "C-z")) ;; I hate you so much C-z
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
-(global-set-key (kbd "M-i") 'idomenu)
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "M-.") 'projectile-etags-select-find-tag)
 (global-set-key (kbd "M-,") 'pop-tag-mark)
@@ -429,15 +437,9 @@ with `dir-locals.el'.")
 ;; This section is for defining commonly invoked commands that deserve
 ;; a short binding instead of their packager's preferred binding.
 (global-set-key (kbd "C-<tab>") 'company-or-dabbrav-complete)
-(global-set-key (kbd "s-f") 'projectile-find-file)
-(global-set-key (kbd "s-F") 'projectile-ag)
-(global-set-key (kbd "s-b") 'magit-blame)
 (global-set-key (kbd "s-s") 'replace-string)
-(global-set-key (kbd "s-h") 'highlight-symbol)
-(global-set-key (kbd "s-/") 'undo-tree-visualize)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
-(global-set-key (kbd "C-M-s") 'hydra-splitter/body)
 
 ;;..............................................................................
 ;; elisp
@@ -463,7 +465,6 @@ with `dir-locals.el'.")
 
             (rainbow-mode)
             (prettify-symbols-mode)
-            (projectile-mode)
             (eldoc-mode)
             (flycheck-mode)
             (yas-minor-mode)
@@ -613,7 +614,12 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; org-mode
-(required 'markdown-mode)
+(use-package markdown-mode
+  :commands markdown-mode)
+(use-package centered-cursor-mode
+  :commands centered-cursor-mode)
+(use-package focus
+  :commands focus-mode)
 
 (defun writeroom-ask ()
   "Interactively ask if the user wants to go into writeroom-mode."
@@ -621,6 +627,8 @@ assuming it is in a maven-style project."
   (when (y-or-n-p "Go into writeroom-mode? ")
     (delete-other-windows)
     (visual-line-mode)
+    (focus-mode)
+    (centered-cursor-mode)
     ;; NOTE weird sizing bug in writeroom
     (writeroom-mode)))
 
@@ -630,6 +638,7 @@ assuming it is in a maven-style project."
   (company-mode)
   ;;(auto-fill-mode)
   (local-set-key (kbd "C-c c") 'pandoc))
+
 (add-hook 'org-mode-hook (lambda()
                            (markup-common-hooks)
                            (local-set-key (kbd "s-c") 'picture-mode)
