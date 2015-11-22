@@ -34,7 +34,6 @@
  inhibit-startup-screen t
  initial-scratch-message nil
  enable-local-variables t
- enable-recursive-minibuffers t
  create-lockfiles nil
  make-backup-files nil
  load-prefer-newer t
@@ -75,18 +74,10 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1) ;; show-smartparens is too slow
-(global-subword-mode 1)
 (global-auto-revert-mode 1)
-(substitute-key-definition
- ;; allows using SPACE when in the minibuffer
- 'minibuffer-complete-word
- 'self-insert-command
- minibuffer-local-completion-map)
 
-;; Disabling a few things that Emacs turns on by default (and I don't like)
 (electric-indent-mode 0)
 (global-auto-composition-mode 0)
-;;(auto-compression-mode 0) ;; breaks help / elisp navigation
 (auto-encryption-mode 0)
 (tooltip-mode 0)
 
@@ -105,18 +96,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setting up the MELPA package manager
 (require 'package)
-(require 'cl-lib)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-                         ("melpa" . "http://melpa.org/packages/")))
+(setq
+ use-package-always-ensure t
+ package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                    ("org" . "http://orgmode.org/elpa/")
+                    ("melpa" . "http://melpa.org/packages/")))
 
 (package-initialize)
 (when (not package-archive-contents)
-  (package-refresh-contents))
-
-(package-install 'use-package)
-(setq use-package-always-ensure t)
+  (package-refresh-contents)
+  (package-install 'use-package))
 (require 'use-package)
+
+(use-package subword
+  :ensure nil
+  :diminish subword-mode
+  :config (global-subword-mode 1))
 
 ;; DEPRECATED: https://github.com/jwiegley/use-package
 (defun required (feature &optional hook force)
@@ -164,7 +159,7 @@ FORCE :boolean will use `require' instead of `autoload'."
 (defun unfill-paragraph (&optional region)
   ;; http://www.emacswiki.org/emacs/UnfillParagraph
   "Transforms a paragraph in REGION into a single line of text."
-  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil region)))
 
@@ -181,9 +176,10 @@ FORCE :boolean will use `require' instead of `autoload'."
   (revert-buffer t t))
 
 (defun contextual-backspace ()
+  ;; TODO rewrite without hungry-delete-backward and release on MELPA
   "Hungry whitespace or delete word depending on context."
   (interactive)
-  (if (looking-back "[\t\s\n\r]\\{2,\\}" (- (point) 3))
+  (if (looking-back "[])} \t\n\r\l]" (- (point) 1))
       (hungry-delete-backward 1)
     (if (subword-mode)
         (subword-backward-kill 1)
@@ -206,68 +202,12 @@ FORCE :boolean will use `require' instead of `autoload'."
           (save-buffers-kill-emacs)
         (message-box "use 'M-x exit'")))))
 
-(defun declare-buffer-bankruptcy()
-  "Declare buffer bankruptcy and clean up everything."
+(defun declare-buffer-bankruptcy ()
+  "Declare buffer bankruptcy and clean up everything using `midnight'."
   (interactive)
   (let ((clean-buffer-list-delay-general 0)
         (clean-buffer-list-delay-special 0))
     (clean-buffer-list)))
-
-(defun flyspell-ignore-http-and-https ()
-  ;; http://emacs.stackexchange.com/a/5435
-  "Ignore anything starting with 'http' or 'https'."
-  (save-excursion
-    (forward-whitespace -1)
-    (when (looking-at " ")
-      (forward-char)
-      (not (looking-at "https?\\b")))))
-
-(defun minor-modes-active ()
-  "The minor modes that are enabled in the current buffer."
-  (interactive)
-  (let (active-modes)
-    (dolist (mode minor-mode-list active-modes)
-      (if (and (boundp mode) (symbol-value mode))
-          (push mode active-modes)))))
-
-(defvar-local copyright-owner user-full-name
-  "The copyright owner for the buffer.
-e.g. when `dir-locals.el' provides a `copyright-owner' variable.
-Particularly useful in yasnippet templates.")
-
-(defvar-local license-url "see the LICENSE file"
-  "The license url for the buffer.
-It is always better to explicitly list the license per file than
-to refer to the LICENSE file.
-e.g. when `dir-locals.el' provides a `license-url' variable.
-Particularly useful in yasnippet templates.")
-
-(defun newfile-template ()
-  "Populate with a yasnippet template called `newfile' for the `major-mode'."
-  (when (eq 0 (buffer-size))
-    (when (member 'yas-minor-mode (minor-modes-active))
-      (let ((snippet (yas-lookup-snippet "newfile" major-mode 'noerror)))
-        (when snippet
-          (yas-expand-snippet snippet)
-          (hack-local-variables))))))
-
-(defun mvn-package-for-buffer ()
-  "Calculate the expected package name for the buffer;
-assuming it is in a maven-style project."
-  ;; TODO: not Windows friendly
-  ;; TODO: support shared code roots (e.g. "src", "main", "tests-unit")
-  (interactive)
-  (let* ((kind (file-name-extension buffer-file-name))
-         (root (locate-dominating-file default-directory kind)))
-    (when root
-      (require 'subr-x) ;; maybe we should just use 's
-      (replace-regexp-in-string
-       (regexp-quote "/") "."
-       (string-remove-suffix "/"
-                             (string-remove-prefix
-                              (expand-file-name (concat root "/" kind "/"))
-                              default-directory))
-       nil 'literal))))
 
 (defun projectile-etags-select-find-tag ()
   "Run `etags-select-find-tag' in the current projectile context."
@@ -276,12 +216,15 @@ assuming it is in a maven-style project."
   (etags-select-find-tag))
 
 (defun company-or-dabbrav-complete ()
-  "Force a `company-complete' or `dabbrev-expand' if company is not loaded."
+  "Force a `company-complete', falling back to `dabbrev-expand'."
   (interactive)
-  (let ((active (minor-modes-active)))
-    (if (member 'company-mode active)
-        (company-complete)
-      (call-interactively 'dabbrev-expand))))
+  (if company-mode
+      (company-complete)
+    (call-interactively 'dabbrev-expand)))
+
+(defun sp-restrict-c (sym)
+  "Smartparens restriction on `SYM' for C-derived parenthesis."
+  (sp-restrict-to-pairs-interactive "{([" sym))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
@@ -293,118 +236,172 @@ assuming it is in a maven-style project."
   (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*ENSIME-server.*"))
 
 (use-package persistent-scratch
-  :config
-  (persistent-scratch-setup-default))
-
-(use-package highlight-symbol
-  :config
-  (add-hook 'find-file-hook (lambda() (highlight-symbol-mode))))
+  :config (persistent-scratch-setup-default))
 
 (use-package undo-tree
-  :config
-  (global-undo-tree-mode))
-;; TODO consider volatile-highlights-mode
+  :diminish undo-tree-mode
+  :config (global-undo-tree-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
 ;; context or when explicitly called by the user.
+(use-package highlight-symbol
+  :diminish highlight-symbol-mode
+  :commands highlight-symbol)
+
 (use-package hungry-delete
   :commands hungry-delete)
+
 (use-package git-gutter
   :commands git-gutter-mode)
 
-
 (use-package magit
-  :commands magit-status
-  :init
-  (setq magit-revert-buffers nil ;; performance optimisation
-        magit-push-always-verify nil)
+  :commands magit-status magit-blame
+  :init (setq
+         magit-revert-buffers nil
+         magit-push-always-verify nil)
   :bind ("s-g" . magit-status))
 
-(setq git-timemachine-abbreviation-length 4)
-(required 'git-timemachine)
+(use-package git-timemachine
+  :commands git-timemachine
+  :init (setq
+         git-timemachine-abbreviation-length 4))
 
-(required '(etags-select-find-tag etags-select))
+(use-package etags-select
+  :commands etags-select-find-tag)
 
-;; For any given word completion, company-mode queries each backend
-;; and the first one that returns non-nil is then asked for a
-;; completion --- then completion terminates (even if no suggestions)
-(setq company-dabbrev-ignore-case nil
-      company-dabbrev-code-ignore-case nil
-      company-dabbrev-downcase nil
-      company-idle-delay 0
-      company-minimum-prefix-length 4)
-(required '(company-mode company)
-          (lambda ()
-            (require 'company-yasnippet)
-            ;; disables TAB in company-mode, freeing it for yasnippet
-            (define-key company-active-map [tab] nil)))
+(use-package company
+  :diminish company-mode
+  :commands company-mode
+  :init
+  (setq
+   company-dabbrev-ignore-case nil
+   company-dabbrev-code-ignore-case nil
+   company-dabbrev-downcase nil
+   company-idle-delay 0
+   company-minimum-prefix-length 4)
+  :config
+  ;; disables TAB in company-mode, freeing it for yasnippet
+  (define-key company-active-map [tab] nil))
 
-(required 'rainbow-mode)
-(required 'flycheck)
+(use-package rainbow-mode
+  :diminish rainbow-mode
+  :commands rainbow-mode)
 
-(required '(yas-minor-mode yasnippet) (lambda() (yas-reload-all)))
-(add-hook 'find-file-hook 'newfile-template)
+(use-package flycheck
+  :diminish flycheck-mode
+  :commands flycheck-mode)
 
-;; BUGs to be aware of:
-;; https://github.com/joostkremers/writeroom-mode/issues/18
-;; https://github.com/company-mode/company-mode/issues/376
-(required 'writeroom-mode)
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :commands yas-minor-mode
+  :config (yas-reload-all))
 
-(setq whitespace-style '(face trailing tabs lines-tail)
-      ;;whitespace-style '(face trailing tab-mark lines-tail)
-      whitespace-line-column 80)
-(put 'whitespace-line-column 'safe-local-variable #'integerp)
-(put 'copyright-owner 'safe-local-variable #'stringp)
-(put 'license-url 'safe-local-variable #'stringp)
+;; DEPRECATED https://github.com/mineo/yatemplate/issues/4
+(defvar-local yatemplate-owner user-full-name
+  "The copyright owner for the buffer.
+Particularly useful when combined with `dir-locals.el'.")
+(defvar-local yatemplate-license "http://www.gnu.org/licenses/gpl.html"
+  "The license (usually a URL) for the buffer.
+It is always better to explicitly list the license per file than
+to refer to the LICENSE file. Particularly useful when combined
+with `dir-locals.el'.")
+(put 'yatemplate-owner 'safe-local-variable #'stringp)
+(put 'yatemplate-license 'safe-local-variable #'stringp)
 
-(required '(whitespace-mode whitespace))
-;; local whitespace-line-column are ignored unless loaded by
-;; hack-local-variables-hook
-;; https://emacs.stackexchange.com/questions/7743
-;; so make sure to load whitespace-mode in a buffer local hook
+(use-package yatemplate
+  :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
+  :config
+  (auto-insert-mode)
+  (yatemplate-fill-alist))
+
+(use-package writeroom-mode
+  ;; BUGs to be aware of:
+  ;; https://github.com/joostkremers/writeroom-mode/issues/18
+  ;; https://github.com/company-mode/company-mode/issues/376
+  :diminish writeroom-mode
+  :commands writeroom-mode)
+
+(use-package whitespace
+  :commands whitespace-mode
+  :diminish whitespace-mode
+  :init
+  ;; BUG: https://emacs.stackexchange.com/questions/7743
+  (put 'whitespace-line-column 'safe-local-variable #'integerp)
+  (setq whitespace-style '(face trailing tabs lines-tail)
+        whitespace-line-column 80))
+
+(use-package flyspell
+  :commands flyspell-mode
+  :diminish flyspell-mode
+  :init (setq
+         ispell-dictionary "british"
+         flyspell-prog-text-faces '(font-lock-doc-face))
+  :config
+  (put 'text-mode
+       'flyspell-mode-predicate
+       'flyspell-ignore-http-and-https))
+
+(defun flyspell-ignore-http-and-https ()
+  ;; http://emacs.stackexchange.com/a/5435
+  "Ignore anything starting with 'http' or 'https'."
+  (save-excursion
+    (forward-whitespace -1)
+    (when (looking-at " ")
+      (forward-char)
+      (not (looking-at "https?\\b")))))
 
 
-(setq ispell-dictionary "british"
-      flyspell-prog-text-faces '(font-lock-doc-face))
-(required 'flyspell (lambda()
-                      (put 'text-mode
-                           'flyspell-mode-predicate
-                           'flyspell-ignore-http-and-https)))
-(add-hook 'text-mode-hook (lambda() (flyspell-mode 1)))
+(use-package projectile
+  ;; nice to have it on the modeline
+  :commands projectile-mode
+  :init (setq
+         projectile-use-git-grep t)
+  :config
+  (bind-key "C-c p j" 'projectile-etags-select-find-tag projectile-mode-map))
 
-(setq projectile-use-native-indexing t
-      projectile-use-git-grep t)
-(required 'projectile (lambda()
-                        ;; https://github.com/bbatsov/projectile/issues/755
-                        (require 'vc-git)
-                        ;; projectile-find-tag can be slow/broken for big TAGS
-                        ;; https://github.com/bbatsov/projectile/issues/668
-                        ;; https://github.com/bbatsov/projectile/issues/683
-                        (define-key projectile-mode-map (kbd "C-c p j") 'projectile-etags-select-find-tag)))
-(required 'idomenu)
+(use-package idomenu
+  :commands idomenu)
 
-(required '(rainbow-delimiters-mode rainbow-delimiters))
-(required '(smartparens-mode smartparens)
-          (lambda()
-            (require 'smartparens-config)
-            (sp-use-smartparens-bindings)
-            (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
-            (sp-pair "[" "]" :wrap "s-[") ;; C-[ sends ESC
-            (sp-pair "{" "}" :wrap "C-{")
+(use-package rainbow-delimiters
+  :diminish rainbow-delimiters-mode
+  :commands rainbow-delimiters-mode)
 
-            ;; nice whitespace / indentation when creating statements
-            (sp-local-pair 'c-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
-            (sp-local-pair 'c-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
-            (sp-local-pair 'java-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
-            (sp-local-pair 'java-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
-            (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
-            (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
-            (define-key smartparens-mode-map (kbd "C-<left>") 'subword-left)
-            (define-key smartparens-mode-map (kbd "C-<right>") 'subword-right)))
+(use-package smartparens
+  :diminish smartparens-mode
+  :commands smartparens-strict-mode smartparens-mode
+  :config
+  (require 'smartparens-config)
+  (sp-use-smartparens-bindings)
+  (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
+  (sp-pair "[" "]" :wrap "s-[") ;; C-[ sends ESC
+  (sp-pair "{" "}" :wrap "C-{")
 
-(required 'hydra)
+  ;; nice whitespace / indentation when creating statements
+  (sp-local-pair 'c-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair 'c-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair 'java-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair 'java-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
+
+  ;; delete some bindings
+  (bind-key "C-<left>" nil smartparens-mode-map)
+  (bind-key "C-<right>" nil smartparens-mode-map)
+
+  (bind-key "s-<delete>" 'sp-kill-sexp smartparens-mode-map)
+  (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map)
+  (bind-key "s-<home>" 'sp-beginning-of-sexp smartparens-mode-map)
+  (bind-key "s-<end>" 'sp-end-of-sexp smartparens-mode-map)
+  (bind-key "s-<up>" 'sp-beginning-of-previous-sexp smartparens-mode-map)
+  ;; sp-next-sp could be better https://github.com/Fuco1/smartparens/issues/541
+  (bind-key "s-<down>" 'sp-next-sexp smartparens-mode-map)
+  (bind-key "s-<left>" 'sp-backward-up-sexp smartparens-mode-map)
+  (bind-key "s-<right>" 'sp-down-sexp smartparens-mode-map))
+
+(use-package hydra
+  :commands defhydra)
 (defun hydra-splitter/body ()
   "Defines a Hydra to resize the windows."
   ;; overwrites the original function and calls it
@@ -439,72 +436,30 @@ assuming it is in a maven-style project."
 (global-set-key (kbd "s-h") 'highlight-symbol)
 (global-set-key (kbd "s-/") 'undo-tree-visualize)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
-;; https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#navigation-functions
-;; TODO: restrict sexp navigation in C derived languages to just the parenthesis
-(global-set-key (kbd "s-<delete>") 'sp-kill-sexp)
-(global-set-key (kbd "s-<backspace>") 'sp-backward-kill-sexp)
-(global-set-key (kbd "s-<home>") 'sp-beginning-of-sexp)
-(global-set-key (kbd "s-<end>") 'sp-end-of-sexp)
-(global-set-key (kbd "s-<left>") 'sp-beginning-of-previous-sexp)
-(global-set-key (kbd "s-<right>") 'sp-next-sexp)
-(global-set-key (kbd "s-<up>") 'sp-backward-up-sexp)
-(global-set-key (kbd "s-<down>") 'sp-down-sexp)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 (global-set-key (kbd "C-M-s") 'hydra-splitter/body)
 
 ;;..............................................................................
 ;; elisp
-(defun find-tag-exact ()
-  "`find-tag' for exact symbol at point, returning nil if nothing is found.
-Also pushes the original point to the `global-mark-ring'.
+(use-package lisp-mode
+  :ensure nil
+  :commands emacs-lisp-mode
+  :config
+  (bind-key "RET" 'comment-indent-new-line emacs-lisp-mode-map)
+  (bind-key "C-c c" 'compile emacs-lisp-mode-map))
 
-Remember that `find-tag' will search the description string, not
-the tag name, so this is not appropriate for densely packed
-languages (e.g. Scala) as it will affect the logic for
-prioritising results.
-
-http://emacs.stackexchange.com/questions/14808"
-  (interactive)
-  (condition-case nil
-      (let ((thing (concat "\\_<" (regexp-quote (thing-at-point 'symbol)) "\\_>")))
-        (find-tag-regexp thing))
-    ;; find-tag signals an error if it doesn't find anything, convert to nil
-    ('error)))
-
-(defun elisp-find-tag-or-find-func ()
-  ;; Could be a lot smarter for non-function symbols (variables, faces, packages, etc)
-  "Use `find-tag' to find symbol at point (i.e. prefer your project), falling back to `find-func' (i.e. search the repl)."
-  (interactive)
-  ;; find-tag moves the buffer and point even if it fails, so we have to store it
-  (let ((buffer (buffer-name))
-        (point (point)))
-    (unless (find-tag-exact)
-      (switch-to-buffer buffer)
-      (goto-char point)
-      (ring-insert find-tag-marker-ring (copy-marker (mark-marker)))
-      (find-function-do-it (function-called-at-point) nil 'switch-to-buffer))))
-
-(defun add-default-directory-to-load-path ()
-  "Add the current working directory to the `load-path'.
-Useful for interactive elisp projects."
-  (interactive)
-  (add-to-list 'load-path default-directory))
-
-(eval-after-load "lisp-mode"
-  (lambda ()
-    (define-key emacs-lisp-mode-map (kbd "M-.") 'elisp-find-tag-or-find-func)
-    (define-key emacs-lisp-mode-map (kbd "RET") 'comment-indent-new-line)
-    (define-key emacs-lisp-mode-map (kbd "C-c c") 'compile)))
+(use-package eldoc
+  :ensure nil
+  :diminish eldoc-mode
+  :commands eldoc-mode)
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
 
-            ;; allows dir-locals for whitespace settings
+            ;; WORKAROUND https://emacs.stackexchange.com/questions/7743
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
-
-            (setq license-url "http://www.gnu.org/licenses/gpl.html")
 
             (rainbow-mode)
             (prettify-symbols-mode)
@@ -525,13 +480,26 @@ Useful for interactive elisp projects."
       ensime-prefer-noninteractive t
       scala-outline-popup-select 'closest)
 
-(defun sp-restrict-c (sym)
-  ;; TODO: extend mode-map to all C-derived languages
-  (sp-restrict-to-pairs-interactive "{([" sym))
+;; prefer local ensime-emacs to MELPA install (for dev)
+(add-to-load-path (concat user-emacs-directory "ensime-emacs"))
 
-(let* ((local-ensime (concat user-emacs-directory "ensime-emacs")))
-  (when (file-exists-p local-ensime)
-    (add-to-list 'load-path local-ensime)))
+;; Java / Scala support for templates
+(defun mvn-package-for-buffer ()
+  "Calculate the expected package name for the buffer;
+assuming it is in a maven-style project."
+  ;; TODO: not Windows friendly
+  ;; TODO: support shared code roots (e.g. "src", "main", "tests-unit")
+  (let* ((kind (file-name-extension buffer-file-name))
+         (root (locate-dominating-file default-directory kind)))
+    (when root
+      (require 'subr-x) ;; maybe we should just use 's
+      (replace-regexp-in-string
+       (regexp-quote "/") "."
+       (string-remove-suffix "/"
+                             (string-remove-prefix
+                              (expand-file-name (concat root "/" kind "/"))
+                              default-directory))
+       nil 'literal))))
 
 (required 'scala-mode2
           (lambda ()
@@ -547,12 +515,6 @@ Useful for interactive elisp projects."
             (define-key scala-mode-map (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
             (define-key scala-mode-map (kbd "s-<home>") (sp-restrict-c 'sp-beginning-of-sexp))
             (define-key scala-mode-map (kbd "s-<end>") (sp-restrict-c 'sp-end-of-sexp))
-            (define-key scala-mode-map (kbd "s-<left>") (sp-restrict-c 'sp-beginning-of-previous-sexp))
-            ;; would prefer sp-next-sexp but restriction is broken
-            ;; https://github.com/Fuco1/smartparens/issues/468
-            (define-key scala-mode-map (kbd "s-<right>") (sp-restrict-c 'sp-beginning-of-next-sexp))
-            (define-key scala-mode-map (kbd "s-<up>") (sp-restrict-c 'sp-backward-up-sexp))
-            (define-key scala-mode-map (kbd "s-<down>") (sp-restrict-c 'sp-down-sexp))
 
             ;; i.e. bypass company-mode
             (define-key scala-mode-map (kbd "C-<tab>") 'dabbrev-expand)
@@ -596,7 +558,6 @@ Useful for interactive elisp projects."
             (defun scala-indent:indent-on-parentheses ())
 
             ;;(flyspell-prog-mode)
-            (highlight-symbol-mode)
             (smartparens-mode)
             (yas-minor-mode)
             (git-gutter-mode)

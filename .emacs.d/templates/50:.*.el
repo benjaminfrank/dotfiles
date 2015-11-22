@@ -1,10 +1,7 @@
-# -*- mode: snippet -*-
-#name: newfile
-# --
 ;;; `(buffer-name)` --- ${1:Summary} -*- lexical-binding: t -*-
 
-;; Copyright (C) `(format-time-string "%Y")` `copyright-owner`
-;; License: `license-url`
+;; Copyright (C) `(format-time-string "%Y")` `yatemplate-owner`
+;; License: `yatemplate-license`
 
 ;;; Commentary:
 ;;
