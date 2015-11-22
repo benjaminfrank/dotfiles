@@ -614,41 +614,39 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; org-mode
-(use-package markdown-mode
-  :commands markdown-mode)
 (use-package centered-cursor-mode
   :commands centered-cursor-mode)
-(use-package focus
-  :commands focus-mode)
+;; (use-package focus
+;;   :commands focus-mode)
 
-(defun writeroom-ask ()
-  "Interactively ask if the user wants to go into writeroom-mode."
-  (interactive)
-  (when (y-or-n-p "Go into writeroom-mode? ")
-    (delete-other-windows)
-    (visual-line-mode)
-    (focus-mode)
-    (centered-cursor-mode)
-    ;; NOTE weird sizing bug in writeroom
-    (writeroom-mode)))
+(add-hook 'writeroom-mode-hook
+          (lambda ()
+            (delete-other-windows)
+            (visual-line-mode)
+            ;;(focus-mode)
+            (centered-cursor-mode)
+            ;; NOTE weird sizing bug in writeroom
+            (writeroom-mode)))
 
-(defun markup-common-hooks()
-  (writeroom-ask)
-  (yas-minor-mode)
-  (company-mode)
-  ;;(auto-fill-mode)
-  (local-set-key (kbd "C-c c") 'pandoc))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (yas-minor-mode)
+            (company-mode)
+            (local-set-key (kbd "C-c c") 'pandoc)
+            (local-set-key (kbd "s-c") 'picture-mode)
+            (org-babel-do-load-languages
+             'org-babel-load-languages
+             '((ditaa . t)))))
 
-(add-hook 'org-mode-hook (lambda()
-                           (markup-common-hooks)
-                           (local-set-key (kbd "s-c") 'picture-mode)
-                           (org-babel-do-load-languages
-                            'org-babel-load-languages
-                            '((ditaa . t)))))
-(add-hook 'markdown-mode-hook (lambda()
-                                (markup-common-hooks)
-                                ;; github interprets newlines
-                                (visual-line-mode)))
+(use-package markdown-mode
+  :commands markdown-mode)
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (yas-minor-mode)
+            (company-mode)
+            (markup-common-hooks)
+            ;; github interprets newlines
+            (visual-line-mode)))
 
 ;;..............................................................................
 ;; R
