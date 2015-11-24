@@ -21,6 +21,7 @@ function fommil-links {
        ! -path "./bin/*" \
        ! -path "./var/*" \
        ! -path "./Profiles/*" \
+       ! -path "./.emacs.d/templates/*" \
        ! -name ".drone.yml" \
        ! -name ".emacs-test.el" | \
     while read A ; do
@@ -33,6 +34,7 @@ function fommil-links {
         FILE=`basename "$A"`
         FROM=$PWD/$RELDIR/$FILE
         TO=$DIR/$FILE
+        # this doesn't support files with special characters
         if [ ! "$FROM" -ef "$TO" ] ; then
             echo ln -f "\"$FROM\"" "\"$TO\""
         fi
