@@ -180,7 +180,7 @@ FORCE :boolean will use `require' instead of `autoload'."
   ;; TODO rewrite without hungry-delete-backward and release on MELPA
   "Hungry whitespace or delete word depending on context."
   (interactive)
-  (if (looking-back "[])} \t\n\r\l]" (- (point) 1))
+  (if (looking-back "[ \t\n\r\l]\\{2,\\}" (- (point) 3))
       (hungry-delete-backward 1)
     (if (subword-mode)
         (subword-backward-kill 1)
@@ -614,17 +614,10 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; org-mode
-(use-package centered-cursor-mode
-  :commands centered-cursor-mode)
-;; (use-package focus
-;;   :commands focus-mode)
-
 (add-hook 'writeroom-mode-hook
           (lambda ()
             (delete-other-windows)
             (visual-line-mode)
-            ;;(focus-mode)
-            (centered-cursor-mode)
             ;; NOTE weird sizing bug in writeroom
             (writeroom-mode)))
 
