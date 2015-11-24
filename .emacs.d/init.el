@@ -36,7 +36,7 @@
  enable-local-variables t
  create-lockfiles nil
  make-backup-files nil
- load-prefer-newer t
+ ;;load-prefer-newer t ;; WORKAROUND Debian bug
  column-number-mode t
  scroll-error-top-bottom t
  scroll-margin 15
@@ -329,6 +329,7 @@ with `dir-locals.el'.")
   :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
   :config
   (auto-insert-mode)
+  (setq auto-insert-alist nil)
   (yatemplate-fill-alist))
 
 (use-package writeroom-mode
