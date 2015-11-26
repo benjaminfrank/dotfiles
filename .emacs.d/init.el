@@ -394,7 +394,7 @@ with `dir-locals.el'.")
   (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
   (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
 
-  ;; delete some bindings
+  ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/543
   (bind-key "C-<left>" nil smartparens-mode-map)
   (bind-key "C-<right>" nil smartparens-mode-map)
 
@@ -617,15 +617,14 @@ assuming it is in a maven-style project."
 ;; org-mode
 (add-hook 'writeroom-mode-hook
           (lambda ()
-            (delete-other-windows)
-            (visual-line-mode)
             ;; NOTE weird sizing bug in writeroom
-            (writeroom-mode)))
+            (delete-other-windows)))
 
 (add-hook 'org-mode-hook
           (lambda ()
             (yas-minor-mode)
             (company-mode)
+            (visual-line-mode)
             (local-set-key (kbd "C-c c") 'pandoc)
             (local-set-key (kbd "s-c") 'picture-mode)
             (org-babel-do-load-languages
@@ -638,8 +637,6 @@ assuming it is in a maven-style project."
           (lambda ()
             (yas-minor-mode)
             (company-mode)
-            (markup-common-hooks)
-            ;; github interprets newlines
             (visual-line-mode)))
 
 ;;..............................................................................
