@@ -539,6 +539,12 @@ assuming it is in a maven-style project."
                              :test-template-fn 'ensime-goto-test--test-template-scalatest-flatspec))))
 
 (required 'sbt-mode)
+;; WORKAROUND: https://github.com/hvesalai/sbt-mode/issues/31
+(substitute-key-definition
+ ;; allows using SPACE when in the minibuffer
+ 'minibuffer-complete-word
+ 'self-insert-command
+ minibuffer-local-completion-map)
 
 (defun ensime-edit-definition-with-fallback ()
   "Variant of `ensime-edit-definition' with ctags if ENSIME is not available."
