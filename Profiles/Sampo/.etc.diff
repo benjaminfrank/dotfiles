@@ -37,8 +37,18 @@
  BATT_INTEL_PSTATE_PERF_MAX_PCT=50 # Maximum performance, in percent
  BATT_INTEL_PSTATE_NO_TURBO=1 # Disable "Turbo Boost"?
 --- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2015-09-19 14:10:56.000000000 +0100
-+++ /etc/lightdm/lightdm.conf	2015-12-17 23:19:52.754732906 +0000
-@@ -59,12 +59,16 @@
++++ /etc/lightdm/lightdm.conf	2015-12-17 23:28:19.099701055 +0000
+@@ -39,7 +39,8 @@
+ # [Seat:*] matches all seats and is applied first.
+ # [Seat:seat0] matches the seat named "seat0".
+ # [Seat:thin-client*] matches all seats that have names that start with "thin-client".
+-#
++
++[SeatDefaults]
+ # type = Seat type (xlocal, xremote)
+ # pam-service = PAM service to use for login
+ # pam-autologin-service = PAM service to use for autologin
+@@ -59,12 +60,16 @@
  # unity-compositor-timeout = Number of seconds to wait for compositor to start
  # greeter-session = Session to load for greeter
  # greeter-hide-users = True to hide the user list
@@ -55,6 +65,30 @@
  # guest-session = Session to load for guests (overrides user-session)
  # session-wrapper = Wrapper script to run session with
  # greeter-wrapper = Wrapper script to run greeter with
+--- /tmp/etc.tmp.4//etc/lightdm/lightdm-gtk-greeter.conf	2015-06-21 10:15:27.000000000 +0100
++++ /etc/lightdm/lightdm-gtk-greeter.conf	2015-12-17 23:41:16.663751781 +0000
+@@ -45,11 +45,12 @@
+ #  transition-duration = overrides default value
+ #
+ [greeter]
+-#background=
++background=/usr/share/images/desktop-base/spacefun-wallpaper-widescreen.svg
++hide-user-image=true
+ #user-background=
+-#theme-name=
++theme-name=Moblin-Netbook
+ #icon-theme-name=
+-#font-name=
++font-name="sans-serif 18"
+ #xft-antialias=
+ #xft-dpi=
+ #xft-hintstyle=
+@@ -60,3 +61,4 @@
+ #reader=
+ #position=
+ #screensaver-timeout=
++laptop=true
+\ No newline at end of file
 --- /tmp/etc.tmp.4//etc/modprobe.d/that-fucking-beep.conf	1970-01-01 01:00:00.000000000 +0100
 +++ /etc/modprobe.d/that-fucking-beep.conf	2014-07-10 22:57:39.295322281 +0100
 @@ -0,0 +1 @@
