@@ -9,7 +9,24 @@
  # Recommended packages would be installed together with the package
  # that recommends them in all usual setups.  This option will make
  # debfoster count these recommendations as real dependencies.  En-
---- /tmp/etc.tmp.4//etc/laptop-mode/conf.d/intel_pstate.conf	2014-10-19 15:46:54.000000000 +0100
+--- /tmp/etc.tmp.4//etc/default/docker	2015-10-12 04:37:29.000000000 +0100
++++ /etc/default/docker	2015-09-19 23:34:40.698335120 +0100
+@@ -6,8 +6,13 @@
+ # Use DOCKER_OPTS to modify the daemon startup options.
+ #DOCKER_OPTS="--dns 8.8.8.8 --dns 8.8.4.4"
+ 
++# don't use tiny /var/lib/docker
++# https://github.com/docker/docker/issues/16256
++DOCKER_OPTS="-g /mnt/archive/docker --exec-opt native.cgroupdriver=cgroupfs"
++
+ # If you need Docker to use an HTTP proxy, it can also be specified here.
+ #export http_proxy="http://127.0.0.1:3128/"
+ 
+ # This is also a handy place to tweak where Docker's temporary files go.
+-#export TMPDIR="/mnt/bigdrive/docker-tmp"
++#export TMPDIR="/mnt/archive/docker"
++
+--- /tmp/etc.tmp.4//etc/laptop-mode/conf.d/intel_pstate.conf	2015-09-03 12:10:48.000000000 +0100
 +++ /etc/laptop-mode/conf.d/intel_pstate.conf	2015-05-15 21:04:25.328811911 +0100
 @@ -37,6 +37,6 @@
  LM_AC_INTEL_PSTATE_NO_TURBO=0 # Disable "Turbo Boost"?
@@ -19,55 +36,39 @@
 +BATT_INTEL_PSTATE_PERF_MIN_PCT=5 # Minimum performance, in percent
  BATT_INTEL_PSTATE_PERF_MAX_PCT=50 # Maximum performance, in percent
  BATT_INTEL_PSTATE_NO_TURBO=1 # Disable "Turbo Boost"?
---- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2014-11-04 21:01:16.000000000 +0000
-+++ /etc/lightdm/lightdm.conf	2014-10-04 13:09:33.153286876 +0100
-@@ -97,13 +97,13 @@
- #unity-compositor-command=unity-system-compositor
- #unity-compositor-timeout=60
- #greeter-session=example-gtk-gnome
--#greeter-hide-users=false
-+greeter-hide-users=false
- #greeter-allow-guest=true
--#greeter-show-manual-login=false
-+greeter-show-manual-login=false
- #greeter-show-remote-login=true
- #user-session=default
- #allow-user-switching=true
--#allow-guest=true
-+allow-guest=false
- #guest-session=
- #session-wrapper=lightdm-session
- #greeter-wrapper=
---- /tmp/etc.tmp.4//etc/lightdm/lightdm-gtk-greeter.conf	2014-11-21 17:05:11.000000000 +0000
-+++ /etc/lightdm/lightdm-gtk-greeter.conf	2014-10-04 16:51:36.971510359 +0100
-@@ -19,7 +19,7 @@
- background=/usr/share/images/desktop-base/login-background.svg
- theme-name=Adwaita
- #icon-theme-name=
--#font-name=
-+font-name=Ubuntu 14
- xft-antialias=true
- #xft-dpi=
- xft-hintstyle=hintfull
---- /tmp/etc.tmp.4//etc/systemd/logind.conf	2015-03-30 12:52:05.000000000 +0100
-+++ /etc/systemd/logind.conf	2015-03-29 22:33:32.373132641 +0100
-@@ -15,9 +15,10 @@
- #KillExcludeUsers=root
- #InhibitDelayMaxSec=5
- #HandlePowerKey=poweroff
--#HandleSuspendKey=suspend
-+HandlePowerKey=suspend
-+HandleSuspendKey=suspend
- #HandleHibernateKey=hibernate
--#HandleLidSwitch=suspend
-+HandleLidSwitch=suspend
- #PowerKeyIgnoreInhibited=no
- #SuspendKeyIgnoreInhibited=no
- #HibernateKeyIgnoreInhibited=no
+--- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2015-09-19 14:10:56.000000000 +0100
++++ /etc/lightdm/lightdm.conf	2015-12-17 23:19:52.754732906 +0000
+@@ -59,12 +59,16 @@
+ # unity-compositor-timeout = Number of seconds to wait for compositor to start
+ # greeter-session = Session to load for greeter
+ # greeter-hide-users = True to hide the user list
++greeter-hide-users = False
+ # greeter-allow-guest = True if the greeter should show a guest login option
++greeter-allow-guest = False
+ # greeter-show-manual-login = True if the greeter should offer a manual login option
++greeter-show-manual-login = False
+ # greeter-show-remote-login = True if the greeter should offer a remote login option
+ # user-session = Session to load for users
+ # allow-user-switching = True if allowed to switch users
+ # allow-guest = True if guest login is allowed
++allow-guest = False
+ # guest-session = Session to load for guests (overrides user-session)
+ # session-wrapper = Wrapper script to run session with
+ # greeter-wrapper = Wrapper script to run greeter with
 --- /tmp/etc.tmp.4//etc/modprobe.d/that-fucking-beep.conf	1970-01-01 01:00:00.000000000 +0100
 +++ /etc/modprobe.d/that-fucking-beep.conf	2014-07-10 22:57:39.295322281 +0100
 @@ -0,0 +1 @@
 +blacklist pcspkr
+--- /tmp/etc.tmp.4//etc/X11/xorg.conf.d/50-synaptics.conf	1970-01-01 01:00:00.000000000 +0100
++++ /etc/X11/xorg.conf.d/50-synaptics.conf	2015-12-13 22:30:54.933946711 +0000
+@@ -0,0 +1,7 @@
++Section "InputClass"
++	Identifier "touchpad"
++	MatchProduct "DLL0665:01 06CB:76AD UNKNOWN"
++	Driver "libinput"
++	Option	"Tapping"	"on"
++	Option	"AccelSpeed"	"1"
++EndSection
 --- /tmp/etc.tmp.4//etc/systemd/system/i3lock.service	1970-01-01 01:00:00.000000000 +0100
 +++ /etc/systemd/system/i3lock.service	2014-07-10 00:21:46.483729909 +0100
 @@ -0,0 +1,14 @@
@@ -103,7 +104,7 @@
 +[Install]
 +WantedBy=sleep.target
 --- /tmp/etc.tmp.4//etc/default/keyboard	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/default/keyboard	2015-05-03 11:53:44.410957746 +0100
++++ /etc/default/keyboard	2015-11-13 20:47:08.431469243 +0000
 @@ -0,0 +1,10 @@
 +# KEYBOARD CONFIGURATION FILE
 +
@@ -149,7 +150,7 @@
 +COMMIT
 +# Completed on Wed Mar 25 22:12:18 2015
 --- /tmp/etc.tmp.4//etc/apt/sources.list.d/google-talkplugin.list	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/apt/sources.list.d/google-talkplugin.list	2014-11-01 18:22:04.936914809 +0000
++++ /etc/apt/sources.list.d/google-talkplugin.list	2015-07-10 21:43:48.650171397 +0100
 @@ -0,0 +1 @@
 +deb http://dl.google.com/linux/talkplugin/deb/ stable main
 --- /tmp/etc.tmp.4//etc/apt/sources.list.d/mono-xamarin.list	1970-01-01 01:00:00.000000000 +0100
@@ -163,11 +164,29 @@
 +deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main
 +
 --- /tmp/etc.tmp.4//etc/apt/sources.list.d/spotify.list	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/apt/sources.list.d/spotify.list	2015-01-19 22:27:10.976734891 +0000
++++ /etc/apt/sources.list.d/spotify.list	2015-07-10 21:43:16.479338228 +0100
 @@ -0,0 +1 @@
 +deb http://repository.spotify.com stable non-free
+--- /tmp/etc.tmp.4//etc/modprobe.d/xps13-headphones.conf	1970-01-01 01:00:00.000000000 +0100
++++ /etc/modprobe.d/xps13-headphones.conf	2014-12-29 12:37:35.894622389 +0000
+@@ -0,0 +1,3 @@
++#http://voices.canonical.com/david.henningsson/2014/03/07/headset-jacks-on-newer-laptops/
++# also see https://askubuntu.com/questions/132440
++options snd-hda-intel model=dell-headset-multi
+--- /tmp/etc.tmp.4//etc/modprobe.d/xps13-touchpad.conf	1970-01-01 01:00:00.000000000 +0100
++++ /etc/modprobe.d/xps13-touchpad.conf	2015-12-13 22:29:59.173794843 +0000
+@@ -0,0 +1 @@
++blacklist psmouse
+\ No newline at end of file
 --- /tmp/etc.tmp.4//etc/sudoers.d/apt	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/sudoers.d/apt	2014-10-04 18:20:57.016717500 +0100
-@@ -0,0 +1,2 @@
++++ /etc/sudoers.d/apt	2015-11-21 16:09:54.086582504 +0000
+@@ -0,0 +1,3 @@
 +fommil  ALL = NOPASSWD: /usr/bin/apt-get
 +fommil  ALL = NOPASSWD: /usr/bin/aptitude
++fommil  ALL = NOPASSWD: /usr/bin/debfoster
+--- /tmp/etc.tmp.4//etc/sudoers.d/power	1970-01-01 01:00:00.000000000 +0100
++++ /etc/sudoers.d/power	2015-03-28 13:57:01.515459755 +0000
+@@ -0,0 +1,3 @@
++fommil  ALL = NOPASSWD: /usr/sbin/poweroff
++fommil  ALL = NOPASSWD: /usr/sbin/reboot
++fommil  ALL = NOPASSWD: /usr/sbin/systemctl
