@@ -195,6 +195,7 @@ FORCE :boolean will use `require' instead of `autoload'."
 
 (defun safe-kill-emacs ()
   "Only exit Emacs if this is a small session, otherwise prompt."
+  ;; TODO: save-buffers-kill-terminal
   (interactive)
   (if (daemonp)
       (delete-frame)
