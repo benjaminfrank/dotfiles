@@ -1,20 +1,14 @@
 [general]
 accounts = Gmail
 ui = quiet
-#https://github.com/aroig/offlineimap
-#synclabels = True
+synclabels = True
 
 [Account Gmail]
 localrepository = Local
 remoterepository = Remote
-#postsynchook seems to be ignored, have separate crontab for it
-#postsynchook = /usr/bin/notmuch new
-#postsynchook = mu index --maildir=~/Gmail
 
 [Repository Local]
-#type = GmailMaildir
-localfolders = ~/Gmail
-type = Maildir
+type = GmailMaildir
 localfolders = ~/Mail
 
 [Repository Remote]
