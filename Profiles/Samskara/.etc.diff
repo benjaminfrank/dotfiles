@@ -5,78 +5,160 @@
 -#
 -# This is a stub file, should be edited when needed,
 -# used by default by DKMS.
---- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2014-11-04 21:01:16.000000000 +0000
-+++ /etc/lightdm/lightdm.conf	2015-03-11 23:57:01.000000000 +0000
-@@ -97,13 +97,13 @@
- #unity-compositor-command=unity-system-compositor
- #unity-compositor-timeout=60
- #greeter-session=example-gtk-gnome
--#greeter-hide-users=false
-+greeter-hide-users=false
- #greeter-allow-guest=true
--#greeter-show-manual-login=false
-+greeter-show-manual-login=false
- #greeter-show-remote-login=true
- #user-session=default
- #allow-user-switching=true
--#allow-guest=true
-+allow-guest=false
- #guest-session=
- #session-wrapper=lightdm-session
- #greeter-wrapper=
---- /tmp/etc.tmp.4//etc/init.d/nvidia-kernel	2013-08-03 19:42:02.000000000 +0100
-+++ /etc/init.d/nvidia-kernel	2014-06-18 23:44:34.566541326 +0100
-@@ -27,14 +27,14 @@
-     
- make_nodes () {
-   if ! [ -e /dev/nvidiactl ]; then
--    mknod -m 0660 /dev/nvidiactl c 195 255
-+    mknod -m 0666 /dev/nvidiactl c 195 255
-     chgrp video /dev/nvidiactl
-   fi
-   NVIDIA_CARDS=${NVIDIA_CARDS:-0}
-   i=0
-   while [ "$i" -lt "$NVIDIA_CARDS" ]; do
-     if ! [ -e /dev/nvidia$i ]; then
--      mknod -m 0660 /dev/nvidia$i c 195 $i
-+      mknod -m 0666 /dev/nvidia$i c 195 $i
-       chgrp video /dev/nvidia$i
-     fi
-     i=$((i+1))
---- /tmp/etc.tmp.4//etc/modprobe.d/nvidia-kernel-common.conf	2014-12-02 00:01:05.000000000 +0000
-+++ /etc/modprobe.d/nvidia-kernel-common.conf	2014-06-18 23:46:51.026996177 +0100
-@@ -1,5 +1,5 @@
- alias char-major-195* nvidia
--options nvidia NVreg_DeviceFileUID=0 NVreg_DeviceFileGID=44 NVreg_DeviceFileMode=0660
-+options nvidia NVreg_DeviceFileUID=0 NVreg_DeviceFileGID=44 NVreg_DeviceFileMode=0666
- # To enable FastWrites and Sidebus addressing, uncomment these lines
- # options nvidia NVreg_EnableAGPSBA=1
- # options nvidia NVreg_EnableAGPFW=1
---- /tmp/etc.tmp.4//etc/sysctl.conf	2015-03-06 21:12:02.000000000 +0000
-+++ /etc/sysctl.conf	2014-06-15 20:57:10.664602465 +0100
-@@ -58,3 +58,6 @@
- # Log Martian Packets
- #net.ipv4.conf.all.log_martians = 1
+--- /tmp/etc.tmp.4//etc/default/docker	2015-10-12 04:37:29.000000000 +0100
++++ /etc/default/docker	2015-09-13 09:37:28.000000000 +0100
+@@ -6,8 +6,14 @@
+ # Use DOCKER_OPTS to modify the daemon startup options.
+ #DOCKER_OPTS="--dns 8.8.8.8 --dns 8.8.4.4"
+ 
++# don't use tiny /var/lib/docker
++# https://github.com/docker/docker/issues/16256
++DOCKER_OPTS="-g /mnt/archive/docker --exec-opt native.cgroupdriver=cgroupfs"
++
+ # If you need Docker to use an HTTP proxy, it can also be specified here.
+ #export http_proxy="http://127.0.0.1:3128/"
+ 
+ # This is also a handy place to tweak where Docker's temporary files go.
+-#export TMPDIR="/mnt/bigdrive/docker-tmp"
++#export TMPDIR="/mnt/archive/docker"
++
++# FIXME https://github.com/docker/docker/issues/16256
+\ No newline at end of file
+--- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2015-11-24 21:56:33.000000000 +0000
++++ /etc/lightdm/lightdm.conf	2015-12-18 20:06:39.000000000 +0000
+@@ -41,7 +41,8 @@
+ # [Seat:*] matches all seats and is applied first.
+ # [Seat:seat0] matches the seat named "seat0".
+ # [Seat:thin-client*] matches all seats that have names that start with "thin-client".
+-#
++
++[SeatDefaults]
+ # type = Seat type (xlocal, xremote)
+ # pam-service = PAM service to use for login
+ # pam-autologin-service = PAM service to use for autologin
+@@ -60,13 +61,13 @@
+ # unity-compositor-command = Unity compositor command to run (can also contain arguments e.g. unity-system-compositor -special-option)
+ # unity-compositor-timeout = Number of seconds to wait for compositor to start
+ # greeter-session = Session to load for greeter
+-# greeter-hide-users = True to hide the user list
+-# greeter-allow-guest = True if the greeter should show a guest login option
+-# greeter-show-manual-login = True if the greeter should offer a manual login option
++greeter-hide-users = False
++greeter-allow-guest = False
++greeter-show-manual-login = False
+ # greeter-show-remote-login = True if the greeter should offer a remote login option
+ # user-session = Session to load for users
+ # allow-user-switching = True if allowed to switch users
+-# allow-guest = True if guest login is allowed
++allow-guest = False
+ # guest-session = Session to load for guests (overrides user-session)
+ # session-wrapper = Wrapper script to run session with
+ # greeter-wrapper = Wrapper script to run greeter with
+--- /tmp/etc.tmp.4//etc/lightdm/lightdm-gtk-greeter.conf	2015-06-21 10:15:27.000000000 +0100
++++ /etc/lightdm/lightdm-gtk-greeter.conf	2015-12-18 20:06:21.000000000 +0000
+@@ -45,11 +45,12 @@
+ #  transition-duration = overrides default value
  #
+ [greeter]
+-#background=
++background=/usr/share/images/desktop-base/spacefun-wallpaper-widescreen.svg
++hide-user-image=true
+ #user-background=
+-#theme-name=
++theme-name=Moblin-Netbook
+ #icon-theme-name=
+-#font-name=
++font-name="sans-serif 18"
+ #xft-antialias=
+ #xft-dpi=
+ #xft-hintstyle=
+--- /tmp/etc.tmp.4//etc/sysctl.conf	1970-01-01 01:00:00.000000000 +0100
++++ /etc/sysctl.conf	2014-06-15 20:57:10.664602465 +0100
+@@ -0,0 +1,63 @@
++#
++# /etc/sysctl.conf - Configuration file for setting system variables
++# See /etc/sysctl.d/ for additional system variables.
++# See sysctl.conf (5) for information.
++#
++
++#kernel.domainname = example.com
++
++# Uncomment the following to stop low-level messages on console
++#kernel.printk = 3 4 1 3
++
++##############################################################3
++# Functions previously found in netbase
++#
++
++# Uncomment the next two lines to enable Spoof protection (reverse-path filter)
++# Turn on Source Address Verification in all interfaces to
++# prevent some spoofing attacks
++#net.ipv4.conf.default.rp_filter=1
++#net.ipv4.conf.all.rp_filter=1
++
++# Uncomment the next line to enable TCP/IP SYN cookies
++# See http://lwn.net/Articles/277146/
++# Note: This may impact IPv6 TCP sessions too
++#net.ipv4.tcp_syncookies=1
++
++# Uncomment the next line to enable packet forwarding for IPv4
++#net.ipv4.ip_forward=1
++
++# Uncomment the next line to enable packet forwarding for IPv6
++#  Enabling this option disables Stateless Address Autoconfiguration
++#  based on Router Advertisements for this host
++#net.ipv6.conf.all.forwarding=1
++
++
++###################################################################
++# Additional settings - these settings can improve the network
++# security of the host and prevent against some network attacks
++# including spoofing attacks and man in the middle attacks through
++# redirection. Some network environments, however, require that these
++# settings are disabled so review and enable them as needed.
++#
++# Do not accept ICMP redirects (prevent MITM attacks)
++#net.ipv4.conf.all.accept_redirects = 0
++#net.ipv6.conf.all.accept_redirects = 0
++# _or_
++# Accept ICMP redirects only for gateways listed in our default
++# gateway list (enabled by default)
++# net.ipv4.conf.all.secure_redirects = 1
++#
++# Do not send ICMP redirects (we are not a router)
++#net.ipv4.conf.all.send_redirects = 0
++#
++# Do not accept IP source route packets (we are not a router)
++#net.ipv4.conf.all.accept_source_route = 0
++#net.ipv6.conf.all.accept_source_route = 0
++#
++# Log Martian Packets
++#net.ipv4.conf.all.log_martians = 1
++#
 +
 +# added by Insync
 +fs.inotify.max_user_watches=1048576
---- /tmp/etc.tmp.4//etc/systemd/logind.conf	2015-01-21 12:30:37.000000000 +0000
-+++ /etc/systemd/logind.conf	2014-07-23 22:25:17.174961880 +0100
-@@ -15,6 +15,7 @@
- #KillExcludeUsers=root
- #InhibitDelayMaxSec=5
- #HandlePowerKey=poweroff
-+HandlePowerKey=suspend
- #HandleSuspendKey=suspend
- #HandleHibernateKey=hibernate
- #HandleLidSwitch=suspend
-@@ -24,5 +25,3 @@
- #LidSwitchIgnoreInhibited=yes
- #IdleAction=ignore
- #IdleActionSec=30min
--#RuntimeDirectorySize=10%
--#RemoveIPC=yes
+--- /tmp/etc.tmp.4//etc/default/rng-tools	2011-06-29 02:55:44.000000000 +0100
++++ /etc/default/rng-tools	2015-04-08 20:14:12.000000000 +0100
+@@ -15,3 +15,18 @@
+ #RNGDOPTIONS="--hrng=intelfwh --fill-watermark=90% --feed-interval=1"
+ #RNGDOPTIONS="--hrng=viakernel --fill-watermark=90% --feed-interval=1"
+ #RNGDOPTIONS="--hrng=viapadlock --fill-watermark=90% --feed-interval=1"
++
++# http://www.gniibe.org/FST-01/q_and_a/neug-standalone-device.html
++
++HRNGDEVICE=/dev/ttyACM0
++
++#if [ -c $HRNGDEVICE ]; then
++#   until stty -F $HRNGDEVICE -parenb raw echo; do
++#     sleep 5
++#     echo "Try another invocation of stty"
++#   done
++#else
++#    exit 0
++#fi
++
++RNGDOPTIONS="--fill-watermark=90% --feed-interval=1"
 --- /tmp/etc.tmp.4//etc/systemd/system/i3lock.service	1970-01-01 01:00:00.000000000 +0100
 +++ /etc/systemd/system/i3lock.service	2014-06-29 16:32:55.795997827 +0100
 @@ -0,0 +1,14 @@
@@ -112,7 +194,7 @@
 +[Install]
 +WantedBy=sleep.target
 --- /tmp/etc.tmp.4//etc/default/keyboard	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/default/keyboard	2015-03-10 20:28:04.300214298 +0000
++++ /etc/default/keyboard	2015-11-03 22:40:38.391314032 +0000
 @@ -0,0 +1,10 @@
 +# KEYBOARD CONFIGURATION FILE
 +
@@ -124,12 +206,62 @@
 +XKBOPTIONS=""
 +
 +BACKSPACE="guess"
+--- /tmp/etc.tmp.4//etc/iptables/rules.v4	1970-01-01 01:00:00.000000000 +0100
++++ /etc/iptables/rules.v4	2015-12-05 12:32:52.000000000 +0000
+@@ -0,0 +1,46 @@
++*filter
++
++# Allows all loopback (lo0) traffic and drop all traffic to 127/8 that doesn't use lo0
++-A INPUT -i lo -j ACCEPT
++-A INPUT ! -i lo -d 127.0.0.0/8 -j REJECT
++
++# Accepts all established inbound connections
++-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
++
++# Allows all outbound traffic
++# You could modify this to only allow certain traffic
++-A OUTPUT -j ACCEPT
++
++# Allows HTTP and HTTPS connections from anywhere (the normal ports for websites)
++-A INPUT -p tcp --dport 80 -j ACCEPT
++-A INPUT -p tcp --dport 443 -j ACCEPT
++
++# Allows S-Tunnel
++-A INPUT -p tcp -m state --state NEW --dport 443 -j ACCEPT
++
++# Allows SSH connections
++# The --dport number is the same as in /etc/ssh/sshd_config
++-A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT
++
++# Now you should read up on iptables rules and consider whether ssh access
++# for everyone is really desired. Most likely you will only allow access from certain IPs.
++
++# Allow ping
++#  note that blocking other types of icmp packets is considered a bad idea by some
++#  remove -m icmp --icmp-type 8 from this line to allow all kinds of icmp:
++#  https://security.stackexchange.com/questions/22711
++-A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT
++
++# Allow spotify
++-A INPUT -p tcp -m state --state NEW --dport 57621 -j ACCEPT
++-A INPUT -p udp -m state --state NEW --dport 57621 -j ACCEPT
++
++# log iptables denied calls (access via 'dmesg' command)
++-A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
++
++# Reject all other inbound - default deny unless explicitly allowed policy:
++-A INPUT -j REJECT
++-A FORWARD -j REJECT
++
++COMMIT
++
 --- /tmp/etc.tmp.4//etc/apt/sources.list.d/google-talkplugin.list	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/apt/sources.list.d/google-talkplugin.list	2014-03-22 02:23:01.316185846 +0000
-@@ -0,0 +1,3 @@
++++ /etc/apt/sources.list.d/google-talkplugin.list	2015-11-30 19:41:22.371419073 +0000
+@@ -0,0 +1,4 @@
 +### THIS FILE IS AUTOMATICALLY CONFIGURED ###
 +# You may comment out this entry, but any other modifications may be lost.
 +deb http://dl.google.com/linux/talkplugin/deb/ stable main
++
 --- /tmp/etc.tmp.4//etc/apt/sources.list.d/mono-xamarin.list	1970-01-01 01:00:00.000000000 +0100
 +++ /etc/apt/sources.list.d/mono-xamarin.list	2015-01-08 21:55:42.284600121 +0000
 @@ -0,0 +1 @@
@@ -143,13 +275,14 @@
 @@ -0,0 +1,2 @@
 +#options snd-hda-intel model=mbp55
 +options snd-hda-intel model=imac27_122
---- /tmp/etc.tmp.4//etc/sudoers.d/aptitude	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/sudoers.d/aptitude	2014-10-05 20:10:12.671698358 +0100
-@@ -0,0 +1,2 @@
+--- /tmp/etc.tmp.4//etc/sudoers.d/apt	1970-01-01 01:00:00.000000000 +0100
++++ /etc/sudoers.d/apt	2015-04-04 14:18:22.252652244 +0100
+@@ -0,0 +1,3 @@
 +fommil  ALL = NOPASSWD: /usr/bin/apt-get
 +fommil  ALL = NOPASSWD: /usr/bin/aptitude
---- /tmp/etc.tmp.4//etc/sudoers.d/pmsuspend	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/sudoers.d/pmsuspend	2014-06-13 00:28:14.795337024 +0100
++fommil  ALL = NOPASSWD: /usr/bin/debfoster
+--- /tmp/etc.tmp.4//etc/sudoers.d/power	1970-01-01 01:00:00.000000000 +0100
++++ /etc/sudoers.d/power	2014-06-13 00:28:14.795337024 +0100
 @@ -0,0 +1,4 @@
 +fommil  ALL = NOPASSWD: /usr/sbin/pm-hibernate
 +fommil  ALL = NOPASSWD: /usr/sbin/pm-suspend
@@ -166,3 +299,9 @@
 @@ -0,0 +1,2 @@
 +SUBSYSTEM=="usb", ATTR{idVendor}=="1004", MODE="0666", GROUP="plugdev"
 +SUBSYSTEM=="usb", ATTR{idVendor}=="0b05", MODE="0666", GROUP="plugdev"
+--- /tmp/etc.tmp.4//etc/udev/rules.d/90-neug.rules	1970-01-01 01:00:00.000000000 +0100
++++ /etc/udev/rules.d/90-neug.rules	2015-04-09 19:36:54.810976920 +0100
+@@ -0,0 +1,3 @@
++# http://www.gniibe.org/FST-01/q_and_a/neug-standalone-device.html
++
++KERNEL=="ttyACM[0-9]*", SUBSYSTEMS=="usb", ACTION=="add", ATTRS{idVendor}=="234b", ATTRS{idProduct}=="0001", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd@%k.service"
