@@ -44,7 +44,6 @@
 
 ;; buffer local variables
 (setq-default
- show-trailing-whitespace t
  indent-tabs-mode nil
  tab-width 4)
 
@@ -459,6 +458,8 @@ with `dir-locals.el'.")
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
+            (setq show-trailing-whitespace t)
+
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
 
@@ -506,6 +507,7 @@ assuming it is in a maven-style project."
 
 (required 'scala-mode2
           (lambda ()
+            (setq show-trailing-whitespace t)
             (require 'smartparens)
             (define-key scala-mode-map (kbd "s-o") 'scala-outline-popup)
             (define-key scala-mode-map (kbd "RET")
