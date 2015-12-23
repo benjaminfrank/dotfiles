@@ -245,12 +245,13 @@ FORCE :boolean will use `require' instead of `autoload'."
   :bind ("s-/" . undo-tree-visualize))
 
 (use-package projectile
+  :demand
   ;; nice to have it on the modeline
-  :init (setq
-         projectile-use-git-grep t)
+  :init
+  (setq projectile-use-git-grep t)
   :config
-  (bind-key "C-c p j" 'projectile-etags-select-find-tag projectile-mode-map)
   (projectile-global-mode)
+  (bind-key "C-c p j" 'projectile-etags-select-find-tag projectile-mode-map)
   :bind
   (("s-f" . projectile-find-file)
    ("s-F" . projectile-ag)))
@@ -561,8 +562,6 @@ assuming it is in a maven-style project."
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
 
-            (projectile-mode)
-
             (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
 
             ;; disable this post-self-insert-hook
@@ -597,7 +596,6 @@ assuming it is in a maven-style project."
                            (local-set-key (kbd "C-c e") 'next-error)
                            (local-set-key (kbd "M-RET") 'comint-accumulate)))
 (add-hook 'dired-mode-hook (lambda()
-                             (projectile-mode)
                              ;; a workflow optimisation too far?
                              (local-set-key (kbd "C-c c") 'sbt-command)
                              (local-set-key (kbd "C-c e") 'next-error)))
@@ -608,7 +606,6 @@ assuming it is in a maven-style project."
 (add-hook 'java-mode-hook
           (lambda()
             (yas-minor-mode)
-            (projectile-mode)
             (company-mode)
             (smartparens-mode)
             (local-set-key (kbd "C-c e") 'next-error)))
@@ -618,7 +615,6 @@ assuming it is in a maven-style project."
 ;; C
 (add-hook 'c-mode-hook (lambda()
                          (yas-minor-mode)
-                         (projectile-mode)
                          (company-mode)
                          (smartparens-mode)))
 
