@@ -53,13 +53,7 @@
   :init
   (setq ag-reuse-window 't)
   :config
-  ;; would be a lot better if the next-error had a hook for the first match
-  (add-hook 'ag-search-finished-hook 'next-match-jump))
-
-(defun next-match-jump ()
-  ;; FIXME: next-error-no-select still opens the source (grr!)
-  "Jump the point and user's focus to first match in a `compile'."
-  (next-error-no-select))
+  (add-hook 'ag-search-finished-hook (lambda () (pop-to-buffer next-error-last-buffer))))
 
 (use-package yaml-mode
   :mode ("\\.yml\\'" . yaml-mode))

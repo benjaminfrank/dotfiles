@@ -56,6 +56,7 @@
  tags-revert-without-query t
  tags-add-tables nil
  compilation-skip-threshold 2
+ compilation-scroll-output 'first-error
  source-directory (getenv "EMACS_SOURCE")
  org-confirm-babel-evaluate nil
  nxml-slash-auto-complete-flag t
@@ -558,6 +559,7 @@ assuming it is in a maven-style project."
             (company-mode)
             (ensime-mode)
 
+            ;; TODO company-etags should depend on the size of the project
             (set (make-local-variable 'company-backends)
                  ;; https://github.com/company-mode/company-mode/issues/390
                  ;; (ensime-company :with company-yasnippet)
@@ -568,6 +570,7 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; Java: watch out for https://github.com/ensime/ensime-server/issues/345
+;; TODO https://snarfed.org/java-stack-traces-in-emacs-compilation-mode
 (add-hook 'java-mode-hook
           (lambda()
             (yas-minor-mode)
