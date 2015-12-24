@@ -5,7 +5,9 @@
 ;;
 ;;; Code:
 
-(required 'darcula-theme)
+(require 'use-package)
+
+(use-package darcula-theme)
 
 (defun dark-theme ()
   "A dark coloured theme for hacking when there is no screen glare."

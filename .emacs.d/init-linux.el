@@ -10,6 +10,9 @@
 ;;
 ;;; Code:
 
+;; keeps flycheck happy
+(require 'use-package)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
@@ -22,20 +25,28 @@
  x-select-enable-clipboard t
  interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
-(required '(package-utils-upgrade-all package-utils))
+(use-package package-utils
+  :commands package-utils-upgrade-all)
 
-(required '(flycheck-cask-setup flycheck-cask))
-(add-hook 'emacs-lisp-mode-hook (lambda() (flycheck-cask-setup)))
+(use-package flycheck-cask
+  :commands flycheck-cask-setup
+  :config (add-hook 'emacs-lisp-mode-hook (flycheck-cask-setup)))
 
-(required 'elnode)
-(required '(tidy-buffer tidy))
+(use-package elnode
+  :commands elnode-make-webserver)
 
-(setq erc-prompt-for-password nil ;; prefer ~/.authinfo for passwords
-      erc-hide-list '("JOIN" "PART" "QUIT")
-      erc-autojoin-channels-alist
-      '(("irc.freenode.net" "#emacs")
-        ("irc.gitter.im" "#ensime/ensime-server" "#ensime/ensime-emacs")))
-(required 'erc)
+(use-package tidy
+  :commands tidy-buffer)
+
+(use-package erc
+  :commands erc erc-tls
+  :init
+  (setq
+   erc-prompt-for-password nil ;; prefer ~/.authinfo for passwords
+   erc-hide-list '("JOIN" "PART" "QUIT")
+   erc-autojoin-channels-alist
+   '(("irc.freenode.net" "#emacs")
+     ("irc.gitter.im" "#ensime/ensime-server" "#ensime/ensime-emacs"))))
 
 (use-package ag
   :commands ag
@@ -50,10 +61,11 @@
   "Jump the point and user's focus to first match in a `compile'."
   (next-error-no-select))
 
-(required 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-(required 'dockerfile-mode)
-(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+(use-package yaml-mode
+  :mode ("\\.yml\\'" . yaml-mode))
+
+(use-package dockerfile-mode
+  :mode ("Dockerfile\\'" . dockerfile-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and configuring more involved
@@ -73,27 +85,21 @@
                                ("unread" . "tag:unread")
                                ("flagged" . "tag:flagged")
                                ("all" . "*")))
-(required 'notmuch (lambda() (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)))
-(required 'notmuch-address (lambda() (notmuch-address-message-insinuate)))
-(add-hook 'message-mode-hook (lambda()
-                               ;; hmm, undecided about filling emails...
-                               ;;(auto-fill-mode -1)
-                               ;;(visual-line-mode)
-                               (writeroom-mode)))
+(use-package notmuch
+  :commands notmuch
+  :config (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime))
+;;(use-package notmuch-address
+;;  :commands notmuch-address)
 
 ;;..............................................................................
 ;; shell scripts
-(add-hook 'sh-mode-hook (lambda()
-                          (electric-indent-local-mode)))
+(add-hook 'sh-mode-hook (electric-indent-local-mode))
 
 ;;..............................................................................
 ;; org-mode
-;; 'org is a system install but doing a 'required on taskjuggler forces
-;; an install of org-plus-contrib from ELPA
-;; doesn't work on Windows
-;; Debugger entered--Lisp error: (overflow-error "100000000")
-;; eval-buffer(#<buffer  *load*-834341> nil "d:/.emacs.d/elpa/org-plus-contrib-20150921/org-footnote.el" nil t)  ; Reading at buffer position 20900
-(required '(org-taskjuggler-export org-plus-contrib))
+(use-package org
+  :ensure org-plus-contrib
+  :defer t)
 
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."

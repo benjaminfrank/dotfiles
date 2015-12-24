@@ -67,6 +67,9 @@
 (setq-default
  c-basic-offset 4)
 
+(add-hook 'prog-mode-hook
+          (lambda() (setq show-trailing-whitespace t)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setup functions that are built-in to emacs
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -113,36 +116,12 @@
   :diminish subword-mode
   :config (global-subword-mode 1))
 
-;; DEPRECATED: https://github.com/jwiegley/use-package
-(defun required (feature &optional hook force)
-  "`autoload' an interactive FEATURE, which is either:
-
-- function :symbol
-  a symbol with consistent package and filename.
-- (function:symbol package:symbol)
-  a function with a different package (filename is package).
-- (function:symbol package:symbol name:string)
-  a function with inconsistent package name and filename.
-
-The package will be downloaded using function `package-install'
-if not found locally.
-
-Runs a HOOK :lambda when the file is loaded.
-
-FORCE :boolean will use `require' instead of `autoload'."
-  (interactive)
-  (cl-multiple-value-bind (function package filename)
-      (pcase feature
-        ((pred symbolp)   (list feature feature (symbol-name feature)))
-        (`(,fn ,pkg)      (list fn pkg (symbol-name pkg)))
-        (`(,fn ,pkg ,nm)  (list fn pkg nm)))
-    (unless (locate-library filename)
-      (package-install package))
-    (when hook
-      (eval-after-load filename hook))
-    (if force
-        (require function)
-      (autoload function filename nil 'interactive))))
+(use-package dired
+  :ensure nil
+  :config
+  ;; a workflow optimisation too far?
+  (bind-key "C-c c" 'sbt-command dired-mode-map)
+  (bind-key "C-c e" 'next-error dired-mode-map))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for generic interactive convenience methods.
@@ -372,7 +351,10 @@ with `dir-locals.el'.")
 
 (use-package smartparens
   :diminish smartparens-mode
-  :commands smartparens-strict-mode smartparens-mode
+  :commands
+  smartparens-strict-mode
+  smartparens-mode
+  sp-restrict-to-pairs-interactive
   :config
   (require 'smartparens-config)
   (sp-use-smartparens-bindings)
@@ -502,49 +484,27 @@ assuming it is in a maven-style project."
                               default-directory))
        nil 'literal))))
 
-(required 'scala-mode2
-          (lambda ()
-            (setq show-trailing-whitespace t)
-            (require 'smartparens)
-            (define-key scala-mode-map (kbd "s-o") 'scala-outline-popup)
-            (define-key scala-mode-map (kbd "RET")
-                           (lambda()
-                             (interactive)
-                             (newline-and-indent)
-                             (scala-indent:insert-asterisk-on-multiline-comment)))
+(defun scala-mode-newline-comments ()
+  "Custom newline appropriate for `scala-mode'."
+  (interactive)
+  (newline-and-indent)
+  (scala-indent:insert-asterisk-on-multiline-comment))
 
-            (define-key scala-mode-map (kbd "s-<delete>") (sp-restrict-c 'sp-kill-sexp))
-            (define-key scala-mode-map (kbd "s-<backspace>") (sp-restrict-c 'sp-backward-kill-sexp))
-            (define-key scala-mode-map (kbd "s-<home>") (sp-restrict-c 'sp-beginning-of-sexp))
-            (define-key scala-mode-map (kbd "s-<end>") (sp-restrict-c 'sp-end-of-sexp))
+(use-package scala-mode2
+  :interpreter
+  ("scala" . scala-mode)
+  :config
+  (bind-key "RET" 'scala-mode-newline-comments scala-mode-map)
+  (bind-key "s-<delete>" (sp-restrict-c 'sp-kill-sexp) scala-mode-map)
+  (bind-key "s-<backspace>" (sp-restrict-c 'sp-backward-kill-sexp) scala-mode-map)
+  (bind-key "s-<home>" (sp-restrict-c 'sp-beginning-of-sexp) scala-mode-map)
+  (bind-key "s-<end>" (sp-restrict-c 'sp-end-of-sexp) scala-mode-map)
 
-            ;; i.e. bypass company-mode
-            (define-key scala-mode-map (kbd "C-<tab>") 'dabbrev-expand)
+  ;; i.e. bypass company-mode
+  (bind-key "C-<tab>" 'dabbrev-expand scala-mode-map)
 
-            (define-key scala-mode-map (kbd "C-c c") 'sbt-command)
-            (define-key scala-mode-map (kbd "C-c e") 'next-error)))
-
-(required '(ensime-mode ensime)
-          (lambda()
-            (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
-
-            (define-key ensime-mode-map (kbd "s-n") 'ensime-search)
-            (define-key ensime-mode-map (kbd "s-i") 'ensime-print-type-at-point)
-            (define-key ensime-mode-map (kbd "M-.") 'ensime-edit-definition-with-fallback)
-
-            (setq ensime-goto-test-config-defaults
-                  (plist-put (plist-put ;; TODO: clean up double plist-put
-                              ensime-goto-test-config-defaults
-                              :test-class-suffixes '("Spec" "Test" "Check"))
-                             :test-template-fn 'ensime-goto-test--test-template-scalatest-flatspec))))
-
-(required 'sbt-mode)
-;; WORKAROUND: https://github.com/hvesalai/sbt-mode/issues/31
-(substitute-key-definition
- ;; allows using SPACE when in the minibuffer
- 'minibuffer-complete-word
- 'self-insert-command
- minibuffer-local-completion-map)
+  (bind-key "C-c c" 'sbt-command scala-mode-map)
+  (bind-key "C-c e" 'next-error scala-mode-map))
 
 (defun ensime-edit-definition-with-fallback ()
   "Variant of `ensime-edit-definition' with ctags if ENSIME is not available."
@@ -553,15 +513,43 @@ assuming it is in a maven-style project."
       (ensime-edit-definition)
     (projectile-find-tag)))
 
+(use-package ensime
+  :commands ensime ensime-mode
+  :config
+  (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
+
+  (bind-key "s-n" 'ensime-search ensime-mode-map)
+  (bind-key "s-i" 'ensime-print-type-at-point ensime-mode-map)
+  (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map)
+
+  ;; TODO: clean up double plist-put
+  (setq ensime-goto-test-config-defaults
+        (plist-put (plist-put
+                    ensime-goto-test-config-defaults
+                    :test-class-suffixes '("Spec" "Test" "Check"))
+                   :test-template-fn 'ensime-goto-test--test-template-scalatest-flatspec)))
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/hvesalai/sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+
+  (bind-key "C-c c" 'sbt-command sbt:mode-map)
+  (bind-key "C-c e" 'next-error sbt:mode-map))
+
 (add-hook 'scala-mode-hook
           (lambda()
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
-
-            (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
-
             ;; disable this post-self-insert-hook
             (defun scala-indent:indent-on-parentheses ())
+
+            (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
 
             ;;(flyspell-prog-mode)
             (smartparens-mode)
@@ -570,32 +558,13 @@ assuming it is in a maven-style project."
             (company-mode)
             (ensime-mode)
 
-            (scala-mode:goto-start-of-code)))
-
-(add-hook 'ensime-mode-hook
-          (lambda ()
             (set (make-local-variable 'company-backends)
                  ;; https://github.com/company-mode/company-mode/issues/390
                  ;; (ensime-company :with company-yasnippet)
                  '(ensime-company
-                   (company-keywords company-dabbrev-code company-etags company-yasnippet)))))
+                   (company-keywords company-dabbrev-code company-etags company-yasnippet)))
 
-(defun scala-start()
-  "Easy way to initialise All The Things for a Scala project"
-  (interactive)
-  (sbt-command)
-  (ensime))
-
-(add-hook 'sbt-mode-hook (lambda()
-                           ;;(setq compilation-skip-threshold 1)
-                           (local-set-key (kbd "C-c c") 'sbt-command)
-                           (local-set-key (kbd "C-c e") 'next-error)
-                           (local-set-key (kbd "M-RET") 'comint-accumulate)))
-(add-hook 'dired-mode-hook (lambda()
-                             ;; a workflow optimisation too far?
-                             (local-set-key (kbd "C-c c") 'sbt-command)
-                             (local-set-key (kbd "C-c e") 'next-error)))
-
+            (scala-mode:goto-start-of-code)))
 
 ;;..............................................................................
 ;; Java: watch out for https://github.com/ensime/ensime-server/issues/345
@@ -642,10 +611,9 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; R
-(required '(ess-site ess))
-;; bad packaging means we have to manually setup R-mode
-(autoload 'R-mode "ess-site" nil t)
-(add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
+(use-package ess-site
+  :ensure ess
+  :mode ("\\.R\\'" . R-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OS specific
