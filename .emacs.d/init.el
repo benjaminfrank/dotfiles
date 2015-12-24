@@ -210,12 +210,6 @@ FORCE :boolean will use `require' instead of `autoload'."
         (clean-buffer-list-delay-special 0))
     (clean-buffer-list)))
 
-(defun projectile-etags-select-find-tag ()
-  "Run `etags-select-find-tag' in the current projectile context."
-  (interactive)
-  (projectile-visit-project-tags-table)
-  (etags-select-find-tag))
-
 (defun company-or-dabbrav-complete ()
   "Force a `company-complete', falling back to `dabbrev-expand'."
   (interactive)
@@ -251,7 +245,6 @@ FORCE :boolean will use `require' instead of `autoload'."
   (setq projectile-use-git-grep t)
   :config
   (projectile-global-mode)
-  (bind-key "C-c p j" 'projectile-etags-select-find-tag projectile-mode-map)
   :bind
   (("s-f" . projectile-find-file)
    ("s-F" . projectile-ag)))
@@ -432,7 +425,7 @@ with `dir-locals.el'.")
 (global-set-key (kbd "C-x C-c") 'safe-kill-emacs)
 (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 (global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "M-.") 'projectile-etags-select-find-tag)
+(global-set-key (kbd "M-.") 'projectile-find-tag)
 (global-set-key (kbd "M-,") 'pop-tag-mark)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -483,7 +476,10 @@ with `dir-locals.el'.")
       scala-indent:align-parameters t
       ensime-default-buffer-prefix "ENSIME-"
       ensime-prefer-noninteractive t
-      scala-outline-popup-select 'closest)
+      ensime-refactor-enable-beta t
+      ensime-refactor-preview t
+      ensime-refactor-auto-apply-file-limit 1
+      ensime-refactor-auto-apply-hunk-limit 1)
 
 ;; prefer local ensime-emacs to MELPA install (for dev)
 (add-to-load-path (concat user-emacs-directory "ensime-emacs"))
@@ -555,7 +551,7 @@ assuming it is in a maven-style project."
   (interactive)
   (if (ensime-connection-or-nil)
       (ensime-edit-definition)
-    (projectile-etags-select-find-tag)))
+    (projectile-find-tag)))
 
 (add-hook 'scala-mode-hook
           (lambda()
