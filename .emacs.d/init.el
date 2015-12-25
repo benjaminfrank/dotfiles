@@ -247,8 +247,7 @@
 (use-package magit
   :commands magit-status magit-blame
   :init (setq
-         magit-revert-buffers nil
-         magit-push-always-verify nil)
+         magit-revert-buffers nil)
   :bind (("s-g" . magit-status)
          ("s-b" . magit-blame)))
 
@@ -374,6 +373,8 @@ with `dir-locals.el'.")
   ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/543
   (bind-key "C-<left>" nil smartparens-mode-map)
   (bind-key "C-<right>" nil smartparens-mode-map)
+
+  (bind-key "s-{" 'sp-rewrap-sexp smartparens-mode-map)
 
   (bind-key "s-<delete>" 'sp-kill-sexp smartparens-mode-map)
   (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map)
