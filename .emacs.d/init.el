@@ -320,6 +320,10 @@ with `dir-locals.el'.")
   (put 'whitespace-line-column 'safe-local-variable #'integerp)
   (setq whitespace-style '(face trailing tabs lines-tail)
         whitespace-line-column 80))
+(defun whitespace-mode-with-local-variables ()
+  "A variant of `whitespace-mode' that can see local variables."
+  ;; WORKAROUND https://emacs.stackexchange.com/questions/7743
+  (add-hook 'hack-local-variables-hook 'whitespace-mode nil t))
 
 (use-package flyspell
   :commands flyspell-mode
@@ -434,6 +438,9 @@ with `dir-locals.el'.")
   :diminish eldoc-mode
   :commands eldoc-mode)
 
+(use-package focus
+  :commands focus-mode)
+
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
             (setq show-trailing-whitespace t)
@@ -441,9 +448,8 @@ with `dir-locals.el'.")
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
 
-            ;; WORKAROUND https://emacs.stackexchange.com/questions/7743
-            (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
-
+            (whitespace-mode-with-local-variables)
+            (focus-mode)
             (rainbow-mode)
             (prettify-symbols-mode)
             (eldoc-mode)
@@ -548,9 +554,7 @@ assuming it is in a maven-style project."
             ;; disable this post-self-insert-hook
             (defun scala-indent:indent-on-parentheses ())
 
-            (add-hook 'hack-local-variables-hook 'whitespace-mode nil t)
-
-            ;;(flyspell-prog-mode)
+            (whitespace-mode-with-local-variables)
             (smartparens-mode)
             (yas-minor-mode)
             (git-gutter-mode)
