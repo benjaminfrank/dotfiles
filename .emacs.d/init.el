@@ -201,6 +201,15 @@
   "Smartparens restriction on `SYM' for C-derived parenthesis."
   (sp-restrict-to-pairs-interactive "{([" sym))
 
+(defun plist-merge (&rest plists)
+  "Create a single property list from all PLISTS.
+Inspired by `org-combine-plists'."
+  (let ((rtn (pop plists)))
+    (dolist (plist plists rtn)
+      (setq rtn (plist-put rtn
+                           (pop plist)
+                           (pop plist))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
@@ -529,10 +538,9 @@ assuming it is in a maven-style project."
   (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map)
 
   (setq ensime-goto-test-config-defaults
-        (plist-put (plist-put
-                    ensime-goto-test-config-defaults
-                    :test-class-suffixes '("Spec" "Test" "Check"))
-                   :test-template-fn 'ensime-goto-test--test-template-scalatest-flatspec)))
+        (plist-merge ensime-goto-test-config-defaults
+                     '(:test-class-suffixes ("Spec" "Test" "Check"))
+                     '(:test-template-fn ensime-goto-test--test-template-scalatest-flatspec))))
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
