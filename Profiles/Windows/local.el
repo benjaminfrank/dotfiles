@@ -25,7 +25,6 @@
 
 ;; SBT from http://www.scala-sbt.org/0.13/tutorial/Installing-sbt-on-Windows.html
 ;; C:/Program Files/sbt/bin/sbt.bat
-;; FIXME: getting an error about the JVM not starting thanks to -no-colors
 (setq sbt:program-name "C:/PROGRA~1/sbt/bin/sbt.bat")
 
 

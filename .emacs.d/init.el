@@ -156,7 +156,6 @@
   (revert-buffer t t))
 
 (defun contextual-backspace ()
-  ;; TODO rewrite without hungry-delete-backward and release on MELPA
   "Hungry whitespace or delete word depending on context."
   (interactive)
   (if (looking-back "[ \t\n\r\l]\\{2,\\}" (- (point) 3))
@@ -174,9 +173,10 @@
 
 (defun safe-kill-emacs ()
   "Only exit Emacs if this is a small session, otherwise prompt."
-  ;; TODO: save-buffers-kill-terminal
   (interactive)
   (if (daemonp)
+      ;; intentionally not save-buffers-kill-terminal as it has an
+      ;; impact on other client sessions.
       (delete-frame)
     (let ((count-buffers (length (buffer-list))))
       (if (< count-buffers 10)
@@ -471,8 +471,6 @@ with `dir-locals.el'.")
 (defun mvn-package-for-buffer ()
   "Calculate the expected package name for the buffer;
 assuming it is in a maven-style project."
-  ;; TODO: not Windows friendly
-  ;; TODO: support shared code roots (e.g. "src", "main", "tests-unit")
   (let* ((kind (file-name-extension buffer-file-name))
          (root (locate-dominating-file default-directory kind)))
     (when root
@@ -523,7 +521,6 @@ assuming it is in a maven-style project."
   (bind-key "s-i" 'ensime-print-type-at-point ensime-mode-map)
   (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map)
 
-  ;; TODO: clean up double plist-put
   (setq ensime-goto-test-config-defaults
         (plist-put (plist-put
                     ensime-goto-test-config-defaults
@@ -559,7 +556,6 @@ assuming it is in a maven-style project."
             (company-mode)
             (ensime-mode)
 
-            ;; TODO company-etags should depend on the size of the project
             (set (make-local-variable 'company-backends)
                  ;; https://github.com/company-mode/company-mode/issues/390
                  ;; (ensime-company :with company-yasnippet)
@@ -570,7 +566,6 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; Java: watch out for https://github.com/ensime/ensime-server/issues/345
-;; TODO https://snarfed.org/java-stack-traces-in-emacs-compilation-mode
 (add-hook 'java-mode-hook
           (lambda()
             (yas-minor-mode)
