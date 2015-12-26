@@ -80,6 +80,8 @@
 (global-auto-revert-mode 1)
 
 (electric-indent-mode 0)
+(remove-hook 'post-self-insert-hook
+             'electric-indent-post-self-insert-function)
 (global-auto-composition-mode 0)
 (auto-encryption-mode 0)
 (tooltip-mode 0)
@@ -561,10 +563,10 @@ assuming it is in a maven-style project."
 
 (add-hook 'scala-mode-hook
           (lambda()
+            ;; WORKAROUND https://github.com/hvesalai/scala-mode2/issues/99
+            (remove-hook 'post-self-insert-hook 'scala-indent:indent-on-parentheses)
             ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
             (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
-            ;; disable this post-self-insert-hook
-            (defun scala-indent:indent-on-parentheses ())
 
             (whitespace-mode-with-local-variables)
             (smartparens-mode)
