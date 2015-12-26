@@ -236,6 +236,17 @@ Inspired by `org-combine-plists'."
   :config (global-undo-tree-mode)
   :bind ("s-/" . undo-tree-visualize))
 
+(use-package flx-ido
+  :demand
+  :init
+  (setq
+   ido-enable-flex-matching t
+   ido-use-faces nil)
+  :config
+  (ido-mode 1)
+  (ido-everywhere 1)
+  (flx-ido-mode 1))
+
 (use-package projectile
   :demand
   ;; nice to have it on the modeline
@@ -256,7 +267,12 @@ Inspired by `org-combine-plists'."
   :commands highlight-symbol
   :bind ("s-h" . highlight-symbol))
 
+(use-package popup-imenu
+  :commands popup-imenu
+  :bind ("s-o" . popup-imenu))
+
 (use-package git-gutter
+  :diminish git-gutter-mode
   :commands git-gutter-mode)
 
 (use-package magit
