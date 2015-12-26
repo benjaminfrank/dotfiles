@@ -50,6 +50,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in packages that autoload
 (setq
+ help-window-select t
  show-paren-delay 0.5
  dabbrev-case-fold-search nil
  tags-case-fold-search nil
@@ -368,6 +369,7 @@ with `dir-locals.el'.")
   smartparens-strict-mode
   smartparens-mode
   sp-restrict-to-pairs-interactive
+  sp-local-pair
   :config
   (require 'smartparens-config)
   (sp-use-smartparens-bindings)
@@ -376,12 +378,8 @@ with `dir-locals.el'.")
   (sp-pair "{" "}" :wrap "C-{")
 
   ;; nice whitespace / indentation when creating statements
-  (sp-local-pair 'c-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair 'c-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair 'java-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair 'java-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
+  (sp-local-pair '(c-mode java-mode) "(" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair '(c-mode java-mode) "{" nil :post-handlers '(("||\n[i]" "RET")))
 
   ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/543
   (bind-key "C-<left>" nil smartparens-mode-map)
@@ -393,11 +391,10 @@ with `dir-locals.el'.")
   (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map)
   (bind-key "s-<home>" 'sp-beginning-of-sexp smartparens-mode-map)
   (bind-key "s-<end>" 'sp-end-of-sexp smartparens-mode-map)
-  (bind-key "s-<up>" 'sp-beginning-of-previous-sexp smartparens-mode-map)
-  ;; sp-next-sp could be better https://github.com/Fuco1/smartparens/issues/541
-  (bind-key "s-<down>" 'sp-next-sexp smartparens-mode-map)
-  (bind-key "s-<left>" 'sp-backward-up-sexp smartparens-mode-map)
-  (bind-key "s-<right>" 'sp-down-sexp smartparens-mode-map))
+  (bind-key "s-<left>" 'sp-beginning-of-previous-sexp smartparens-mode-map)
+  (bind-key "s-<right>" 'sp-next-sexp smartparens-mode-map)
+  (bind-key "s-<up>" 'sp-backward-up-sexp smartparens-mode-map)
+  (bind-key "s-<down>" 'sp-down-sexp smartparens-mode-map))
 
 (use-package hydra
   :commands defhydra
@@ -509,11 +506,16 @@ assuming it is in a maven-style project."
   :interpreter
   ("scala" . scala-mode)
   :config
+  (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
+
   (bind-key "RET" 'scala-mode-newline-comments scala-mode-map)
   (bind-key "s-<delete>" (sp-restrict-c 'sp-kill-sexp) scala-mode-map)
   (bind-key "s-<backspace>" (sp-restrict-c 'sp-backward-kill-sexp) scala-mode-map)
   (bind-key "s-<home>" (sp-restrict-c 'sp-beginning-of-sexp) scala-mode-map)
   (bind-key "s-<end>" (sp-restrict-c 'sp-end-of-sexp) scala-mode-map)
+  ;; BUG https://github.com/Fuco1/smartparens/issues/468
+  ;; backwards/next not working particularly well
 
   ;; i.e. bypass company-mode
   (bind-key "C-<tab>" 'dabbrev-expand scala-mode-map)
