@@ -447,6 +447,10 @@ with `dir-locals.el'.")
 (use-package focus
   :commands focus-mode)
 
+(use-package pcre2el
+  :commands rxt-toggle-elisp-rx
+  :init (bind-key "C-c / t" 'rxt-toggle-elisp-rx emacs-lisp-mode-map))
+
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
             (setq show-trailing-whitespace t)
