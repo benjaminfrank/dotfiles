@@ -460,6 +460,10 @@ with `dir-locals.el'.")
 
             (whitespace-mode-with-local-variables)
             (focus-mode)
+            ;; WORKAROUND https://github.com/larstvei/Focus/issues/4
+            (add-hook 'after-revert-hook (lambda ()
+                                           (focus-mode 0)
+                                           (focus-mode 1)))
             (rainbow-mode)
             (prettify-symbols-mode)
             (eldoc-mode)
