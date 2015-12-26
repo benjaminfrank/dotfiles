@@ -576,11 +576,14 @@ assuming it is in a maven-style project."
             (company-mode)
             (ensime-mode)
 
-            (set (make-local-variable 'company-backends)
-                 ;; https://github.com/company-mode/company-mode/issues/390
-                 ;; (ensime-company :with company-yasnippet)
-                 '(ensime-company
-                   (company-keywords company-dabbrev-code company-etags company-yasnippet)))
+            ;; for small projects, use TAGS for completions
+            (make-local-variable 'company-backends)
+            (projectile-visit-project-tags-table)
+            (setq company-backends
+             (if (and tags-file-name
+                      (<= 20000000 (buffer-size (get-file-buffer tags-file-name))))
+                 '(ensime-company (company-keywords company-dabbrev-code company-yasnippet))
+               '(ensime-company (company-keywords company-dabbrev-code company-etags company-yasnippet))))
 
             (scala-mode:goto-start-of-code)))
 
