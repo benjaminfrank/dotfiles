@@ -86,6 +86,8 @@
 (auto-encryption-mode 0)
 (tooltip-mode 0)
 
+(make-variable-buffer-local 'tags-file-name)
+
 (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 (defun add-to-load-path (path)
   "Add PATH to LOAD-PATH if PATH exists."
