@@ -1,3 +1,4 @@
 #!/bin/bash
 
-exec emacs -batch -u $USER -f package-utils-upgrade-all
+emacs -batch -u $USER -f package-utils-upgrade-all
+ctags -Re -f ~/.emacs.d/TAGS ~/.emacs.d/
