@@ -161,11 +161,17 @@
 (defun contextual-backspace ()
   "Hungry whitespace or delete word depending on context."
   (interactive)
-  (if (looking-back "[ \t\n\r\l]\\{2,\\}" (- (point) 3))
-      (hungry-delete-backward 1)
-    (if (subword-mode)
-        (subword-backward-kill 1)
-      (backward-kill-word 1))))
+  (if (looking-back "[[:space:]\n]\\{2,\\}" (- (point) 2))
+      (while (looking-back "[[:space:]\n]" (- (point) 1))
+        (delete-char -1))
+    (cond
+     ((and (boundp 'smartparens-strict-mode)
+           smartparens-strict-mode)
+      (sp-backward-kill-word 1))
+     (subword-mode
+      (subword-backward-kill 1))
+     (t
+      (backward-kill-word 1)))))
 
 (defun exit ()
   "Short hand for DEATH TO ALL PUNY BUFFERS!"
@@ -249,9 +255,6 @@ Inspired by `org-combine-plists'."
   :diminish highlight-symbol-mode
   :commands highlight-symbol
   :bind ("s-h" . highlight-symbol))
-
-(use-package hungry-delete
-  :commands hungry-delete)
 
 (use-package git-gutter
   :commands git-gutter-mode)
