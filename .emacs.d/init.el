@@ -24,9 +24,7 @@
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; High Priority Site Local
-(let ((user-local (concat user-emacs-directory "local-preinit.el")))
-  (when (file-exists-p user-local)
-    (load user-local)))
+(load (concat user-emacs-directory "local-preinit.el") 'no-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in emacs parameters
@@ -640,8 +638,6 @@ assuming it is in a maven-style project."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; User Site Local
-(let ((user-local (concat user-emacs-directory "local.el")))
-  (when (file-exists-p user-local)
-    (load user-local)))
+(load (concat user-emacs-directory "local.el") 'no-error)
 
 ;;; init.el ends here
