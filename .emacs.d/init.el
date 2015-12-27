@@ -241,7 +241,8 @@ Inspired by `org-combine-plists'."
   :init
   (setq
    ido-enable-flex-matching t
-   ido-use-faces nil)
+   ido-use-faces nil
+   ido-show-dot-for-dired t)
   :config
   (ido-mode 1)
   (ido-everywhere 1)
@@ -391,6 +392,8 @@ with `dir-locals.el'.")
   smartparens-mode
   sp-restrict-to-pairs-interactive
   sp-local-pair
+  :init
+  (setq sp-interactive-dwim t)
   :config
   (require 'smartparens-config)
   (sp-use-smartparens-bindings)
