@@ -269,8 +269,10 @@ Inspired by `org-combine-plists'."
   :bind ("s-h" . highlight-symbol))
 
 (use-package popup-imenu
+  ;; WORKAROUND https://github.com/ancane/popup-imenu/issues/5
+  :init (setq popup-imenu-position 'point)
   :commands popup-imenu
-  :bind ("s-o" . popup-imenu))
+  :bind ("M-i" . popup-imenu))
 
 (use-package git-gutter
   :diminish git-gutter-mode
@@ -376,10 +378,6 @@ with `dir-locals.el'.")
     (when (looking-at " ")
       (forward-char)
       (not (looking-at "https?\\b")))))
-
-(use-package idomenu
-  :commands idomenu
-  :bind ("M-i" . idomenu))
 
 (use-package rainbow-delimiters
   :diminish rainbow-delimiters-mode
