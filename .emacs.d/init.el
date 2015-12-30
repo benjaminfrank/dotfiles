@@ -269,8 +269,6 @@ Inspired by `org-combine-plists'."
   :bind ("s-h" . highlight-symbol))
 
 (use-package popup-imenu
-  ;; WORKAROUND https://github.com/ancane/popup-imenu/issues/5
-  :init (setq popup-imenu-position 'point)
   :commands popup-imenu
   :bind ("M-i" . popup-imenu))
 
@@ -467,7 +465,6 @@ with `dir-locals.el'.")
   :commands eldoc-mode)
 
 (use-package focus
-  ;; BUG be aware of https://github.com/larstvei/Focus/issues/4
   :commands focus-mode)
 
 (use-package pcre2el
@@ -477,9 +474,6 @@ with `dir-locals.el'.")
 (add-hook 'emacs-lisp-mode-hook
           (lambda()
             (setq show-trailing-whitespace t)
-
-            ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
-            (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
 
             (whitespace-mode-with-local-variables)
             (focus-mode)
@@ -586,11 +580,6 @@ assuming it is in a maven-style project."
 
 (add-hook 'scala-mode-hook
           (lambda()
-            ;; WORKAROUND https://github.com/hvesalai/scala-mode2/issues/99
-            (remove-hook 'post-self-insert-hook 'scala-indent:indent-on-parentheses)
-            ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/481
-            (add-hook 'post-self-insert-hook 'sp--post-self-insert-hook-handler)
-
             (whitespace-mode-with-local-variables)
             (smartparens-mode)
             (yas-minor-mode)
