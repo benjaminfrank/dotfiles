@@ -2,12 +2,10 @@ anacron
 ant
 apt-file
 apt-show-versions
-aufs-tools
 autocutsel
 avahi-daemon
 bash-completion
 bc
-beignet
 blueman
 bluetooth
 build-essential
@@ -18,6 +16,7 @@ cgroupfs-mount
 chromium
 command-not-found
 console-setup
+cowsay
 cpufrequtils
 cruft
 cups
@@ -33,6 +32,7 @@ docker.io
 dosfstools
 dzen2
 emacs24
+emacs24-common-non-dfsg
 emacs24-el
 equivs
 evince
@@ -47,14 +47,15 @@ fonts-droid
 fonts-freefont-ttf
 fonts-inconsolata
 fonts-opensymbol
+fortune-mod
+fortunes-min
+fortunes-off
+geoip-database-contrib
 gfortran
-ghc-haddock
 gimp
 git
-gnome-system-monitor
 golang-go
 google-talkplugin
-gparted
 gpm
 grub-efi
 gtk2-engines-moblin
@@ -78,7 +79,10 @@ laptop-mode-tools
 less
 libblas-dev
 libgcrypt11
-libghc-xmonad-contrib-dev
+libxft-dev
+libxinerama-dev
+libxrandr-dev
+libxt-dev
 lightdm
 linux-headers-amd64
 linux-image-amd64
@@ -89,7 +93,7 @@ lsof
 mesa-utils
 miscfiles
 mlocate
-mplayer2
+mplayer
 ncurses-term
 nethogs
 network-manager
@@ -121,8 +125,8 @@ preview-latex-style
 printer-driver-postscript-hp
 pulseaudio
 pulseaudio-module-x11
-qbittorrent
 r-base
+recordmydesktop
 reportbug
 rtkit
 rxvt-unicode
@@ -142,6 +146,7 @@ texlive-latex-base
 texlive-latex-recommended
 thermald
 tidy
+transmission
 trayer
 tree
 ttf-dejavu
@@ -174,6 +179,7 @@ xmobar
 xmonad
 xorg
 xsel
+xserver-xorg-input-evdev
 xserver-xorg-input-mouse
 xserver-xorg-input-synaptics
 xvfb
