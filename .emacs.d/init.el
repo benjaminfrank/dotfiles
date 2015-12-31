@@ -489,14 +489,6 @@ with `dir-locals.el'.")
 
 ;;..............................................................................
 ;; Scala
-(setq scala-indent:use-javadoc-style t
-      scala-indent:align-parameters t
-      ensime-default-buffer-prefix "ENSIME-"
-      ensime-prefer-noninteractive t
-      ensime-refactor-enable-beta t
-      ensime-refactor-preview t
-      ensime-refactor-auto-apply-file-limit 1
-      ensime-refactor-auto-apply-hunk-limit 1)
 
 ;; prefer local ensime-emacs to MELPA install (for dev)
 (add-to-load-path (concat user-emacs-directory "ensime-emacs"))
@@ -519,6 +511,7 @@ assuming it is in a maven-style project."
 
 (defun scala-mode-newline-comments ()
   "Custom newline appropriate for `scala-mode'."
+  ;; shouldn't this be in a post-insert hook?
   (interactive)
   (newline-and-indent)
   (scala-indent:insert-asterisk-on-multiline-comment))
@@ -526,6 +519,11 @@ assuming it is in a maven-style project."
 (use-package scala-mode2
   :interpreter
   ("scala" . scala-mode)
+  :init
+  (setq
+   scala-indent:use-javadoc-style t
+   scala-indent:align-parameters t
+   sbt:prefer-nested-projects t)
   :config
   (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
   (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
@@ -553,6 +551,14 @@ assuming it is in a maven-style project."
 
 (use-package ensime
   :commands ensime ensime-mode
+  :init
+  (setq
+   ensime-default-buffer-prefix "ENSIME-"
+   ensime-prefer-noninteractive t
+   ensime-refactor-enable-beta t
+   ensime-refactor-preview t
+   ensime-refactor-auto-apply-file-limit 1
+   ensime-refactor-auto-apply-hunk-limit 1)
   :config
   (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
 

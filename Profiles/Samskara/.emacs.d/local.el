@@ -5,7 +5,9 @@
 ;;
 ;;; Code:
 
-(required 'darcula-theme (lambda() (set-frame-font "Inconsolata-16")) t)
+(use-package darcula-theme
+  :config
+  (set-frame-font "Inconsolata-16"))
 
 ;; I'll usually want access to these..
 (find-file "~/Projects")
