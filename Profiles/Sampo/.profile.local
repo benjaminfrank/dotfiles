@@ -21,6 +21,8 @@ export PATH=$GOPATH/bin:$PATH
 # cabal install xmonad xmonad-contrib pandoc
 export PATH=$HOME/.cabal/bin:$PATH
 
+export JDK_LANGTOOLS_SRC=/opt/java/openjdk6-langtools-src.zip
+
 # GnuPG passphrase caching. Oh, GPG, you so user-friendly...
 if test -f $HOME/.gpg-agent-info && \
         kill -0 `cut -d: -f 2 $HOME/.gpg-agent-info` 2>/dev/null; then
