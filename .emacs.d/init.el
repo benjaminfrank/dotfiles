@@ -490,9 +490,6 @@ with `dir-locals.el'.")
 ;;..............................................................................
 ;; Scala
 
-;; prefer local ensime-emacs to MELPA install (for dev)
-(add-to-load-path (concat user-emacs-directory "ensime-emacs"))
-
 ;; Java / Scala support for templates
 (defun mvn-package-for-buffer ()
   "Calculate the expected package name for the buffer;
