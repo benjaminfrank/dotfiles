@@ -4,6 +4,4 @@
   (when (and package (not (string= "" package)))
      (concat "package " package)))`
 
-import Predef.{ any2stringadd => _ }
-
 $0
