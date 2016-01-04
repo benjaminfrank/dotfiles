@@ -38,6 +38,7 @@
  column-number-mode t
  scroll-error-top-bottom t
  scroll-margin 15
+ gc-cons-threshold 20000000
  user-full-name "Sam Halliday")
 
 ;; buffer local variables
@@ -68,7 +69,18 @@
  c-basic-offset 4)
 
 (add-hook 'prog-mode-hook
-          (lambda() (setq show-trailing-whitespace t)))
+          (lambda () (setq show-trailing-whitespace t)))
+
+;; protects against accidental mouse movements
+;; http://stackoverflow.com/a/3024055/1041691
+(add-hook 'mouse-leave-buffer-hook
+          (lambda () (when (and (>= (recursion-depth) 1)
+                           (active-minibuffer-window))
+                  (abort-recursive-edit))))
+
+;; *scratch* is immortal
+(add-hook 'kill-buffer-query-functions
+          (lambda () (not (equal (buffer-name) "*scratch*"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setup functions that are built-in to emacs
@@ -98,7 +110,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode))
 ;; WORKAROUND http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16449
-(add-hook 'nxml-mode-hook (lambda() (flyspell-mode -1)))
+(add-hook 'nxml-mode-hook (lambda () (flyspell-mode -1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setting up the MELPA package manager
@@ -242,6 +254,8 @@ Inspired by `org-combine-plists'."
   (setq
    ido-enable-flex-matching t
    ido-use-faces nil
+   ido-case-fold nil ;; https://github.com/lewang/flx#uppercase-letters
+   ido-ignore-buffers '("TAGS*" "[*][^s]+") ;; no neg-lookahead: *sbt and *scratch
    ido-show-dot-for-dired t)
   :config
   (ido-mode 1)
@@ -472,7 +486,7 @@ with `dir-locals.el'.")
   :init (bind-key "C-c / t" 'rxt-toggle-elisp-rx emacs-lisp-mode-map))
 
 (add-hook 'emacs-lisp-mode-hook
-          (lambda()
+          (lambda ()
             (setq show-trailing-whitespace t)
 
             (whitespace-mode-with-local-variables)
@@ -557,7 +571,7 @@ assuming it is in a maven-style project."
    ensime-refactor-auto-apply-file-limit 1
    ensime-refactor-auto-apply-hunk-limit 1)
   :config
-  (add-hook 'git-timemachine-mode-hook (lambda() (ensime-mode 0)))
+  (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
 
   (bind-key "s-n" 'ensime-search ensime-mode-map)
   (bind-key "s-i" 'ensime-print-type-at-point ensime-mode-map)
@@ -582,7 +596,7 @@ assuming it is in a maven-style project."
   (bind-key "C-c e" 'next-error sbt:mode-map))
 
 (add-hook 'scala-mode-hook
-          (lambda()
+          (lambda ()
             (whitespace-mode-with-local-variables)
             (smartparens-mode)
             (yas-minor-mode)
@@ -604,7 +618,7 @@ assuming it is in a maven-style project."
 ;;..............................................................................
 ;; Java: watch out for https://github.com/ensime/ensime-server/issues/345
 (add-hook 'java-mode-hook
-          (lambda()
+          (lambda ()
             (yas-minor-mode)
             (company-mode)
             (smartparens-mode)
@@ -613,7 +627,7 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; C
-(add-hook 'c-mode-hook (lambda()
+(add-hook 'c-mode-hook (lambda ()
                          (yas-minor-mode)
                          (company-mode)
                          (smartparens-mode)))
