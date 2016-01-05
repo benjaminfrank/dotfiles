@@ -25,6 +25,10 @@
  x-select-enable-clipboard t
  interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
+(use-package ess-site
+  :ensure ess
+  :mode ("\\.R\\'" . R-mode))
+
 (use-package package-utils
   :commands package-utils-upgrade-all)
 

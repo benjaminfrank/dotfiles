@@ -107,25 +107,9 @@
     (add-to-list 'load-path path)))
 (add-to-load-path (concat user-emacs-directory "lisp"))
 
-
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode))
 ;; WORKAROUND http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16449
 (add-hook 'nxml-mode-hook (lambda () (flyspell-mode -1)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; This section is for setting up the MELPA package manager
-(require 'package)
-(setq
- use-package-always-ensure t
- package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                    ("org" . "http://orgmode.org/elpa/")
-                    ("melpa" . "http://melpa.org/packages/")))
-
-(package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
 
 (use-package subword
   :ensure nil
@@ -658,17 +642,11 @@ assuming it is in a maven-style project."
             (company-mode)
             (visual-line-mode)))
 
-;;..............................................................................
-;; R
-(use-package ess-site
-  :ensure ess
-  :mode ("\\.R\\'" . R-mode))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OS specific
 (pcase system-type
   (`gnu/linux
-   (load (concat user-emacs-directory "init-linux.el"))))
+   (load (concat user-emacs-directory "init-gnu.el"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; User Site Local
