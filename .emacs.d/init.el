@@ -24,7 +24,8 @@
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; High Priority Site Local
-(load (concat user-emacs-directory "local-preinit.el") 'no-error)
+;; This must exist and set up `use-package'
+(load (concat user-emacs-directory "local-preinit.el"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in emacs parameters
