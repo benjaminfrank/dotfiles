@@ -215,6 +215,12 @@ Inspired by `org-combine-plists'."
                            (pop plist)
                            (pop plist))))))
 
+(defun dot-emacs ()
+  "Go directly to .emacs, do not pass Go, do not collect $200."
+  (interactive)
+  (message "Stop procrastinating and do some work!")
+  (find-file "~/.emacs.d/init.el"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
@@ -447,6 +453,7 @@ with `dir-locals.el'.")
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
+(global-set-key (kbd "<f6>") 'dot-emacs)
 
 ;;..............................................................................
 ;; elisp
