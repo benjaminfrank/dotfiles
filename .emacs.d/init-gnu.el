@@ -19,9 +19,6 @@
 ;; context or when explicitly called by the user.
 
 (setq
- mail-user-agent 'message-user-agent
- user-mail-address "Sam.Halliday@gmail.com"
- send-mail-function 'smtpmail-send-it
  x-select-enable-clipboard t
  interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
@@ -73,6 +70,9 @@
 (setq smtpmail-stream-type 'ssl
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 465
+      mail-user-agent 'message-user-agent
+      user-mail-address "Sam.Halliday@gmail.com"
+      send-mail-function 'smtpmail-send-it
       message-auto-save-directory (concat user-emacs-directory "drafts")
       message-kill-buffer-on-exit t
       message-signature "Best regards,\nSam\n"
@@ -85,13 +85,14 @@
                                ("all" . "*")))
 (use-package notmuch
   :commands notmuch
-  :config (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime))
-;;(use-package notmuch-address
-;;  :commands notmuch-address)
+  :config
+  (add-hook 'message-setup-hook #'company-mode)
+  (add-hook 'message-setup-hook #'flyspell-mode)
+  (add-hook 'message-setup-hook #'mml-secure-sign-pgpmime))
 
 ;;..............................................................................
 ;; shell scripts
-(add-hook 'sh-mode-hook (electric-indent-local-mode))
+(add-hook 'sh-mode-hook #'electric-indent-local-mode)
 
 ;;..............................................................................
 ;; org-mode

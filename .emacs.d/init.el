@@ -26,6 +26,9 @@
 ;; High Priority Site Local
 ;; This must exist and set up `use-package'
 (load (concat user-emacs-directory "local-preinit.el"))
+;; keeps flycheck happy
+(require 'use-package)
+(setq use-package-always-ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for global settings for built-in emacs parameters

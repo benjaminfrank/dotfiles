@@ -12,13 +12,14 @@ remoterepository = Remote
 #postsynchook = mu index --maildir=~/Gmail
 
 [Repository Local]
-#type = GmailMaildir
+type = GmailMaildir
 localfolders = ~/Gmail
 type = Maildir
 localfolders = ~/Mail
 
 [Repository Remote]
 type = Gmail
+auth_mechanisms = PLAIN
 maxconnections=1
 remoteuser = Sam.Halliday@gmail.com
 realdelete=no
