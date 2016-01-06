@@ -196,6 +196,12 @@
         (clean-buffer-list-delay-special 0))
     (clean-buffer-list)))
 
+(defun midnight-cleanp (name)
+  "T if midnight is likely to kill the buffer named NAME.
+Approximates the rules of `clean-buffer-list'"
+  (and (midnight-find name clean-buffer-list-kill-regexps 'string-match)
+       (not (midnight-find name clean-buffer-list-kill-never-regexps 'string-equal))))
+
 (defun company-or-dabbrav-complete ()
   "Force a `company-complete', falling back to `dabbrev-expand'."
   (interactive)
@@ -226,10 +232,11 @@ Inspired by `org-combine-plists'."
 ;; This section is for global modes that should be loaded in order to
 ;; make them immediately available.
 (use-package midnight
-  :config
-  (add-to-list 'clean-buffer-list-kill-regexps "\\`\\*magit.*\\*\\'")
-  (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*sbt.*")
-  (add-to-list 'clean-buffer-list-kill-never-regexps ".*\\*ENSIME-server.*"))
+  :init
+  (setq
+   clean-buffer-list-kill-regexps '("^[*].*")
+   clean-buffer-list-kill-never-regexps
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
@@ -244,10 +251,11 @@ Inspired by `org-combine-plists'."
   :init
   (setq
    ido-enable-flex-matching t
-   ido-use-faces nil
+   ido-use-faces nil ;; ugly
    ido-case-fold nil ;; https://github.com/lewang/flx#uppercase-letters
-   ido-ignore-buffers '("TAGS*" "[*][^s]+") ;; no neg-lookahead: *sbt and *scratch
-   ido-show-dot-for-dired t)
+   ido-ignore-buffers '("\\` " "TAGS.*" midnight-cleanp)
+   ido-show-dot-for-dired nil ;; remember C-d
+   ido-enable-dot-prefix nil)
   :config
   (ido-mode 1)
   (ido-everywhere 1)
