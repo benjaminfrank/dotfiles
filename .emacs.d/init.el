@@ -255,7 +255,7 @@ Inspired by `org-combine-plists'."
    ido-case-fold nil ;; https://github.com/lewang/flx#uppercase-letters
    ido-ignore-buffers '("\\` " "TAGS.*" midnight-cleanp)
    ido-show-dot-for-dired nil ;; remember C-d
-   ido-enable-dot-prefix nil)
+   ido-enable-dot-prefix t)
   :config
   (ido-mode 1)
   (ido-everywhere 1)
