@@ -66,7 +66,6 @@
  nxml-slash-auto-complete-flag t
  sentence-end-double-space nil
  browse-url-browser-function 'browse-url-generic
- browse-url-generic-program "sensible-browser"
  ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (setq-default
@@ -203,7 +202,7 @@
   "T if midnight is likely to kill the buffer named NAME.
 Approximates the rules of `clean-buffer-list'"
   (and (midnight-find name clean-buffer-list-kill-regexps 'string-match)
-       (not (midnight-find name clean-buffer-list-kill-never-regexps 'string-equal))))
+       (not (midnight-find name clean-buffer-list-kill-never-regexps 'string-match))))
 
 (defun company-or-dabbrav-complete ()
   "Force a `company-complete', falling back to `dabbrev-expand'."
@@ -306,6 +305,13 @@ Inspired by `org-combine-plists'."
 
 (use-package etags-select
   :commands etags-select-find-tag)
+
+(use-package ag
+  :commands ag
+  :init
+  (setq ag-reuse-window 't)
+  :config
+  (add-hook 'ag-search-finished-hook (lambda () (pop-to-buffer next-error-last-buffer))))
 
 (use-package company
   :diminish company-mode

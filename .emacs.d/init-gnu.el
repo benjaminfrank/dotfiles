@@ -1,12 +1,12 @@
-;;; init-linux.el --- Appended to init for Linux boxen -*- lexical-binding: t -*-
+;;; init-linux.el --- Appended to init for GNU boxen -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2015 Sam Halliday
 ;; License: http://www.gnu.org/licenses/gpl.html
 
 ;;; Commentary:
 ;;
-;;  Some packages only make sense on Linux, typically because of
-;;  external applications. This is where they go.
+;;  Some packages only make sense on GNU/Linux, typically because of
+;;  external applications.  This is where they go.
 ;;
 ;;; Code:
 
@@ -19,6 +19,7 @@
 ;; context or when explicitly called by the user.
 
 (setq
+ browse-url-generic-program "sensible-browser"
  x-select-enable-clipboard t
  interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
@@ -48,13 +49,6 @@
    erc-autojoin-channels-alist
    '(("irc.freenode.net" "#emacs")
      ("irc.gitter.im" "#ensime/ensime-server" "#ensime/ensime-emacs"))))
-
-(use-package ag
-  :commands ag
-  :init
-  (setq ag-reuse-window 't)
-  :config
-  (add-hook 'ag-search-finished-hook (lambda () (pop-to-buffer next-error-last-buffer))))
 
 (use-package yaml-mode
   :mode ("\\.yml\\'" . yaml-mode))
