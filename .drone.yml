@@ -7,5 +7,5 @@ build:
     - export PATH=$PWD/bin:$PATH ;
       cp -rv .emacs.d $HOME/ ;
       cp -v Profiles/Samskara/.emacs.d/* $HOME/.emacs.d/ ;
-      $EMACS -batch -u root -f package-utils-upgrade-all
+      $EMACS -debug-init -batch -u root -f package-utils-upgrade-all
 
