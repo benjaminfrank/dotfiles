@@ -2,6 +2,7 @@ build:
   image: fommil/dotfiles
   pull: true
   environment:
+    - HOME=/drone
     - EMACS=/opt/emacs-24.5/bin/emacs
   commands:
     - export PATH=$PWD/bin:$PATH ;
