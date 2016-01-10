@@ -6,7 +6,7 @@ build:
     - EMACS=/opt/emacs-24.5/bin/emacs
   commands:
     - export PATH=$PWD/bin:$PATH ;
-      cp -r .emacs.d $HOME/ ;
-      cp Profiles/Samskara/.emacs.d/local-preinit.el $HOME/.emacs.d/ ;
+      cp -rv .emacs.d $HOME/ ;
+      cp -v Profiles/Samskara/.emacs.d/local-preinit.el $HOME/.emacs.d/ ;
       $EMACS -batch -u drone -f package-utils-upgrade-all
 
