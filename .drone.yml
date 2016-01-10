@@ -1,11 +1,10 @@
-image: fommil/dotfiles
-
-before_install:
-  - export PATH=$PWD/bin:$PATH
-
-script:
-  # only testing emacs starts up ok for now
-  - $EMACS -batch --no-init-file --load .emacs-test.el --load .emacs.d/init.el --eval '(kill-emacs 0)'
-
-env:
-  - EMACS=/opt/emacs-24.5/bin/emacs
+build:
+  image: fommil/dotfiles
+  pull: true
+  environment:
+    - EMACS=/opt/emacs-24.5/bin/emacs
+  commands:
+    - export PATH=$PWD/bin:$PATH ;
+      cp -r .emacs.d $HOME/ ;
+      cp Profiles/Samskara/.emacs.d/local-preinit.el $HOME/.emacs.d/ ;
+      $EMACS -batch --load .emacs-test.el --eval '(kill-emacs 0)'
