@@ -13,8 +13,9 @@ xrandr --output DP-2 --brightness 0.7
 
 # Google Drive
 #google-drive-ocamlfuse $HOME/Google/Drive
-insync start
+#insync start
 
+feh --bg-center ~/.bg.gif
 
 # IDEA
 #export IDEA_JDK=/opt/jdk1.8.0

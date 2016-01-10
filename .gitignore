@@ -8,3 +8,5 @@ target/
 .dir-locals.el
 
 TAGS
+
+EnsimeProjectSettings.scala
