@@ -7,5 +7,5 @@ build:
     - export PATH=$PWD/bin:$PATH ;
       cp -r .emacs.d $HOME/ ;
       cp Profiles/Samskara/.emacs.d/local-preinit.el $HOME/.emacs.d/ ;
-      $EMACS -batch -u $USER -f package-utils-upgrade-all
+      $EMACS -batch -u drone -f package-utils-upgrade-all
 
