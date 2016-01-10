@@ -499,8 +499,9 @@ with `dir-locals.el'.")
             (setq show-trailing-whitespace t)
 
             (whitespace-mode-with-local-variables)
-            ;; BUG https://github.com/larstvei/Focus/issues/5
-            ;;(focus-mode)
+            (when window-system
+              ;; BUG https://github.com/larstvei/Focus/issues/5
+              (focus-mode))
             (rainbow-mode)
             (prettify-symbols-mode)
             (eldoc-mode)
