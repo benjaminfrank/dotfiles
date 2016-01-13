@@ -238,7 +238,7 @@ Inspired by `org-combine-plists'."
   (setq
    clean-buffer-list-kill-regexps '("^[*].*")
    clean-buffer-list-kill-never-regexps
-   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\).*")))
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|notmuch\\|unsent\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
@@ -499,9 +499,7 @@ with `dir-locals.el'.")
             (setq show-trailing-whitespace t)
 
             (whitespace-mode-with-local-variables)
-            (when window-system
-              ;; BUG https://github.com/larstvei/Focus/issues/5
-              (focus-mode))
+            (focus-mode)
             (rainbow-mode)
             (prettify-symbols-mode)
             (eldoc-mode)
