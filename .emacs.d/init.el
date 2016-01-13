@@ -25,7 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; High Priority Site Local
 ;; This must exist and set up `use-package'
-(load (concat user-emacs-directory "local-preinit.el"))
+(load (expand-file-name "local-preinit.el" user-emacs-directory))
 ;; keeps flycheck happy
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -83,7 +83,8 @@
 
 ;; *scratch* is immortal
 (add-hook 'kill-buffer-query-functions
-          (lambda () (not (equal (buffer-name) "*scratch*"))))
+          (lambda () (not (or (equal (buffer-name) "*scratch*")
+                         (equal (buffer-name) "scratch.el")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setup functions that are built-in to emacs
@@ -108,7 +109,7 @@
   "Add PATH to LOAD-PATH if PATH exists."
   (when (file-exists-p path)
     (add-to-list 'load-path path)))
-(add-to-load-path (concat user-emacs-directory "lisp"))
+(add-to-load-path (expand-file-name "lisp" user-emacs-directory))
 
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode))
 ;; WORKAROUND http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16449
@@ -671,10 +672,10 @@ assuming it is in a maven-style project."
 ;; OS specific
 (pcase system-type
   (`gnu/linux
-   (load (concat user-emacs-directory "init-gnu.el"))))
+   (load (expand-file-name "init-gnu.el" user-emacs-directory))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; User Site Local
-(load (concat user-emacs-directory "local.el") 'no-error)
+(load (expand-file-name "local.el" user-emacs-directory) 'no-error)
 
 ;;; init.el ends here
