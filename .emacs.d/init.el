@@ -83,8 +83,7 @@
 
 ;; *scratch* is immortal
 (add-hook 'kill-buffer-query-functions
-          (lambda () (not (or (equal (buffer-name) "*scratch*")
-                         (equal (buffer-name) "scratch.el")))))
+          (lambda () (not (member (buffer-name) '("*scratch*" "scratch.el")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for setup functions that are built-in to emacs
