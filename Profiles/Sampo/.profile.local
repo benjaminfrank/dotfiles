@@ -23,6 +23,9 @@ export PATH=$GOPATH/bin:$PATH
 # cabal install xmonad xmonad-contrib pandoc
 export PATH=$HOME/.cabal/bin:$PATH
 
+# git clone https://github.com/gcuisinier/jenv.git ~/.jenv
+export PATH=$HOME/.jenv/bin:$PATH
+
 export JDK_LANGTOOLS_SRC=/opt/java/openjdk6-langtools-src.zip
 
 # GnuPG passphrase caching. Oh, GPG, you so user-friendly...
