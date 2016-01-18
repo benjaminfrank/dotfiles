@@ -239,7 +239,7 @@ Inspired by `org-combine-plists'."
   (setq
    clean-buffer-list-kill-regexps '("^[*].*")
    clean-buffer-list-kill-never-regexps
-   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|notmuch\\-hello\\|unsent\\).*")))
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|notmuch\\-hello\\|unsent\\|ag search\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
