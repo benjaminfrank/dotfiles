@@ -198,11 +198,15 @@
         (clean-buffer-list-delay-special 0))
     (clean-buffer-list)))
 
-(defun midnight-cleanp (name)
-  "T if midnight is likely to kill the buffer named NAME.
-Approximates the rules of `clean-buffer-list'"
+(defvar ido-buffer-whitelist
+  '("^[*]\\(notmuch\\-hello\\|unsent\\|ag search\\|grep\\).*")
+  "Whitelist regexp of `clean-buffer-list' buffers to show when switching buffer.")
+(defun midnight-clean-or-ido-whitelisted (name)
+  "T if midnight is likely to kill the buffer named NAME, unless whitelisted.
+Approximates the rules of `clean-buffer-list'."
   (and (midnight-find name clean-buffer-list-kill-regexps 'string-match)
-       (not (midnight-find name clean-buffer-list-kill-never-regexps 'string-match))))
+       (not (or (midnight-find name clean-buffer-list-kill-never-regexps 'string-match)
+                (midnight-find name ido-buffer-whitelist 'string-match)))))
 
 (defun company-or-dabbrav-complete ()
   "Force a `company-complete', falling back to `dabbrev-expand'."
@@ -238,7 +242,7 @@ Inspired by `org-combine-plists'."
   (setq
    clean-buffer-list-kill-regexps '("^[*].*")
    clean-buffer-list-kill-never-regexps
-   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|notmuch\\-hello\\|unsent\\|ag search\\).*")))
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
@@ -255,7 +259,7 @@ Inspired by `org-combine-plists'."
    ido-enable-flex-matching t
    ido-use-faces nil ;; ugly
    ido-case-fold nil ;; https://github.com/lewang/flx#uppercase-letters
-   ido-ignore-buffers '("\\` " "TAGS.*" midnight-cleanp)
+   ido-ignore-buffers '("\\` " "TAGS.*" midnight-clean-or-ido-whitelisted)
    ido-show-dot-for-dired nil ;; remember C-d
    ido-enable-dot-prefix t)
   :config
