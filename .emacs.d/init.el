@@ -587,7 +587,7 @@ assuming it is in a maven-style project."
   (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
 
   (bind-key "s-n" 'ensime-search ensime-mode-map)
-  (bind-key "s-i" 'ensime-print-type-at-point ensime-mode-map)
+  (bind-key "s-t" 'ensime-print-type-at-point ensime-mode-map)
   (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map)
 
   (setq ensime-goto-test-config-defaults
