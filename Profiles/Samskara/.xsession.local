@@ -9,7 +9,8 @@
 #xmodmap -e "pointer = 1 2 3 5 4 7 6 8 9 10 11 12"
 
 # brightness
-xrandr --output DP-2 --brightness 0.7
+#xrandr --output DP-2 --brightness 0.7
+redshift -l 51.507351:-0.127758 -b 0.8:0.5 &
 
 # Google Drive
 #google-drive-ocamlfuse $HOME/Google/Drive
