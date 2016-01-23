@@ -242,7 +242,7 @@ Inspired by `org-combine-plists'."
   (setq
    clean-buffer-list-kill-regexps '("^[*].*")
    clean-buffer-list-kill-never-regexps
-   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\).*")))
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|magit:\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
@@ -259,7 +259,7 @@ Inspired by `org-combine-plists'."
    ido-enable-flex-matching t
    ido-use-faces nil ;; ugly
    ido-case-fold nil ;; https://github.com/lewang/flx#uppercase-letters
-   ido-ignore-buffers '("\\` " "TAGS.*" midnight-clean-or-ido-whitelisted)
+   ido-ignore-buffers '("\\` " midnight-clean-or-ido-whitelisted)
    ido-show-dot-for-dired nil ;; remember C-d
    ido-enable-dot-prefix t)
   :config

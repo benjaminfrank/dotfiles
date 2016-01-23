@@ -20,8 +20,6 @@ syndaemon -t -k -i 2 &
 
 #xfce4-power-manager
 
-xmobar &
+redshift -b 0.8:0.5 &
 
-# Google Drive
-#. /home/fommil/.opam/opam-init/init.sh
-#google-drive-ocamlfuse $HOME/Google/Drive
+xmobar &

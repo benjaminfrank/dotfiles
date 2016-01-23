@@ -1,5 +1,5 @@
-// Copyright (C) `(format-time-string "%Y")` `yatemplate-owner`
-// License: `yatemplate-license`
+// Copyright: `(format-time-string "%Y")` `yatemplate-owner`
+// Licence: `yatemplate-license`
 `(let ((package (mvn-package-for-buffer)))
   (when (and package (not (string= "" package)))
      (concat "package " package)))`
