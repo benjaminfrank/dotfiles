@@ -581,8 +581,7 @@ assuming it is in a maven-style project."
    ensime-prefer-noninteractive t
    ensime-refactor-enable-beta t
    ensime-refactor-preview t
-   ensime-refactor-auto-apply-file-limit 1
-   ensime-refactor-auto-apply-hunk-limit 1)
+   ensime-refactor-preview-override-hunk 10)
   :config
   (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
 
