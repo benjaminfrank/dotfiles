@@ -114,6 +114,10 @@
 ;; WORKAROUND http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16449
 (add-hook 'nxml-mode-hook (lambda () (flyspell-mode -1)))
 
+(use-package ibuffer
+  :ensure nil
+  :bind ("C-x C-b". ibuffer))
+
 (use-package subword
   :ensure nil
   :diminish subword-mode
