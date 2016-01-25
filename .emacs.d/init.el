@@ -278,6 +278,9 @@ Inspired by `org-combine-plists'."
   (setq projectile-use-git-grep t)
   :config
   (projectile-global-mode)
+  (add-hook 'projectile-grep-finished-hook
+            ;; not going to the first hit?
+            (lambda () (pop-to-buffer next-error-last-buffer)))
   :bind
   (("s-f" . projectile-find-file)
    ("s-F" . projectile-ag)))
@@ -319,7 +322,8 @@ Inspired by `org-combine-plists'."
   :init
   (setq ag-reuse-window 't)
   :config
-  (add-hook 'ag-search-finished-hook (lambda () (pop-to-buffer next-error-last-buffer))))
+  (add-hook 'ag-search-finished-hook
+            (lambda () (pop-to-buffer next-error-last-buffer))))
 
 (use-package company
   :diminish company-mode
