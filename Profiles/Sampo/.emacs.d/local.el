@@ -22,8 +22,10 @@
   (load-theme 'leuven t)
   (set-frame-font "Inconsolata-22"))
 
+(find-file (expand-file-name "scratch.el" user-emacs-directory))
+
 ;; I'll usually want access to these..
 (find-file "~/Projects/")
-(find-file (expand-file-name "scratch.el" user-emacs-directory))
+
 
 ;;; local.el ends here

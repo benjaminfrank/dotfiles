@@ -16,10 +16,10 @@ synclient HorizScrollDelta=-111
 synclient TapAndDragGesture=1
 synclient HorizTwoFingerScroll=1
 
-syndaemon -i 1.0 &
+syndaemon -d -k -i 0.5
 
 feh --bg-center ~/.bg.jpg
 
-redshift -b 0.8:0.5 &
+redshift -b 0.9:0.7 &
 
 xmobar &
