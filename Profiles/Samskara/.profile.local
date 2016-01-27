@@ -19,7 +19,7 @@ export EDITOR=$EMACS_CLIENT
 # curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
 export PATH=/home/fommil/.cask/bin:$PATH
 
-export YOURKIT_HOME=/opt/yjp-2015-build-15056
+export YOURKIT_HOME=/opt/yjp-2015-build-15086
 export YOURKIT_AGENT=$YOURKIT_HOME/bin/linux-x86-64/libyjpagent.so
 
 # GnuPG passphrase caching. Oh, GPG, you so user-friendly...
