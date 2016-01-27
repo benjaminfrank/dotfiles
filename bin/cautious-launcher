@@ -32,21 +32,23 @@ If you do not know what this means, select <b>BLOCK</b>.
 ZENITY=`which zenity`
 
 if [ ! -x "$EXE" ] && [ "$PREFIX" != "/usr/" ] && [ "$PREFIX" != "/opt/" ] ; then
+    # NOTE: we return 0 to indicate that we successfully "managed" the file... i.e. didn't open it
+
     if [ ! -x "$ZENITY" ] ; then
-	echo "'$EXE' is not executable and zenity is not installed. Aborting." >&2
-	exit 1
+	    echo "'$EXE' is not executable and zenity is not installed. Aborting." >&2 ;
+	    exit 0;
     fi
 
     "$ZENITY" --question --text="$MESSAGE" --ok-label="RUN" --cancel-label="BLOCK"
     if [ $? -ne 0 ] ; then
-	echo "User selected not to run '$EXE'" >&2
-	exit 1
+	    echo "User selected not to run '$EXE'" >&2 ;
+	    exit 0;
     fi
 
     chmod u+x "$EXE"
     if [ $? -ne 0 ] ; then
-	"$ZENITY" --warning --text "Unable to set the executable bit on $EXE. You may not have permissions."
-	exit 2
+	    "$ZENITY" --warning --text "Unable to set the executable bit on $EXE. You may not have permissions." ;
+	    exit 0;
     fi
 
 fi
