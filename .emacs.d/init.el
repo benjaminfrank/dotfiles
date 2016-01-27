@@ -294,6 +294,13 @@ Inspired by `org-combine-plists'."
   :commands highlight-symbol
   :bind ("s-h" . highlight-symbol))
 
+(use-package goto-chg
+  ;; complementary to
+  ;; C-x r m / C-x r l
+  ;; and C-<space> C-<space> / C-u C-<space>
+  :bind (("C-," . goto-last-change)
+         ("C-." . goto-last-change-reverse)))
+
 (use-package popup-imenu
   :commands popup-imenu
   :bind ("M-i" . popup-imenu))
