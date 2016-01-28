@@ -591,6 +591,7 @@ assuming it is in a maven-style project."
 (use-package ensime
   :commands ensime ensime-mode
   :init
+  (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
   (setq
    ensime-default-buffer-prefix "ENSIME-"
    ensime-prefer-noninteractive t
