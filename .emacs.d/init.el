@@ -91,7 +91,6 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(show-paren-mode 1) ;; show-smartparens is too slow
 (global-auto-revert-mode 1)
 
 (electric-indent-mode 0)
@@ -102,6 +101,7 @@
 (tooltip-mode 0)
 
 (make-variable-buffer-local 'tags-file-name)
+(make-variable-buffer-local 'show-paren-mode)
 
 (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 (defun add-to-load-path (path)
@@ -517,6 +517,7 @@ with `dir-locals.el'.")
           (lambda ()
             (setq show-trailing-whitespace t)
 
+            (show-paren-mode)
             (whitespace-mode-with-local-variables)
             (focus-mode)
             (rainbow-mode)
@@ -626,6 +627,7 @@ assuming it is in a maven-style project."
 (add-hook 'scala-mode-hook
           (lambda ()
             (whitespace-mode-with-local-variables)
+            (show-paren-mode)
             (smartparens-mode)
             (yas-minor-mode)
             (git-gutter-mode)
