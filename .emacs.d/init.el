@@ -203,7 +203,7 @@
     (clean-buffer-list)))
 
 (defvar ido-buffer-whitelist
-  '("^[*]\\(notmuch\\-hello\\|unsent\\|ag search\\|grep\\).*")
+  '("^[*]\\(notmuch\\-hello\\|unsent\\|ag search\\|grep\\|eshell\\).*")
   "Whitelist regexp of `clean-buffer-list' buffers to show when switching buffer.")
 (defun midnight-clean-or-ido-whitelisted (name)
   "T if midnight is likely to kill the buffer named NAME, unless whitelisted.
