@@ -294,6 +294,10 @@ Inspired by `org-combine-plists'."
   :commands highlight-symbol
   :bind ("s-h" . highlight-symbol))
 
+(use-package expand-region
+  :commands 'er/expand-region
+  :bind ("C-=" . er/expand-region))
+
 (use-package goto-chg
   ;; complementary to
   ;; C-x r m / C-x r l
@@ -600,6 +604,7 @@ assuming it is in a maven-style project."
    ensime-refactor-preview t
    ensime-refactor-preview-override-hunk 10)
   :config
+  (require 'ensime-expand-region)
   (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
 
   (bind-key "s-n" 'ensime-search ensime-mode-map)
