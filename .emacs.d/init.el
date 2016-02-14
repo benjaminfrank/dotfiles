@@ -396,7 +396,8 @@ with `dir-locals.el'.")
   ;; BUG: https://emacs.stackexchange.com/questions/7743
   (put 'whitespace-line-column 'safe-local-variable #'integerp)
   (setq whitespace-style '(face trailing tabs lines-tail)
-        whitespace-line-column 80))
+        ;; github source code viewer overflows ~120 chars
+        whitespace-line-column 120))
 (defun whitespace-mode-with-local-variables ()
   "A variant of `whitespace-mode' that can see local variables."
   ;; WORKAROUND https://emacs.stackexchange.com/questions/7743
