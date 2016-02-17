@@ -590,8 +590,8 @@ assuming it is in a maven-style project."
 (defun ensime-edit-definition-with-fallback ()
   "Variant of `ensime-edit-definition' with ctags if ENSIME is not available."
   (interactive)
-  (if (ensime-connection-or-nil)
-      (ensime-edit-definition)
+  (unless (and (ensime-connection-or-nil)
+               (ensime-edit-definition))
     (projectile-find-tag)))
 
 (use-package ensime
