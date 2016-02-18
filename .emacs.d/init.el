@@ -246,7 +246,7 @@ Inspired by `org-combine-plists'."
   (setq
    clean-buffer-list-kill-regexps '("^[*].*")
    clean-buffer-list-kill-never-regexps
-   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|magit:\\).*")))
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|magit\\(:\\|-revision\\)\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
@@ -304,6 +304,12 @@ Inspired by `org-combine-plists'."
   ;; and C-<space> C-<space> / C-u C-<space>
   :bind (("C-," . goto-last-change)
          ("C-." . goto-last-change-reverse)))
+
+(use-package visual-regexp-steroids
+  :commands vr/isearch-forward vr/query-replace
+  :init (setq vr/engine 'pcre2el)
+  :bind (("C-S" . vr/isearch-forward)
+         ("s-S" . vr/query-replace)))
 
 (use-package popup-imenu
   :commands popup-imenu
@@ -517,6 +523,11 @@ with `dir-locals.el'.")
 (use-package pcre2el
   :commands rxt-toggle-elisp-rx
   :init (bind-key "C-c / t" 'rxt-toggle-elisp-rx emacs-lisp-mode-map))
+
+(use-package re-builder
+  :ensure nil
+  ;; C-c C-u errors, C-c C-w copy, C-c C-q exit
+  :init (bind-key "C-c r" 're-builder emacs-lisp-mode-map))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
