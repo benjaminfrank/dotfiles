@@ -299,6 +299,7 @@ Inspired by `org-combine-plists'."
   :bind ("C-=" . er/expand-region))
 
 (use-package goto-chg
+  :commands goto-last-change
   ;; complementary to
   ;; C-x r m / C-x r l
   ;; and C-<space> C-<space> / C-u C-<space>

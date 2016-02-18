@@ -84,7 +84,6 @@
   :commands notmuch
   :config
   (add-hook 'message-setup-hook #'company-mode)
-  (add-hook 'message-setup-hook #'flyspell-mode)
   (add-hook 'message-setup-hook #'mml-secure-sign-pgpmime))
 
 ;;..............................................................................
@@ -96,6 +95,14 @@
 (use-package org
   :ensure org-plus-contrib
   :defer t)
+
+(use-package synosaurus
+  :commands synosaurus-choose-and-replace
+  :init (setq synosaurus-choose-method 'popup)
+  :config
+  (bind-key "C-c s r" 'synosaurus-choose-and-replace text-mode-map))
+
+(add-hook 'text-mode-hook #'flyspell-mode)
 
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
