@@ -303,8 +303,8 @@ Inspired by `org-combine-plists'."
   ;; complementary to
   ;; C-x r m / C-x r l
   ;; and C-<space> C-<space> / C-u C-<space>
-  :bind (("C-," . goto-last-change)
-         ("C-." . goto-last-change-reverse)))
+  :bind (("C-." . goto-last-change)
+         ("C-," . goto-last-change-reverse)))
 
 (use-package visual-regexp-steroids
   :commands vr/isearch-forward vr/query-replace
