@@ -309,7 +309,7 @@ Inspired by `org-combine-plists'."
 (use-package visual-regexp-steroids
   :commands vr/isearch-forward vr/query-replace
   :init (setq vr/engine 'pcre2el)
-  :bind (("C-S" . vr/isearch-forward)
+  :bind (("C-S-s" . vr/isearch-forward)
          ("s-S" . vr/query-replace)))
 
 (use-package popup-imenu
