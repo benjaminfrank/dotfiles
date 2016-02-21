@@ -72,7 +72,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     ++
     -- my custom additions
     [ 
-          ((modMask .|. shiftMask, xK_z), spawn "i3lock -c000000")
+          ((modMask, xK_l), spawn "i3lock -c000000")
         , ((modMask, xK_Print), spawn "sleep 0.2; scrot -s")
         , ((0, xK_Print), spawn "scrot")
     ]
