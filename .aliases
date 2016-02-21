@@ -43,3 +43,5 @@ alias open="xdg-open"
 alias volume="pavucontrol"
 
 alias apt-upgrade='sudo apt-get upgrade -t $(lsb_release -sc)-backports'
+
+alias ensime="sbt gen-ensime gen-ensime-project"
