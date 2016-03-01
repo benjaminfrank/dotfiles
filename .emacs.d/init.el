@@ -343,6 +343,9 @@ Inspired by `org-combine-plists'."
   (add-hook 'ag-search-finished-hook
             (lambda () (pop-to-buffer next-error-last-buffer))))
 
+(use-package tidy
+  :commands tidy-buffer)
+
 (use-package company
   :diminish company-mode
   :commands company-mode

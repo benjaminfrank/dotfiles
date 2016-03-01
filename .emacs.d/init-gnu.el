@@ -40,9 +40,6 @@
 (use-package elnode
   :commands elnode-make-webserver)
 
-(use-package tidy
-  :commands tidy-buffer)
-
 (use-package erc
   :commands erc erc-tls
   :init
