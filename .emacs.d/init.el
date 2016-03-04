@@ -246,7 +246,7 @@ Inspired by `org-combine-plists'."
   (setq
    clean-buffer-list-kill-regexps '("^[*].*")
    clean-buffer-list-kill-never-regexps
-   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|eshell\\|magit\\(:\\|-revision\\)\\).*")))
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|eshell\\|magit\\(:\\|-revision\\|-staging\\)\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
@@ -488,6 +488,18 @@ with `dir-locals.el'.")
      ("<down>" hydra-move-splitter-down)
      ("<up>" hydra-move-splitter-up)
      ("<right>" hydra-move-splitter-right))))
+
+(defun hydra-smerge/body ()
+  "Defines a Hydra to give ediff commands in `smerge-mode'."
+  (interactive)
+  (funcall
+   (defhydra hydra-smerge nil "smerge"
+     ("p" smerge-prev)
+     ("n" smerge-next)
+     ("e" smerge-ediff)
+     ("a" smerge-keep-mine)
+     ("b" smerge-keep-other))))
+(add-hook 'smerge-mode-hook (lambda () (hydra-smerge/body)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
