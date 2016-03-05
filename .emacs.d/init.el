@@ -89,7 +89,7 @@
 ;; This section is for setup functions that are built-in to emacs
 (defalias 'yes-or-no-p 'y-or-n-p)
 (menu-bar-mode -1)
-(unless window-system
+(if window-system
   (tool-bar-mode -1))
 (scroll-bar-mode -1)
 (global-auto-revert-mode 1)
