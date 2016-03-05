@@ -2,7 +2,7 @@
 
 # mouse sensitivity
 #xset m 1/16
-#xinput set-prop 10 'Device Accel Constant Deceleration' 2.5
+xinput set-prop 12 'Device Accel Constant Deceleration' 2.0
 # prefer to set this system-wide http://askubuntu.com/questions/8506
 
 # natural scroll

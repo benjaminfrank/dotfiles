@@ -89,7 +89,8 @@
 ;; This section is for setup functions that are built-in to emacs
 (defalias 'yes-or-no-p 'y-or-n-p)
 (menu-bar-mode -1)
-(tool-bar-mode -1)
+(unless window-system
+  (tool-bar-mode -1))
 (scroll-bar-mode -1)
 (global-auto-revert-mode 1)
 
@@ -357,6 +358,8 @@ Inspired by `org-combine-plists'."
    company-idle-delay 0
    company-minimum-prefix-length 4)
   :config
+  ;; dabbrev is too slow, use C-TAB explicitly
+  (delete 'company-dabbrev company-backends)
   ;; disables TAB in company-mode, freeing it for yasnippet
   (define-key company-active-map [tab] nil))
 

@@ -70,6 +70,8 @@
       message-auto-save-directory (concat user-emacs-directory "drafts")
       message-kill-buffer-on-exit t
       message-signature "Best regards,\nSam\n"
+      notmuch-search-line-faces '(("unread" :weight bold)
+                                  ("flagged" :inherit 'font-lock-string-face))
       notmuch-fcc-dirs nil
       notmuch-search-oldest-first nil
       notmuch-address-command "notmuch-addrlookup"
