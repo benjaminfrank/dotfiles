@@ -18,7 +18,7 @@
 ;;   - email
 ;;
 ;; This file is broken into sections which gather similar features or
-;; modes together. Sections are delimited by a row of semi-colons
+;; modes together.  Sections are delimited by a row of semi-colons
 ;; (stage/functional sections) or a row of dots (primary modes).
 
 ;;; Code:
@@ -213,7 +213,7 @@ Approximates the rules of `clean-buffer-list'."
        (not (or (midnight-find name clean-buffer-list-kill-never-regexps 'string-match)
                 (midnight-find name ido-buffer-whitelist 'string-match)))))
 
-(defun company-or-dabbrav-complete ()
+(defun company-or-dabbrev-complete ()
   "Force a `company-complete', falling back to `dabbrev-expand'."
   (interactive)
   (if company-mode
@@ -516,7 +516,7 @@ with `dir-locals.el'.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for defining commonly invoked commands that deserve
 ;; a short binding instead of their packager's preferred binding.
-(global-set-key (kbd "C-<tab>") 'company-or-dabbrav-complete)
+(global-set-key (kbd "C-<tab>") 'company-or-dabbrev-complete)
 (global-set-key (kbd "s-s") 'replace-string)
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
