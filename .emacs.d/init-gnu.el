@@ -101,8 +101,10 @@
   :config
   (bind-key "C-c s r" 'synosaurus-choose-and-replace text-mode-map))
 
-;; seems to be a performance problem in emacs 24.5
+;; seems to be a performance problem in emacs 24.5 in some text modes (e.g. email)
 ;;(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'org-mode-hook #'flyspell-mode)
+(add-hook 'markdown-mode-hook #'flyspell-mode)
 
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
