@@ -86,6 +86,10 @@
   (add-hook 'message-setup-hook #'mml-secure-sign-pgpmime))
 
 ;;..............................................................................
+;; Clojure
+(use-package cider)
+
+;;..............................................................................
 ;; shell scripts
 (add-hook 'sh-mode-hook #'electric-indent-local-mode)
 
