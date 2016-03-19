@@ -87,7 +87,33 @@
 
 ;;..............................................................................
 ;; Clojure
+
+(use-package flycheck-clojure)
+(use-package flycheck-pos-tip)
 (use-package cider)
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (setq show-trailing-whitespace t)
+
+            (show-paren-mode)
+            (whitespace-mode-with-local-variables)
+            ;;(focus-mode)
+            (rainbow-mode)
+            ;;(prettify-symbols-mode)
+            (eldoc-mode)
+
+            ;; BUG https://github.com/clojure-emacs/squiggly-clojure/issues/39
+            (flycheck-clojure-setup)
+            (flycheck-mode)
+            (flycheck-pos-tip-mode)
+
+            (yas-minor-mode)
+            (company-mode)
+            (smartparens-strict-mode)
+            (rainbow-delimiters-mode)))
+
+(add-hook 'cider-repl-mode-hook #'eldoc-mode)
+
 
 ;;..............................................................................
 ;; shell scripts
