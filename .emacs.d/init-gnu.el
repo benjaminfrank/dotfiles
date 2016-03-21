@@ -90,16 +90,16 @@
 
 (use-package flycheck-clojure)
 (use-package flycheck-pos-tip)
-(use-package cider)
+(use-package cider
+  :commands cider-jack-in
+  :config
+  (bind-key "C-c c" 'compile clojure-mode-map))
+(defalias 'cider 'cider-jack-in)
 (add-hook 'clojure-mode-hook
           (lambda ()
-            (setq show-trailing-whitespace t)
-
             (show-paren-mode)
-            (whitespace-mode-with-local-variables)
             ;;(focus-mode)
             (rainbow-mode)
-            ;;(prettify-symbols-mode)
             (eldoc-mode)
 
             ;; BUG https://github.com/clojure-emacs/squiggly-clojure/issues/39
