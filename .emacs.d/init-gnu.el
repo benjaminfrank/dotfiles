@@ -93,7 +93,8 @@
 (use-package cider
   :commands cider-jack-in
   :config
-  (bind-key "C-c c" 'compile clojure-mode-map))
+  (bind-key "C-c c" 'compile clojure-mode-map)
+  (bind-key "C-c e" 'next-error clojure-mode-map))
 (defalias 'cider 'cider-jack-in)
 (add-hook 'clojure-mode-hook
           (lambda ()
