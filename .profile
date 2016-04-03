@@ -26,5 +26,5 @@ if [ "$PS1" ] && [ "$BASH" ]; then
     fi
 fi
 
-export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
-export JDK_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
+export PATH=$HOME/.jenv/bin:$PATH
+eval "$(jenv init -)"

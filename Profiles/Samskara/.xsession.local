@@ -10,7 +10,7 @@ xinput set-prop 12 'Device Accel Constant Deceleration' 2.0
 
 # brightness
 #xrandr --output DP-2 --brightness 0.7
-redshift -l 51.507351:-0.127758 -b 0.8:0.5 &
+redshift -l 51.507351:-0.127758 -b 1.0:0.6 &
 
 # Google Drive
 #google-drive-ocamlfuse $HOME/Google/Drive
