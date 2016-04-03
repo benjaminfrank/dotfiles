@@ -21,6 +21,8 @@ function fommil-links {
        ! -path "./bin/*" \
        ! -path "./var/*" \
        ! -path "./Profiles/*" \
+       ! -name ".gitmodules" \
+       ! -name ".git" \
        ! -name ".drone.yml" \
        ! -name ".emacs-test.el" | \
     while read A ; do
