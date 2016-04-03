@@ -685,10 +685,17 @@ assuming it is in a maven-style project."
 ;; Java: watch out for https://github.com/ensime/ensime-server/issues/345
 (add-hook 'java-mode-hook
           (lambda ()
-            (yas-minor-mode)
-            (company-mode)
+            ;; is there a better place to put these bindings?
+            (bind-key "C-c c" 'sbt-command java-mode-map)
+            (bind-key "C-c e" 'next-error java-mode-map)
+
+            (whitespace-mode-with-local-variables)
+            (show-paren-mode)
             (smartparens-mode)
-            (local-set-key (kbd "C-c e") 'next-error)))
+            (yas-minor-mode)
+            (git-gutter-mode)
+            (company-mode)
+            (ensime-mode)))
 
 
 ;;..............................................................................
