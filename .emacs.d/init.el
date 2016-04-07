@@ -97,6 +97,8 @@
 (electric-indent-mode 0)
 (remove-hook 'post-self-insert-hook
              'electric-indent-post-self-insert-function)
+(remove-hook 'find-file-hooks 'vc-find-file-hook)
+
 (global-auto-composition-mode 0)
 (auto-encryption-mode 0)
 (tooltip-mode 0)
