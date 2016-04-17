@@ -457,10 +457,12 @@ with `dir-locals.el'.")
   (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
   (sp-pair "[" "]" :wrap "s-[") ;; C-[ sends ESC
   (sp-pair "{" "}" :wrap "C-{")
+  (sp-pair "<" ">" :wrap "C-<")
 
   ;; nice whitespace / indentation when creating statements
   (sp-local-pair '(c-mode java-mode) "(" nil :post-handlers '(("||\n[i]" "RET")))
   (sp-local-pair '(c-mode java-mode) "{" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair '(java-mode) "<" nil :post-handlers '(("||\n[i]" "RET")))
 
   ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/543
   (bind-key "C-<left>" nil smartparens-mode-map)
@@ -593,6 +595,13 @@ assuming it is in a maven-style project."
   (newline-and-indent)
   (scala-indent:insert-asterisk-on-multiline-comment))
 
+(defun c-mode-newline-comments ()
+  "Newline with indent and preserve multiline comments."
+  ;; TODO: annoyingly preserve single line comments, I don't want that
+  (interactive)
+  (c-indent-new-comment-line)
+  (indent-according-to-mode))
+
 (use-package scala-mode2
   :interpreter
   ("scala" . scala-mode)
@@ -690,6 +699,7 @@ assuming it is in a maven-style project."
             ;; is there a better place to put these bindings?
             (bind-key "C-c c" 'sbt-command java-mode-map)
             (bind-key "C-c e" 'next-error java-mode-map)
+            (bind-key "RET" 'c-mode-newline-comments java-mode-map)
 
             (whitespace-mode-with-local-variables)
             (show-paren-mode)
