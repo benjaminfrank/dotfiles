@@ -1,5 +1,5 @@
-;; Copyright (C) `(format-time-string "%Y")` `yatemplate-owner`
-;; Licence: `yatemplate-license`
+;; Copyright (c) `(format-time-string "%Y")` `yatemplate-owner`
+;; License: `yatemplate-license`
 
 ;; $1
 (ns fommil.$2
