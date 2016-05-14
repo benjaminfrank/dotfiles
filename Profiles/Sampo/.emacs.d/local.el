@@ -9,18 +9,19 @@
 
 (use-package darcula-theme)
 
+(add-to-list 'default-frame-alist
+             '(font . "Hack-18"))
+
 (defun dark-theme ()
   "A dark coloured theme for hacking when there is no screen glare."
   (interactive)
-  (load-theme 'darcula t)
-  (set-frame-font "Inconsolata-22"))
+  (load-theme 'darcula t))
 (dark-theme)
 
 (defun light-theme ()
   "A light coloured theme for hacking when there is lots of screen glare."
   (interactive)
-  (load-theme 'leuven t)
-  (set-frame-font "Inconsolata-22"))
+  (load-theme 'leuven t))
 
 (find-file (expand-file-name "scratch.el" user-emacs-directory))
 
