@@ -681,9 +681,6 @@ assuming it is in a maven-style project."
             (company-mode)
             (ensime-mode)
 
-            (setq prettify-symbols-alist scala-prettify-symbols-alist)
-            (prettify-symbols-mode)
-
             ;; for small projects, use TAGS for completions
             (make-local-variable 'company-backends)
             (projectile-visit-project-tags-table)
