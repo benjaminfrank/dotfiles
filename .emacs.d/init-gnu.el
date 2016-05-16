@@ -35,7 +35,9 @@
 
 (use-package flycheck-cask
   :commands flycheck-cask-setup
-  :config (add-hook 'emacs-lisp-mode-hook (flycheck-cask-setup)))
+  :init
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-cask-setup)))
 
 (use-package elnode
   :commands elnode-make-webserver)
