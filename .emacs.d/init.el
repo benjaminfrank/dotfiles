@@ -602,7 +602,7 @@ assuming it is in a maven-style project."
   (c-indent-new-comment-line)
   (indent-according-to-mode))
 
-(use-package scala-mode2
+(use-package scala-mode
   :interpreter
   ("scala" . scala-mode)
   :init
