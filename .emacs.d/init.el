@@ -92,7 +92,7 @@
 (when window-system
   (tool-bar-mode -1)
   (scroll-bar-mode -1))
-(global-auto-revert-mode 1)
+(global-auto-revert-mode t)
 
 (electric-indent-mode 0)
 (remove-hook 'post-self-insert-hook
@@ -124,7 +124,7 @@
 (use-package subword
   :ensure nil
   :diminish subword-mode
-  :config (global-subword-mode 1))
+  :config (global-subword-mode t))
 
 (use-package dired
   :ensure nil
@@ -249,7 +249,7 @@ Inspired by `org-combine-plists'."
   (setq
    clean-buffer-list-kill-regexps '("^[*].*")
    clean-buffer-list-kill-never-regexps
-   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|eshell\\|magit\\(:\\|-revision\\|-staging\\)\\).*")))
+   '("^[*]\\(scratch\\|sbt\\|Messages\\|ENSIME\\|eshell\\|compilation\\|magit\\(:\\|-revision\\|-staging\\)\\).*")))
 
 (use-package persistent-scratch
   :config (persistent-scratch-setup-default))
@@ -270,9 +270,9 @@ Inspired by `org-combine-plists'."
    ido-show-dot-for-dired nil ;; remember C-d
    ido-enable-dot-prefix t)
   :config
-  (ido-mode 1)
-  (ido-everywhere 1)
-  (flx-ido-mode 1))
+  (ido-mode t)
+  (ido-everywhere t)
+  (flx-ido-mode t))
 
 (use-package projectile
   :demand
@@ -393,7 +393,7 @@ with `dir-locals.el'.")
 (use-package yatemplate
   :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
   :config
-  (auto-insert-mode)
+  (auto-insert-mode t)
   (setq auto-insert-alist nil)
   (yatemplate-fill-alist))
 
@@ -533,7 +533,11 @@ with `dir-locals.el'.")
   :commands emacs-lisp-mode
   :config
   (bind-key "RET" 'comment-indent-new-line emacs-lisp-mode-map)
-  (bind-key "C-c c" 'compile emacs-lisp-mode-map))
+  (bind-key "C-c c" 'compile emacs-lisp-mode-map)
+
+  ;; barf / slurp need some experimentation
+  (bind-key "M-<left>" 'sp-forward-slurp-sexp)
+  (bind-key "M-<right>" 'sp-forward-barf-sexp))
 
 (use-package eldoc
   :ensure nil
@@ -556,17 +560,17 @@ with `dir-locals.el'.")
           (lambda ()
             (setq show-trailing-whitespace t)
 
-            (show-paren-mode)
+            (show-paren-mode t)
             (whitespace-mode-with-local-variables)
-            (focus-mode)
-            (rainbow-mode)
-            (prettify-symbols-mode)
-            (eldoc-mode)
-            (flycheck-mode)
-            (yas-minor-mode)
-            (company-mode)
-            (smartparens-strict-mode)
-            (rainbow-delimiters-mode)))
+            (focus-mode t)
+            (rainbow-mode t)
+            (prettify-symbols-mode t)
+            (eldoc-mode t)
+            (flycheck-mode t)
+            (yas-minor-mode t)
+            (company-mode t)
+            (smartparens-strict-mode t)
+            (rainbow-delimiters-mode t)))
 
 
 ;;..............................................................................
@@ -608,8 +612,7 @@ assuming it is in a maven-style project."
   :init
   (setq
    scala-indent:use-javadoc-style t
-   scala-indent:align-parameters t
-   sbt:prefer-nested-projects t)
+   scala-indent:align-parameters t)
   :config
   (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
   (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
@@ -642,7 +645,6 @@ assuming it is in a maven-style project."
   (setq
    ensime-default-buffer-prefix "ENSIME-"
    ensime-prefer-noninteractive t
-   ensime-refactor-enable-beta t
    ensime-refactor-preview t
    ensime-refactor-preview-override-hunk 10)
   :config
@@ -660,6 +662,7 @@ assuming it is in a maven-style project."
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
+  :init (setq sbt:prefer-nested-projects t)
   :config
   ;; WORKAROUND: https://github.com/hvesalai/sbt-mode/issues/31
   ;; allows using SPACE when in the minibuffer
@@ -674,12 +677,12 @@ assuming it is in a maven-style project."
 (add-hook 'scala-mode-hook
           (lambda ()
             (whitespace-mode-with-local-variables)
-            (show-paren-mode)
-            (smartparens-mode)
-            (yas-minor-mode)
-            (git-gutter-mode)
-            (company-mode)
-            (ensime-mode)
+            (show-paren-mode t)
+            (smartparens-mode t)
+            (yas-minor-mode t)
+            (git-gutter-mode t)
+            (company-mode t)
+            (ensime-mode t)
 
             ;; for small projects, use TAGS for completions
             (make-local-variable 'company-backends)
@@ -702,20 +705,20 @@ assuming it is in a maven-style project."
             (bind-key "RET" 'c-mode-newline-comments java-mode-map)
 
             (whitespace-mode-with-local-variables)
-            (show-paren-mode)
-            (smartparens-mode)
-            (yas-minor-mode)
-            (git-gutter-mode)
-            (company-mode)
-            (ensime-mode)))
+            (show-paren-mode t)
+            (smartparens-mode t)
+            (yas-minor-mode t)
+            (git-gutter-mode t)
+            (company-mode t)
+            (ensime-mode t)))
 
 
 ;;..............................................................................
 ;; C
 (add-hook 'c-mode-hook (lambda ()
-                         (yas-minor-mode)
-                         (company-mode)
-                         (smartparens-mode)))
+                         (yas-minor-mode t)
+                         (company-mode t)
+                         (smartparens-mode t)))
 
 ;;..............................................................................
 ;; org-mode
@@ -726,9 +729,9 @@ assuming it is in a maven-style project."
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (yas-minor-mode)
-            (company-mode)
-            (visual-line-mode)
+            (yas-minor-mode t)
+            (company-mode t)
+            (visual-line-mode t)
             (local-set-key (kbd "C-c c") 'pandoc)
             (local-set-key (kbd "s-c") 'picture-mode)
             (org-babel-do-load-languages
@@ -739,9 +742,9 @@ assuming it is in a maven-style project."
   :commands markdown-mode)
 (add-hook 'markdown-mode-hook
           (lambda ()
-            (yas-minor-mode)
-            (company-mode)
-            (visual-line-mode)))
+            (yas-minor-mode t)
+            (company-mode t)
+            (visual-line-mode t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OS specific

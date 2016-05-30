@@ -100,20 +100,20 @@
 (defalias 'cider 'cider-jack-in)
 (add-hook 'clojure-mode-hook
           (lambda ()
-            (show-paren-mode)
-            ;;(focus-mode)
-            (rainbow-mode)
-            (eldoc-mode)
+            (show-paren-mode t)
+            ;;(focus-mode t)
+            (rainbow-mode t)
+            (eldoc-mode t)
 
             ;; BUG https://github.com/clojure-emacs/squiggly-clojure/issues/39
             (flycheck-clojure-setup)
-            (flycheck-mode)
-            (flycheck-pos-tip-mode)
+            (flycheck-mode t)
+            (flycheck-pos-tip-mode t)
 
-            (yas-minor-mode)
-            (company-mode)
-            (smartparens-strict-mode)
-            (rainbow-delimiters-mode)))
+            (yas-minor-mode t)
+            (company-mode t)
+            (smartparens-strict-mode t)
+            (rainbow-delimiters-mode t)))
 
 (add-hook 'cider-repl-mode-hook #'eldoc-mode)
 
