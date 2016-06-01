@@ -24,8 +24,8 @@
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; High Priority Site Local
-;; This must exist and set up `use-package'
-(load (expand-file-name "local-preinit.el" user-emacs-directory))
+;; This (or a site-local.el) must set up `use-package'
+(load (expand-file-name "local-preinit.el" user-emacs-directory) 'no-error)
 ;; keeps flycheck happy
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -536,8 +536,8 @@ with `dir-locals.el'.")
   (bind-key "C-c c" 'compile emacs-lisp-mode-map)
 
   ;; barf / slurp need some experimentation
-  (bind-key "M-<left>" 'sp-forward-slurp-sexp)
-  (bind-key "M-<right>" 'sp-forward-barf-sexp))
+  (bind-key "M-<left>" 'sp-forward-slurp-sexp emacs-lisp-mode-map)
+  (bind-key "M-<right>" 'sp-forward-barf-sexp emacs-lisp-mode-map))
 
 (use-package eldoc
   :ensure nil
