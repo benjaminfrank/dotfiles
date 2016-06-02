@@ -222,6 +222,17 @@ Approximates the rules of `clean-buffer-list'."
       (company-complete)
     (call-interactively 'dabbrev-expand)))
 
+(defun company-backends-for-buffer ()
+  "Calculate appropriate `company-backends' for the buffer.
+For small projects, use TAGS for completions, otherwise use a
+very minimal set."
+  (projectile-visit-project-tags-table)
+  (cl-flet ((size () (buffer-size (get-file-buffer tags-file-name))))
+    (let ((base '(company-keywords company-dabbrev-code company-yasnippet)))
+      (if (and tags-file-name (<= 20000000 (size)))
+          (list (push 'company-etags base))
+        (list base)))))
+
 (defun sp-restrict-c (sym)
   "Smartparens restriction on `SYM' for C-derived parenthesis."
   (sp-restrict-to-pairs-interactive "{([" sym))
@@ -683,27 +694,24 @@ assuming it is in a maven-style project."
             (git-gutter-mode t)
             (company-mode t)
             (ensime-mode t)
-
-            ;; for small projects, use TAGS for completions
-            (make-local-variable 'company-backends)
-            (projectile-visit-project-tags-table)
-            (setq company-backends
-             (if (and tags-file-name
-                      (<= 20000000 (buffer-size (get-file-buffer tags-file-name))))
-                 '(ensime-company (company-keywords company-dabbrev-code company-yasnippet))
-               '(ensime-company (company-keywords company-dabbrev-code company-etags company-yasnippet))))
-
             (scala-mode:goto-start-of-code)))
 
+(add-hook 'ensime-mode-hook
+          (lambda ()
+            (let ((backends (company-backends-for-buffer)))
+              (setq company-backends (push 'ensime-company backends)))))
+
 ;;..............................................................................
-;; Java: watch out for https://github.com/ensime/ensime-server/issues/345
+;; Java
+(use-package cc-mode
+  :ensure nil
+  :config
+  (bind-key "C-c c" 'sbt-command java-mode-map)
+  (bind-key "C-c e" 'next-error java-mode-map)
+  (bind-key "RET" 'c-mode-newline-comments java-mode-map))
+
 (add-hook 'java-mode-hook
           (lambda ()
-            ;; is there a better place to put these bindings?
-            (bind-key "C-c c" 'sbt-command java-mode-map)
-            (bind-key "C-c e" 'next-error java-mode-map)
-            (bind-key "RET" 'c-mode-newline-comments java-mode-map)
-
             (whitespace-mode-with-local-variables)
             (show-paren-mode t)
             (smartparens-mode t)
