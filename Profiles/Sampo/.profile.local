@@ -1,8 +1,9 @@
 #!/bin/bash
 
-export SCALA_HOME=/opt/scala-2.11.6
+export SCALA_HOME=/opt/scala-2.11.8
 export MAVEN_HOME=/opt/apache-maven-3.2.5
 
+export PATH=/opt/visualvm_138/bin:$PATH
 export PATH=$SCALA_HOME/bin:$MAVEN_HOME/bin:$PATH
 export PRINTER=PeterPrinter
 
@@ -25,8 +26,6 @@ export PATH=$HOME/.cabal/bin:$PATH
 
 # git clone https://github.com/gcuisinier/jenv.git ~/.jenv
 export PATH=$HOME/.jenv/bin:$PATH
-
-export JDK_LANGTOOLS_SRC=/opt/java/openjdk6-langtools-src.zip
 
 # GnuPG passphrase caching. Oh, GPG, you so user-friendly...
 if test -f $HOME/.gpg-agent-info && \

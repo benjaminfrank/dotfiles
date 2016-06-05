@@ -25,6 +25,3 @@ if [ "$PS1" ] && [ "$BASH" ]; then
         . /etc/bashrc
     fi
 fi
-
-export PATH=$HOME/.jenv/bin:$PATH
-eval "$(jenv init -)"
