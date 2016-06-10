@@ -26,6 +26,7 @@ export PATH=$HOME/.cabal/bin:$PATH
 
 # git clone https://github.com/gcuisinier/jenv.git ~/.jenv
 export PATH=$HOME/.jenv/bin:$PATH
+eval "$(jenv init -)"
 
 # GnuPG passphrase caching. Oh, GPG, you so user-friendly...
 if test -f $HOME/.gpg-agent-info && \
