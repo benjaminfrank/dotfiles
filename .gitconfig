@@ -36,6 +36,7 @@
     # for when magit supports pushing to origin and pulling from upstream
     # cut = "!f() { UPSTREAM=`git rev-parse --abbrev-ref --symbolic-full-name @{u}`; git checkout -b $1 ; git branch -u $UPSTREAM ; }; f"
     cut = checkout -b
+    spin = checkout -b
 	sith = push --force
     # unfortunately there is no git-config clean.exclude section
 	nuke = clean -fdx -e project/Build.scala -e project/EnsimeProjectSettings.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .dir-locals.el
