@@ -13,6 +13,10 @@
 ;; keeps flycheck happy
 (require 'use-package)
 
+;; while testing 25.1
+(setq debug-on-error t
+      debug-on-quit t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
 ;; used in a variety of contexts, but can be lazily loaded based on
@@ -77,15 +81,18 @@
       notmuch-fcc-dirs nil
       notmuch-search-oldest-first nil
       notmuch-address-command "notmuch-addrlookup"
-      notmuch-saved-searches '(("inbox" . "tag:inbox")
-                               ("unread" . "tag:unread")
-                               ("flagged" . "tag:flagged")
-                               ("all" . "*")))
+      notmuch-saved-searches '((:name "inbox" :key "i" :query "tag:inbox")
+                               (:name "unread" :key "u" :query "tag:unread")
+                               (:name "flagged" :key "f" :query "tag:flagged")
+                               (:name "drafts" :key "d" :query "tag:draft")
+                               (:name "all" :key "a" :query "*")))
 (use-package notmuch
   :commands notmuch
   :config
   (add-hook 'message-setup-hook #'company-mode)
-  (add-hook 'message-setup-hook #'mml-secure-sign-pgpmime))
+  ;; BUG https://debbugs.gnu.org/cgi/bugreport.cgi?bug=23747
+  ;;(add-hook 'message-setup-hook #'mml-secure-sign-pgpmime)
+  )
 
 ;;..............................................................................
 ;; Clojure

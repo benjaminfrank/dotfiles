@@ -23,10 +23,19 @@
 
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; High Priority Site Local
-;; This (or a site-local.el) must set up `use-package'
+;; User Site Local
 (load (expand-file-name "local-preinit.el" user-emacs-directory) 'no-error)
-;; keeps flycheck happy
+(unless (boundp 'package--initialized)
+  ;; don't set gnu/org/melpa if the site-local or local-preinit have
+  ;; done so (e.g. firewalled corporate environments)
+  (require 'package)
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("org" . "http://orgmode.org/elpa/")
+                           ("melpa" . "http://melpa.org/packages/"))))
+(package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents)
+  (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t)
 
@@ -205,15 +214,20 @@
         (clean-buffer-list-delay-special 0))
     (clean-buffer-list)))
 
+
 (defvar ido-buffer-whitelist
   '("^[*]\\(notmuch\\-hello\\|unsent\\|ag search\\|grep\\|eshell\\).*")
   "Whitelist regexp of `clean-buffer-list' buffers to show when switching buffer.")
 (defun midnight-clean-or-ido-whitelisted (name)
   "T if midnight is likely to kill the buffer named NAME, unless whitelisted.
 Approximates the rules of `clean-buffer-list'."
-  (and (midnight-find name clean-buffer-list-kill-regexps 'string-match)
-       (not (or (midnight-find name clean-buffer-list-kill-never-regexps 'string-match)
-                (midnight-find name ido-buffer-whitelist 'string-match)))))
+  (require 'midnight)
+  (require 'dash)
+  (cl-flet* ((buffer-finder (regexp)
+                            (string-match regexp name)))
+    (and (-find #'buffer-finder clean-buffer-list-kill-regexps)
+         (not (or (-find #'buffer-finder clean-buffer-list-kill-never-regexps)
+                  (-find #'buffer-finder ido-buffer-whitelist))))))
 
 (defun company-or-dabbrev-complete ()
   "Force a `company-complete', falling back to `dabbrev-expand'."

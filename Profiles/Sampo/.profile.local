@@ -36,3 +36,6 @@ else
     eval `gpg-agent --daemon --no-grab --write-env-file $HOME/.gpg-agent-info`
 fi
 
+
+# emacs pre-test
+export PATH=$PATH:/opt/emacs-25/bin
