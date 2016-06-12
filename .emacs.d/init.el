@@ -223,11 +223,11 @@
 Approximates the rules of `clean-buffer-list'."
   (require 'midnight)
   (require 'dash)
-  (cl-flet* ((buffer-finder (regexp)
-                            (string-match regexp name)))
-    (and (-find #'buffer-finder clean-buffer-list-kill-regexps)
-         (not (or (-find #'buffer-finder clean-buffer-list-kill-never-regexps)
-                  (-find #'buffer-finder ido-buffer-whitelist))))))
+  (cl-flet* ((buffer-finder (regexp) (string-match regexp name))
+             (buffer-find (regexps) (-partial #'-find #'buffer-finder)))
+    (and (buffer-find clean-buffer-list-kill-regexps)
+         (not (or (buffer-find clean-buffer-list-kill-never-regexps)
+                  (buffer-find ido-buffer-whitelist))))))
 
 (defun company-or-dabbrev-complete ()
   "Force a `company-complete', falling back to `dabbrev-expand'."
