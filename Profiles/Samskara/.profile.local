@@ -42,6 +42,8 @@ export PATH=$GOPATH/bin:$PATH
 
 export PATH=$HOME/.cabal/bin:$PATH
 
+eval "$(jenv init -)"
+
 # iMacs require some TLC for various drivers to work:
 # 1. sudo apt-get install nvidia-glx nvidia-kernel-dkms nvidia-xconfig
 #    (version 304.116 known to work, this may just be for debian jessie)
