@@ -708,6 +708,16 @@ assuming it is in a maven-style project."
             (git-gutter-mode t)
             (company-mode t)
             (ensime-mode t)
+            (setq
+             ;; implicit https://github.com/chrissimpkins/Hack/issues/214
+             prettify-symbols-alist '(("->" . ?→)
+                                      ("<-" . ?←)
+                                      ("=>" . ?⇒)
+                                      ("<=" . ?≤)
+                                      (">=" . ?≥)
+                                      ("==" . ?≡)
+                                      ("!=" . ?≠)))
+            (prettify-symbols-mode t)
             (scala-mode:goto-start-of-code)))
 
 (add-hook 'ensime-mode-hook
