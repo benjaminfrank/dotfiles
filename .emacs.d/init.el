@@ -699,6 +699,19 @@ assuming it is in a maven-style project."
   (bind-key "C-c c" 'sbt-command sbt:mode-map)
   (bind-key "C-c e" 'next-error sbt:mode-map))
 
+(defcustom
+  scala-mode-prettify-symbols
+  '(("->" . ?→)
+    ("<-" . ?←)
+    ("=>" . ?⇒)
+    ("<=" . ?≤)
+    (">=" . ?≥)
+    ("==" . ?≡)
+    ("!=" . ?≠)
+    ;; implicit https://github.com/chrissimpkins/Hack/issues/214
+    ("+-" . ?±))
+  "Prettify symbols for scala-mode.")
+
 (add-hook 'scala-mode-hook
           (lambda ()
             (whitespace-mode-with-local-variables)
@@ -708,15 +721,7 @@ assuming it is in a maven-style project."
             (git-gutter-mode t)
             (company-mode t)
             (ensime-mode t)
-            (setq
-             ;; implicit https://github.com/chrissimpkins/Hack/issues/214
-             prettify-symbols-alist '(("->" . ?→)
-                                      ("<-" . ?←)
-                                      ("=>" . ?⇒)
-                                      ("<=" . ?≤)
-                                      (">=" . ?≥)
-                                      ("==" . ?≡)
-                                      ("!=" . ?≠)))
+            (setq prettify-symbols-alist scala-mode-prettify-symbols)
             (prettify-symbols-mode t)
             (scala-mode:goto-start-of-code)))
 
