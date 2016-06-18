@@ -1,56 +1,49 @@
 [user]
-	name = Sam Halliday
-	email = sam.halliday@gmail.com
-	# git config user.email REPO_SPECIFIC_EMAIL
+    name = Sam Halliday
+    email = sam.halliday@gmail.com
+    # git config user.email REPO_SPECIFIC_EMAIL
 [core]
-	excludesfile = ~/.gitignore
-	autocrlf = input
-	editor = emacs -nw
+    excludesfile = ~/.gitignore
+    autocrlf = input
+    editor = emacs -nw
 [diff]
-	renames = copy
+    renames = copy
 [pull]
 # There is apparently no way to set these by default,
 # so don't forget to pass them explicitly for big merges.
 # -X rename-threshold=50% -X ignore-all-space
     rebase = true
 [push]
-	default = simple
+    default = simple
 [mergetool]
-	keepBackup = true
+    keepBackup = true
 [remote]
 # Setting pushdefault to origin, and not upstream, means that even if
 # pulls come from upstream, pushes still go to origin. This is a very
 # good workflow for github style projects.
 # You'll need to set the upstream, e.g.
 #   git branch --set-upstream-to=upstream/master
-# but this will be done automatically if you use the "cut" alias below.
     pushdefault = origin
 [alias]
-	l = log --pretty=format:'%h : %an, %ar : %s' --graph
-	pick = cherry-pick
+    l = log --pretty=format:'%h : %an, %ar : %s' --graph
+    pick = cherry-pick
     up = fetch --all -p
-	undo = reset --soft 'HEAD^'
-	ignore = update-index --assume-unchanged
-	unignore = update-index --no-assume-unchanged
-	ignored = !git ls-files -v | grep "^[[:lower:]]"
-    # for when magit supports pushing to origin and pulling from upstream
-    # cut = "!f() { UPSTREAM=`git rev-parse --abbrev-ref --symbolic-full-name @{u}`; git checkout -b $1 ; git branch -u $UPSTREAM ; }; f"
-    cut = checkout -b
+    undo = reset --soft 'HEAD^'
+    ignore = update-index --assume-unchanged
+    unignore = update-index --no-assume-unchanged
+    ignored = !git ls-files -v | grep "^[[:lower:]]"
     spin = checkout -b
-	sith = push --force
-    # unfortunately there is no git-config clean.exclude section
-	nuke = clean -fdx -e project/Build.scala -e project/EnsimeProjectSettings.scala -e project/build.properties -e .ensime -e .ensime_cache -e .sbtopts -e TAGS -e .dir-locals.el
-    # for rebase operations (for merge, use --ours)
-    my-way-or-the-highway="!ag '<<<<<<<' . | xargs git checkout --theirs"
-
+    sith = push --force
+    nuke = clean -fdx -e project/EnsimeProjectSettings.scala -e .ensime -e .ensime_cache -e .dir-locals.el
+    cleantags = !git tag -l | xargs git tag -d
 [color]
-	branch = auto
-	diff = auto
-	status = auto
-	interactive = auto
-	ui = auto
+    branch = auto
+    diff = auto
+    status = auto
+    interactive = auto
+    ui = auto
 [apply]
-	whitespace = warn
+    whitespace = warn
 
 # for repos that use HTTPS, this stores passwords in a cache (1 hour)
 #git config credential.helper cache

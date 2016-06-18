@@ -14,8 +14,7 @@
 (require 'use-package)
 
 ;; while testing 25.1
-(setq debug-on-error t
-      debug-on-quit t)
+(setq debug-on-error t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for loading and tweaking generic modes that are
