@@ -388,7 +388,8 @@ Inspired by `org-combine-plists'."
   ;; dabbrev is too slow, use C-TAB explicitly
   (delete 'company-dabbrev company-backends)
   ;; disables TAB in company-mode, freeing it for yasnippet
-  (define-key company-active-map [tab] nil))
+  (define-key company-active-map [tab] nil)
+  (define-key company-active-map (kbd "TAB") nil))
 
 (use-package rainbow-mode
   :diminish rainbow-mode
