@@ -406,18 +406,6 @@ Inspired by `org-combine-plists'."
   (yas-reload-all)
   (define-key yas-minor-mode-map [tab] #'yas-expand))
 
-;; DEPRECATED https://github.com/mineo/yatemplate/issues/4
-(defvar-local yatemplate-owner user-full-name
-  "The copyright owner for the buffer.
-Particularly useful when combined with `dir-locals.el'.")
-(defvar-local yatemplate-license "http://www.gnu.org/licenses/gpl.html"
-  "The license (usually a URL) for the buffer.
-It is always better to explicitly list the license per file than
-to refer to the LICENSE file. Particularly useful when combined
-with `dir-locals.el'.")
-(put 'yatemplate-owner 'safe-local-variable #'stringp)
-(put 'yatemplate-license 'safe-local-variable #'stringp)
-
 (use-package yatemplate
   :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
   :config
