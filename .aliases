@@ -44,4 +44,4 @@ alias volume="pavucontrol"
 
 alias apt-upgrade='sudo apt-get upgrade -t $(lsb_release -sc)-backports'
 alias update="sudo apt-get update ; sudo apt-get upgrade ; update-emacs"
-alias ensime="sbt ensimeConfig ensimeConfigProject"
+alias ensime="sbt ensimeConfig ensimeConfigProject test:compile"
