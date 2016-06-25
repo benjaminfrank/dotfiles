@@ -402,7 +402,9 @@ Inspired by `org-combine-plists'."
 (use-package yasnippet
   :diminish yas-minor-mode
   :commands yas-minor-mode
-  :config (yas-reload-all))
+  :config
+  (yas-reload-all)
+  (define-key yas-minor-mode-map [tab] #'yas-expand))
 
 ;; DEPRECATED https://github.com/mineo/yatemplate/issues/4
 (defvar-local yatemplate-owner user-full-name
@@ -665,7 +667,6 @@ assuming it is in a maven-style project."
     (projectile-find-tag)))
 
 (use-package ensime
-  :commands ensime ensime-mode
   :init
   (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
   (setq
@@ -721,7 +722,6 @@ assuming it is in a maven-style project."
             (yas-minor-mode t)
             (git-gutter-mode t)
             (company-mode t)
-            (ensime-mode t)
             (setq prettify-symbols-alist scala-mode-prettify-symbols)
             (prettify-symbols-mode t)
             (scala-mode:goto-start-of-code)))
