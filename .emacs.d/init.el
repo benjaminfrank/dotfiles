@@ -408,10 +408,6 @@ Inspired by `org-combine-plists'."
 
 (use-package yatemplate
   :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
-  :init
-  ;; WORKAROUND https://github.com/mineo/yatemplate/issues/12
-  (put 'yatemplate-owner 'safe-local-variable #'stringp)
-  (put 'yatemplate-license 'safe-local-variable #'stringp)
   :config
   (auto-insert-mode t)
   (setq auto-insert-alist nil)
