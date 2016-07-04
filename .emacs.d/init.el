@@ -658,22 +658,14 @@ assuming it is in a maven-style project."
   :init
   (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
   (setq
-   ensime-default-buffer-prefix "ENSIME-"
-   ensime-prefer-noninteractive t
-   ensime-refactor-preview t
-   ensime-refactor-preview-override-hunk 10)
+   ensime-startup-snapshot-notification nil)
   :config
   (require 'ensime-expand-region)
   (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
 
   (bind-key "s-n" 'ensime-search ensime-mode-map)
   (bind-key "s-t" 'ensime-print-type-at-point ensime-mode-map)
-  (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map)
-
-  (setq ensime-goto-test-config-defaults
-        (plist-merge ensime-goto-test-config-defaults
-                     '(:test-class-suffixes ("Spec" "Test" "Check"))
-                     '(:test-template-fn ensime-goto-test--test-template-scalatest-flatspec))))
+  (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map))
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
