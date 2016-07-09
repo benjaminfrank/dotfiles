@@ -14,4 +14,7 @@
 (find-file (expand-file-name "scratch.el" user-emacs-directory))
 (find-file "~/Projects")
 
+;; beta tester
+(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
+
 ;;; local.el ends here

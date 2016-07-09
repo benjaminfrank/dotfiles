@@ -8,3 +8,6 @@ net.virtualvoid.sbt.graph.DependencyGraphSettings.graphSettings
 PgpKeys.useGpgAgent := true
 
 cancelable in Global := true
+
+// for 2.0-graph
+org.ensime.Imports.EnsimeKeys.ensimeJavaFlags += "-XX:MaxDirectMemorySize=4g"
