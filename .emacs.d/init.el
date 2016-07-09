@@ -709,7 +709,7 @@ assuming it is in a maven-style project."
 (add-hook 'ensime-mode-hook
           (lambda ()
             (let ((backends (company-backends-for-buffer)))
-              (setq company-backends (push 'ensime-company backends)))))
+              (setq company-backends (push '(ensime-company company-yasnippet) backends)))))
 
 ;;..............................................................................
 ;; Java
