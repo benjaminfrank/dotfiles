@@ -23,11 +23,13 @@
 
 (setq
  ;; allows projectile to see .log files, even though git ignores them
- projectile-git-command "cat <(git ls-files -zco --exclude-standard) <(find . -name '*.log' -maxdepth 4 -print0)"
- browse-url-generic-program "sensible-browser"
- x-select-enable-clipboard t
- interprogram-paste-function 'x-cut-buffer-or-selection-value)
+ projectile-git-command "cat <(git ls-files -zco --exclude-standard) <(find . -name '*.log' -maxdepth 4 -print0)")
 
+(when (display-graphic-p)
+  (setq
+   browse-url-generic-program "sensible-browser"
+   x-select-enable-clipboard t
+   interprogram-paste-function 'x-cut-buffer-or-selection-value))
 
 (use-package ess-site
   :ensure ess
