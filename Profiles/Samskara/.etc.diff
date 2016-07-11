@@ -1,41 +1,54 @@
---- /tmp/etc.tmp.4//etc/modprobe.d/dkms.conf	2014-10-04 19:04:21.000000000 +0100
+--- /tmp/etc.tmp.4//etc/modprobe.d/dkms.conf	2016-04-23 18:40:04.000000000 +0100
 +++ /etc/modprobe.d/dkms.conf	2014-09-29 20:27:26.000000000 +0100
 @@ -1,4 +0,0 @@
 -# modprobe information used for DKMS modules
 -#
 -# This is a stub file, should be edited when needed,
 -# used by default by DKMS.
---- /tmp/etc.tmp.4//etc/default/docker	2015-10-12 04:37:29.000000000 +0100
-+++ /etc/default/docker	2015-09-13 09:37:28.000000000 +0100
-@@ -6,8 +6,14 @@
- # Use DOCKER_OPTS to modify the daemon startup options.
- #DOCKER_OPTS="--dns 8.8.8.8 --dns 8.8.4.4"
+--- /tmp/etc.tmp.4//etc/initramfs-tools/initramfs.conf	2016-04-17 20:39:22.000000000 +0100
++++ /etc/initramfs-tools/initramfs.conf	2012-09-21 10:00:57.000000000 +0100
+@@ -20,14 +20,12 @@
+ MODULES=most
  
-+# don't use tiny /var/lib/docker
-+# https://github.com/docker/docker/issues/16256
-+DOCKER_OPTS="-g /mnt/archive/docker --exec-opt native.cgroupdriver=cgroupfs"
-+
- # If you need Docker to use an HTTP proxy, it can also be specified here.
- #export http_proxy="http://127.0.0.1:3128/"
+ #
+-# BUSYBOX: [ y | n | auto ]
++# BUSYBOX: [ y | n ]
+ #
+-# Use busybox shell and utilities.  If set to n, klibc utilities will be used.
+-# If set to auto (or unset), busybox will be used if installed and klibc will
+-# be used otherwise.
++# Use busybox if available.
+ #
  
- # This is also a handy place to tweak where Docker's temporary files go.
--#export TMPDIR="/mnt/bigdrive/docker-tmp"
-+#export TMPDIR="/mnt/archive/docker"
-+
-+# FIXME https://github.com/docker/docker/issues/16256
-\ No newline at end of file
---- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2015-11-24 21:56:33.000000000 +0000
+-BUSYBOX=auto
++BUSYBOX=y
+ 
+ #
+ # KEYMAP: [ y | n ]
+--- /tmp/etc.tmp.4//etc/lightdm/lightdm.conf	2016-06-28 21:50:09.000000000 +0100
 +++ /etc/lightdm/lightdm.conf	2015-12-18 20:06:39.000000000 +0000
-@@ -41,7 +41,8 @@
+@@ -40,16 +40,17 @@
+ # Seat configuration is matched against the seat name glob in the section, for example:
  # [Seat:*] matches all seats and is applied first.
  # [Seat:seat0] matches the seat named "seat0".
- # [Seat:thin-client*] matches all seats that have names that start with "thin-client".
+-# [Seat:seat-thin-client*] matches all seats that have names that start with "seat-thin-client".
 -#
+-# type = Seat type (xlocal, xremote, unity)
++# [Seat:thin-client*] matches all seats that have names that start with "thin-client".
 +
 +[SeatDefaults]
- # type = Seat type (xlocal, xremote)
++# type = Seat type (xlocal, xremote)
  # pam-service = PAM service to use for login
  # pam-autologin-service = PAM service to use for autologin
+ # pam-greeter-service = PAM service to use for greeters
+ # xserver-command = X server command to run (can also contain arguments e.g. X -special-option)
+ # xmir-command = Xmir server command to run (can also contain arguments e.g. Xmir -special-option)
+-# xserver-config = Config file to pass to X server
+ # xserver-layout = Layout to pass to X server
++# xserver-config = Config file to pass to X server
+ # xserver-allow-tcp = True if TCP/IP connections are allowed to this X server
+ # xserver-share = True if the X server is shared for both greeter and session
+ # xserver-hostname = Hostname of X server (only for type=xremote)
 @@ -60,13 +61,13 @@
  # unity-compositor-command = Unity compositor command to run (can also contain arguments e.g. unity-system-compositor -special-option)
  # unity-compositor-timeout = Number of seconds to wait for compositor to start
@@ -54,6 +67,32 @@
  # guest-session = Session to load for guests (overrides user-session)
  # session-wrapper = Wrapper script to run session with
  # greeter-wrapper = Wrapper script to run greeter with
+@@ -90,8 +91,8 @@
+ #pam-greeter-service=lightdm-greeter
+ #xserver-command=X
+ #xmir-command=Xmir
+-#xserver-config=
+ #xserver-layout=
++#xserver-config=
+ #xserver-allow-tcp=false
+ #xserver-share=true
+ #xserver-hostname=
+@@ -132,7 +133,6 @@
+ # port = UDP/IP port to listen for connections on
+ # listen-address = Host/address to listen for XDMCP connections (use all addresses if not present)
+ # key = Authentication key to use for XDM-AUTHENTICATION-1 or blank to not use authentication (stored in keys.conf)
+-# hostname = Hostname to report to XDMCP clients (defaults to system hostname if unset)
+ #
+ # The authentication key is a 56 bit DES key specified in hex as 0xnnnnnnnnnnnnnn.  Alternatively
+ # it can be a word and the first 7 characters are used as the key.
+@@ -142,7 +142,6 @@
+ #port=177
+ #listen-address=
+ #key=
+-#hostname=
+ 
+ #
+ # VNC Server configuration
 --- /tmp/etc.tmp.4//etc/lightdm/lightdm-gtk-greeter.conf	2015-06-21 10:15:27.000000000 +0100
 +++ /etc/lightdm/lightdm-gtk-greeter.conf	2015-12-18 20:06:21.000000000 +0000
 @@ -45,11 +45,12 @@
@@ -72,72 +111,6 @@
  #xft-antialias=
  #xft-dpi=
  #xft-hintstyle=
---- /tmp/etc.tmp.4//etc/sysctl.conf	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/sysctl.conf	2014-06-15 20:57:10.664602465 +0100
-@@ -0,0 +1,63 @@
-+#
-+# /etc/sysctl.conf - Configuration file for setting system variables
-+# See /etc/sysctl.d/ for additional system variables.
-+# See sysctl.conf (5) for information.
-+#
-+
-+#kernel.domainname = example.com
-+
-+# Uncomment the following to stop low-level messages on console
-+#kernel.printk = 3 4 1 3
-+
-+##############################################################3
-+# Functions previously found in netbase
-+#
-+
-+# Uncomment the next two lines to enable Spoof protection (reverse-path filter)
-+# Turn on Source Address Verification in all interfaces to
-+# prevent some spoofing attacks
-+#net.ipv4.conf.default.rp_filter=1
-+#net.ipv4.conf.all.rp_filter=1
-+
-+# Uncomment the next line to enable TCP/IP SYN cookies
-+# See http://lwn.net/Articles/277146/
-+# Note: This may impact IPv6 TCP sessions too
-+#net.ipv4.tcp_syncookies=1
-+
-+# Uncomment the next line to enable packet forwarding for IPv4
-+#net.ipv4.ip_forward=1
-+
-+# Uncomment the next line to enable packet forwarding for IPv6
-+#  Enabling this option disables Stateless Address Autoconfiguration
-+#  based on Router Advertisements for this host
-+#net.ipv6.conf.all.forwarding=1
-+
-+
-+###################################################################
-+# Additional settings - these settings can improve the network
-+# security of the host and prevent against some network attacks
-+# including spoofing attacks and man in the middle attacks through
-+# redirection. Some network environments, however, require that these
-+# settings are disabled so review and enable them as needed.
-+#
-+# Do not accept ICMP redirects (prevent MITM attacks)
-+#net.ipv4.conf.all.accept_redirects = 0
-+#net.ipv6.conf.all.accept_redirects = 0
-+# _or_
-+# Accept ICMP redirects only for gateways listed in our default
-+# gateway list (enabled by default)
-+# net.ipv4.conf.all.secure_redirects = 1
-+#
-+# Do not send ICMP redirects (we are not a router)
-+#net.ipv4.conf.all.send_redirects = 0
-+#
-+# Do not accept IP source route packets (we are not a router)
-+#net.ipv4.conf.all.accept_source_route = 0
-+#net.ipv6.conf.all.accept_source_route = 0
-+#
-+# Log Martian Packets
-+#net.ipv4.conf.all.log_martians = 1
-+#
-+
-+# added by Insync
-+fs.inotify.max_user_watches=1048576
 --- /tmp/etc.tmp.4//etc/default/rng-tools	2011-06-29 02:55:44.000000000 +0100
 +++ /etc/default/rng-tools	2015-04-08 20:14:12.000000000 +0100
 @@ -15,3 +15,18 @@
@@ -194,7 +167,7 @@
 +[Install]
 +WantedBy=sleep.target
 --- /tmp/etc.tmp.4//etc/default/keyboard	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/default/keyboard	2015-11-03 22:40:38.391314032 +0000
++++ /etc/default/keyboard	2016-06-14 21:14:23.454687652 +0100
 @@ -0,0 +1,10 @@
 +# KEYBOARD CONFIGURATION FILE
 +
@@ -255,21 +228,20 @@
 +
 +COMMIT
 +
---- /tmp/etc.tmp.4//etc/apt/sources.list.d/google-talkplugin.list	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/apt/sources.list.d/google-talkplugin.list	2015-11-30 19:41:22.371419073 +0000
-@@ -0,0 +1,4 @@
-+### THIS FILE IS AUTOMATICALLY CONFIGURED ###
-+# You may comment out this entry, but any other modifications may be lost.
-+deb http://dl.google.com/linux/talkplugin/deb/ stable main
-+
---- /tmp/etc.tmp.4//etc/apt/sources.list.d/mono-xamarin.list	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/apt/sources.list.d/mono-xamarin.list	2015-01-08 21:55:42.284600121 +0000
+--- /tmp/etc.tmp.4//etc/apt/sources.list.d/azul.list	1970-01-01 01:00:00.000000000 +0100
++++ /etc/apt/sources.list.d/azul.list	2016-04-17 10:15:57.000000000 +0100
+@@ -0,0 +1,2 @@
++deb http://repos.azulsystems.com/debian stable main
++deb-src http://repos.azulsystems.com/debian stable main
+--- /tmp/etc.tmp.4//etc/apt/sources.list.d/docker.list	1970-01-01 01:00:00.000000000 +0100
++++ /etc/apt/sources.list.d/docker.list	2016-01-06 21:22:08.606633376 +0000
 @@ -0,0 +1 @@
-+#deb http://download.mono-project.com/repo/debian wheezy main
---- /tmp/etc.tmp.4//etc/apt/sources.list.d/spotify.list	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/apt/sources.list.d/spotify.list	2015-01-18 13:40:36.716472041 +0000
-@@ -0,0 +1 @@
-+deb http://repository.spotify.com stable non-free
++deb https://apt.dockerproject.org/repo debian-stretch main
+--- /tmp/etc.tmp.4//etc/ld.so.conf.d/mkl.conf	1970-01-01 01:00:00.000000000 +0100
++++ /etc/ld.so.conf.d/mkl.conf	2015-06-14 14:44:24.000000000 +0100
+@@ -0,0 +1,2 @@
++/opt/intel/lib/intel64
++/opt/intel/mkl/lib/intel64
 --- /tmp/etc.tmp.4//etc/modprobe.d/intel-sound.conf	1970-01-01 01:00:00.000000000 +0100
 +++ /etc/modprobe.d/intel-sound.conf	2014-11-07 21:33:57.898611689 +0000
 @@ -0,0 +1,2 @@
@@ -295,10 +267,11 @@
 +KERNEL="nvidiactl", NAME="%k"
 +
 --- /tmp/etc.tmp.4//etc/udev/rules.d/51-android.rules	1970-01-01 01:00:00.000000000 +0100
-+++ /etc/udev/rules.d/51-android.rules	2014-07-06 19:08:36.403682453 +0100
-@@ -0,0 +1,2 @@
++++ /etc/udev/rules.d/51-android.rules	2015-12-23 23:44:54.000000000 +0000
+@@ -0,0 +1,3 @@
 +SUBSYSTEM=="usb", ATTR{idVendor}=="1004", MODE="0666", GROUP="plugdev"
 +SUBSYSTEM=="usb", ATTR{idVendor}=="0b05", MODE="0666", GROUP="plugdev"
++SUBSYSTEM=="usb", ATTR{idVendor}=="0bb4", MODE="0666", GROUP="plugdev"
 --- /tmp/etc.tmp.4//etc/udev/rules.d/90-neug.rules	1970-01-01 01:00:00.000000000 +0100
 +++ /etc/udev/rules.d/90-neug.rules	2015-04-09 19:36:54.810976920 +0100
 @@ -0,0 +1,3 @@

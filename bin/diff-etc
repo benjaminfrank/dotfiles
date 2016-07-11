@@ -17,6 +17,10 @@ manualFiles="/etc/modprobe.d/that-fucking-beep.conf
 /etc/apt/sources.list.d/mono-xamarin.list
 /etc/apt/sources.list.d/oracle-java.list
 /etc/apt/sources.list.d/spotify.list
+/etc/apt/sources.list.d/azul.list
+/etc/apt/sources.list.d/docker.list
+/etc/chromium.d/default-flags
+/etc/ld.so.conf.d/mkl.conf
 /etc/modprobe.d/intel-sound.conf
 /etc/modprobe.d/xps13-headphones.conf
 /etc/modprobe.d/xps13-touchpad.conf
@@ -38,7 +42,7 @@ sudo debsums -e | awk '$2 !~ /OK/{print $1}' > $tmp.1
 # print missing
 cat $tmp.1 | grep "$missingPattern"
 # get non-missing
-cat $tmp.1 | grep -v "$missingPattern" > $tmp.2
+cat $tmp.1 | grep -v "$missingPattern" | grep -v /etc/icaclient > $tmp.2
 
 echo "$manualFiles" >> $tmp.2
 
