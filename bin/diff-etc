@@ -26,6 +26,7 @@ manualFiles="/etc/modprobe.d/that-fucking-beep.conf
 /etc/modprobe.d/xps13-touchpad.conf
 /etc/sudoers.d/apt
 /etc/sudoers.d/power
+/etc/X11/xorg.conf.d/50-synaptics.conf
 /etc/udev/rules.d/50-nvidia.rules
 /etc/udev/rules.d/51-android.rules
 /etc/udev/rules.d/90-neug.rules"
