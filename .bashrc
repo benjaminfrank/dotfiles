@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # exit early if not interactive
-if [ "$PS1" = "" ] ; then return ; fi
+if [ -z "$PS1" ] ; then return ; fi
 
+# copied here from .profile (I don't know why it's not available)
 function source_if_exists {
     if [ -f "$1" ] ; then
         source "$1"
@@ -72,7 +73,7 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
 fi
 function fommil_ps1 {
     GIT_PS1_SHOWDIRTYSTATE=true
-    local __git_branch="$Blue"'$(__git_ps1 "%s ")'"$Color_Off"
+    local __git_branch="$Purple"'$(__git_ps1 "%s ")'"$Color_Off"
     local __location="$IWhite\w$Color_Off"
     export PS1="$__root_warning_ps1$__ssh_host_ps1$__git_branch$__location "
 }

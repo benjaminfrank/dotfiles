@@ -42,6 +42,6 @@ alias markdown="hsmarkdown"
 alias open="xdg-open"
 alias volume="pavucontrol"
 
-alias apt-upgrade='sudo apt-get upgrade -t $(lsb_release -sc)-backports'
-alias update="sudo apt-get update ; sudo apt-get upgrade ; update-emacs"
-alias ensime="sbt ';ensimeConfig ;ensimeConfigProject ;test:compile ;it:compile'"
+alias ensime="sbt ';ensimeConfig ;ensimeConfigProject'"
+alias ensime-test-compile="sbt ';ensimeConfig ;ensimeConfigProject ;test:compile'"
+alias ensime-test-it-compile="sbt ';ensimeConfig ;ensimeConfigProject ;test:compile ;it:compile'"

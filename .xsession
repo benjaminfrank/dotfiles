@@ -10,8 +10,8 @@
 . ~/.profile
 
 if [ -f ~/.Xresources ] ; then
-  echo "URxvt.perl-lib:$HOME/.urxvt" | xrdb -merge -
-  xrdb -merge ~/.Xresources
+    xrdb -load ~/.Xresources
+    echo "URxvt.perl-lib:$HOME/.urxvt" | xrdb -merge -
 fi
 
 if [ -f ~/.Xresources.local ] ; then
