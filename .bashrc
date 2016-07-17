@@ -3,11 +3,17 @@
 # exit early if not interactive
 if [ "$PS1" = "" ] ; then return ; fi
 
-if [ -z "$BASH_COMPLETION" ] ; then
-    if [ -f /etc/bash_completion ] ; then
-        . /etc/bash_completion
+function source_if_exists {
+    if [ -f "$1" ] ; then
+        source "$1"
     fi
+}
+
+if [ -z "$BASH_COMPLETION" ] ; then
+    source_if_exists /etc/bash_completion
 fi
+
+source_if_exists /usr/share/doc/pkgfile/command-not-found.bash
 
 if [ -x "`which dircolors 2>/dev/null`" ] ; then
     if [ -f ~/.dircolours ] ; then
@@ -56,52 +62,31 @@ IWhite="\[\033[0;97m\]"
 # Reset
 Color_Off="\[\033[0m\]"
 
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
-    PS1PREFIX="$Blue\h$Color_Off "
-fi
-
+# adapted from http://stackoverflow.com/a/6086978/1041691
+source_if_exists /usr/share/git/completion/git-prompt.sh
 if [ "$USER" = "root" ] ; then
-    ROOT_WARNING="${BRed}\u$Color_Off "
+    __root_warning_ps1="${BRed}\u$Color_Off "
 fi
-
-if [ -z "`type -t __git_ps1`" ] ; then
-    # no-op for older machines
-    function __git_ps1 { exit 0 ; }
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
+    __ssh_host_ps1="$Blue\h$Color_Off "
 fi
-
-# TODO: can this be factored out into a clean function?
-export PS1=$ROOT_WARNING$PS1PREFIX'$(git branch &>/dev/null;\
-if [ $? -eq 0 ]; then \
-  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
-  if [ "$?" -eq "0" ]; then \
-    # @4 - Clean repository - nothing to commit
-    echo "'$IGreen'"$(__git_ps1 "%s "); \
-  else \
-    # @5 - Changes to working tree
-    echo "'$IRed'"$(__git_ps1 "%s"); \
-  fi) "
-fi)'"$IWhite\w$Color_Off "
-
-# workaround for the Emacs shell
-if [ "$TERM" = "dumb" ] ; then
-    export PS1="\u@\h:\w:"
+function fommil_ps1 {
+    GIT_PS1_SHOWDIRTYSTATE=true
+    local __git_branch="$Blue"'$(__git_ps1 "%s ")'"$Color_Off"
+    local __location="$IWhite\w$Color_Off"
+    export PS1="$__root_warning_ps1$__ssh_host_ps1$__git_branch$__location "
+}
+if [ -z "$INSIDE_EMACS" ] && [ "$(type -t __git_ps1)" = "function" ] ; then
+    fommil_ps1
 fi
 
 # complicated aliases
-
 function docker-nuke {
     docker rm $(docker ps -aq)
     docker rmi $(docker images | grep '^<none>' | awk '{print $3}')
 }
 
-
 # Local settings and overrides
-if [ -f ~/.bashrc.local ] ; then
-    . ~/.bashrc.local
-fi
-if [ -f ~/.aliases ] ; then
-    . ~/.aliases
-fi
-if [ -f ~/.aliases.local ] ; then
-    . ~/.aliases.local
-fi
+source_if_exists ~/.bashrc.local
+source_if_exists ~/.aliases
+source_if_exists ~/.aliases.local

@@ -14,6 +14,10 @@ if [ -f ~/.Xresources ] ; then
   xrdb -merge ~/.Xresources
 fi
 
+if [ -f ~/.Xresources.local ] ; then
+    xrdb -merge ~/.Xresources.local
+fi
+
 # top right corner stops screen lock
 xautolock -locker "i3lock -c000000" -time 15 -corners +--- &
 

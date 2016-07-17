@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# git clone https://github.com/gcuisinier/jenv.git ~/.jenv
+export PATH=$HOME/.jenv/bin:$PATH
+eval "$(jenv init -)"
+
+export GOPATH=$HOME/.go
+# alternative to grive
+# go get -u github.com/odeke-em/drive/cmd/drive
+# go get -u github.com/github/hub
+# GO15VENDOREXPERIMENT=1 go get github.com/drone/drone-cli/drone
+export PATH=$GOPATH/bin:$PATH

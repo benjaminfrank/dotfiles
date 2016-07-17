@@ -1,0 +1,7 @@
+#!/bin/bash
+
+feh --bg-center ~/.bg.jpg
+
+redshift -b 0.9:0.7 &
+
+xmobar &
