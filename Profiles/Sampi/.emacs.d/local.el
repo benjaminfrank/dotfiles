@@ -12,7 +12,7 @@
 (setq ensime-server-version "2.0.0-graph-SNAPSHOT")
 
 (add-to-list 'default-frame-alist
-             '(font . "Hack-26"))
+             '(font . "Hack-14"))
 
 (defun dark-theme ()
   "A dark coloured theme for hacking when there is no screen glare."

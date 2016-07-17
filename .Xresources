@@ -1,13 +1,12 @@
 !------------------------------------------------------------------------------!
 ! defaults !
 !------------------------------------------------------------------------------!
-Xft.antialias: 1
-Xft.dpi: 96
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
 Xft.hinting: 1
-Xft.hintstyle: hintfull
-Xft.lcdfilter: lcddefault
+Xft.antialias: 1
 Xft.rgba: rgb
-Xcursor.size: 18
 Xcursor.theme: Human
 Xcursor.theme_core: true
 
@@ -24,12 +23,7 @@ URxvt*scrollBar: true
 URxvt*scrollBar_right: true
 URxvt*scrollBar_floating: true
 URxvt*scrollstyle: plain
-!URxvt*font: xft:Inconsolata:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
-!URxvt*boldFont: xft:Inconsolata:size=16,xft:PragmataProPowerline:size=18,xft:Envy Code R:size=18
-URxvt*font: xft:Hack:size=14
-URxvt*boldFont: xft:Hack:size=14
 URxvt.fading: 0
-!URxvt.perl-lib: /home/fommil/.urxvt
 URxvt.perl-ext-common: default,matcher,tabbedex,clipboard
 URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1

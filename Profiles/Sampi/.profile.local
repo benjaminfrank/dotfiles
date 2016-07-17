@@ -10,3 +10,8 @@ export GOPATH=$HOME/.go
 # go get -u github.com/github/hub
 # GO15VENDOREXPERIMENT=1 go get github.com/drone/drone-cli/drone
 export PATH=$GOPATH/bin:$PATH
+
+export MAKEFLAGS="-j$(nproc)"
+# gcc -march=native -v -Q --help=target
+export CFLAGS="-march=native -O3"
+export CXXFLAGS="$CFLAGS"
