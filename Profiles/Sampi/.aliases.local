@@ -1,4 +1,4 @@
-#alias update="sudo pacman -Syu ; update-emacs"
-alias update="yaourt -Syu --devel --aur ; update-emacs"
-alias keepers="pacman -Qqet"
-alias cleanup="pacman -Rsn $(pacman -Qdtq)"
+alias update="sudo pacman -Syu ; update-emacs"
+alias update-aggressive="yaourt -Syu --devel --aur ; update-emacs"
+alias keepers="sudo pacman -Qqet"
+alias cleanup="sudo pacman -Rsn $(pacman -Qdtq)"

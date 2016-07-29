@@ -69,7 +69,6 @@
  tags-case-fold-search nil
  tags-revert-without-query t
  tags-add-tables nil
- compilation-skip-threshold 2
  compilation-scroll-output 'first-error
  source-directory (getenv "EMACS_SOURCE")
  org-confirm-babel-evaluate nil
@@ -203,8 +202,9 @@
       ;; intentionally not save-buffers-kill-terminal as it has an
       ;; impact on other client sessions.
       (delete-frame)
+    ;; would be better to filter non-hidden buffers
     (let ((count-buffers (length (buffer-list))))
-      (if (< count-buffers 10)
+      (if (< count-buffers 11)
           (save-buffers-kill-emacs)
         (message-box "use 'M-x exit'")))))
 

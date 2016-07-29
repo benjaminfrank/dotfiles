@@ -1,4 +1,5 @@
 #!/bin/bash
 
+export LC_ALL=C
+export LANG=C
 exec ${HOME}/kerbal/KSP.x86_64
-

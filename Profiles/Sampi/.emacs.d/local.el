@@ -14,6 +14,11 @@
 (add-to-list 'default-frame-alist
              '(font . "Hack-14"))
 
+;; (bind-key "C-c c" 'sbt-hydra:hydra sbt:mode-map)
+;; (bind-key "C-c c" 'sbt-hydra:hydra java-mode-map)
+;; (bind-key "C-c c" 'sbt-hydra:hydra dired-mode-map)
+
+
 (defun dark-theme ()
   "A dark coloured theme for hacking when there is no screen glare."
   (interactive)
