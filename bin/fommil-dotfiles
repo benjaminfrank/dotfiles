@@ -15,6 +15,9 @@ FOMMIL=`dirname $BIN`
 PROFILE="${FOMMIL}/Profiles/${HOSTNAME}"
 
 function fommil-links {
+  if [ ! -d "$1" ] ; then
+    return 1;
+  fi
   cd "$1"
   find . -type f \
        ! -path "./.git/*" \
