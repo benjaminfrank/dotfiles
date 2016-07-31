@@ -1,0 +1,10 @@
+# don't forget to run this to make the associations:
+# update-desktop-database ~/.local/share/applications
+[Desktop Entry]
+Type=Application
+Name=Citrix Receiver
+MimeType=application/x-ica
+Exec=cautious-launcher %f /opt/Citrix/ICAClient/wfica -icaroot /opt/Citrix/ICAClient
+StartupWMClass=Wfica
+NoDisplay=true
+Terminal=false
