@@ -4,6 +4,9 @@
 export PATH=$HOME/.jenv/bin:$PATH
 eval "$(jenv init -)"
 
+export YOURKIT_INSTALL=/opt/yourkit
+export YOURKIT_AGENT=$YOURKIT_INSTALL/bin/linux-x86-64/libyjpagent.so
+
 export GOPATH=$HOME/.go
 # alternative to grive
 # go get -u github.com/odeke-em/drive/cmd/drive

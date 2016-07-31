@@ -1,7 +1,8 @@
 #!/bin/bash
 
-if [ -z "$YOURKIT_HOME" ] ; then
-   echo "YOURKIT_HOME not set"
+if [ -z "$YOURKIT_INSTALL" ] ; then
+    echo "YOURKIT_INSTALL not set"
+    exit 1
 fi
 
-exec "$YOURKIT_HOME/bin/yjp.sh"
+exec "$YOURKIT_INSTALL/bin/yjp.sh"
