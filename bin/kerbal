@@ -2,4 +2,5 @@
 
 export LC_ALL=C
 export LANG=C
-exec ${HOME}/kerbal/KSP.x86_64
+cd ${HOME}/kerbal
+exec ./KSP.x86_64
