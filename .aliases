@@ -30,8 +30,7 @@ alias cp="cp -i"
 alias mv="mv -i"
 alias rm="rm -i"
 
-#alias nano="nano -w"
-alias nano='echo "stop using nano, emacs is fast now"'
+alias nano="nano -w"
 
 alias please="sudo"
 alias fuck="rm -rf"
@@ -42,6 +41,6 @@ alias markdown="hsmarkdown"
 alias open="xdg-open"
 alias volume="pavucontrol"
 
-alias ensime="sbt ';ensimeConfig ;ensimeConfigProject'"
-alias ensime-test-compile="sbt ';ensimeConfig ;ensimeConfigProject ;test:compile'"
-alias ensime-test-it-compile="sbt ';ensimeConfig ;ensimeConfigProject ;test:compile ;it:compile'"
+alias ensime="ctags -Re . & sbt ';ensimeConfig ;ensimeConfigProject'"
+alias ensime-test-compile="ctags -Re . & sbt ';ensimeConfig ;ensimeConfigProject ;test:compile'"
+alias ensime-test-it-compile="ctags -Re . & sbt ';ensimeConfig ;ensimeConfigProject ;test:compile ;it:compile'"
