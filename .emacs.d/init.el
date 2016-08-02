@@ -597,6 +597,7 @@ Inspired by `org-combine-plists'."
 (defun mvn-package-for-buffer ()
   "Calculate the expected package name for the buffer;
 assuming it is in a maven-style project."
+  ;; see https://github.com/fommil/dotfiles/issues/66
   (let* ((kind (file-name-extension buffer-file-name))
          (root (locate-dominating-file default-directory kind)))
     (when root
@@ -618,7 +619,6 @@ assuming it is in a maven-style project."
 
 (defun c-mode-newline-comments ()
   "Newline with indent and preserve multiline comments."
-  ;; TODO: annoyingly preserve single line comments, I don't want that
   (interactive)
   (c-indent-new-comment-line)
   (indent-according-to-mode))
