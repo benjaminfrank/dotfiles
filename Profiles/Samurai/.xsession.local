@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # TODO make this shared if the file exists
-feh --bg-center --no-fehbg ~/.bg.jpg
+feh --bg-center --no-fehbg ~/.bg.png
 
 # TODO use a redshift config file
 #redshift -b 0.9:0.7 &
