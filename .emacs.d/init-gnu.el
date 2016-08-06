@@ -92,7 +92,7 @@
   :config
   (add-hook 'message-setup-hook #'company-mode)
   ;; BUG https://debbugs.gnu.org/cgi/bugreport.cgi?bug=23747
-  ;;(add-hook 'message-setup-hook #'mml-secure-sign-pgpmime)
+  (add-hook 'message-setup-hook #'mml-secure-sign-pgpmime)
   )
 
 ;;..............................................................................
