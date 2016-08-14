@@ -624,8 +624,7 @@ assuming it is in a maven-style project."
   (indent-according-to-mode))
 
 (use-package scala-mode
-  :interpreter
-  ("scala" . scala-mode)
+  :defer t
   :init
   (setq
    scala-indent:use-javadoc-style t
@@ -656,6 +655,7 @@ assuming it is in a maven-style project."
     (projectile-find-tag)))
 
 (use-package ensime
+  :defer t
   :init
   (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
   (setq
