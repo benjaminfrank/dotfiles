@@ -15,6 +15,6 @@
 (find-file "~/Projects")
 
 ;; beta tester
-(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
+;;(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
 
 ;;; local.el ends here
