@@ -5,5 +5,6 @@ export LANG=C
 cd ${HOME}/kerbal
 
 zenity --warning --text "Don't forget to wiggle the joystick or it won't be calibrated correctly"
+jstest-gtk
 
 exec ./KSP.x86_64
