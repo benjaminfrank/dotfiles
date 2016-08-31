@@ -7,6 +7,8 @@ export HISTCONTROL=ignoredups
 export WINEARCH=win32
 export WINEDEBUG=fixme-all,warn+cursor
 
+export COURSIER_VERBOSITY=-1
+
 export COWPATH=$HOME/.cows:/usr/share/cowsay/cows
 
 function source_if_exists {
