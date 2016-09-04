@@ -12,6 +12,9 @@ export GOPATH=$HOME/.go
 # GO15VENDOREXPERIMENT=1 go get github.com/drone/drone-cli/drone
 export PATH=$GOPATH/bin:$PATH
 
+# yaourt's version is old
+export PATH="/home/fommil/.cask/bin:$PATH"
+
 export MAKEFLAGS="-j$(nproc)"
 # gcc -march=native -v -Q --help=target
 export CFLAGS="-march=native -O3"
