@@ -630,6 +630,11 @@ assuming it is in a maven-style project."
    scala-indent:use-javadoc-style t
    scala-indent:align-parameters t)
   :config
+
+  ;; prefer smartparens for parents handling
+  (remove-hook 'post-self-insert-hook
+               'scala-indent:indent-on-parentheses)
+
   (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
   (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
 
