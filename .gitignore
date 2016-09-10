@@ -2,6 +2,7 @@ target/
 .idea/
 
 .ensime*
+ensime.sbt
 .javahome
 .sbtopts
 
