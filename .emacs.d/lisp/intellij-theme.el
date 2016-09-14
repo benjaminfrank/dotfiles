@@ -1,6 +1,7 @@
 ;;; intellij-theme.el --- Inspired by IntelliJ's default theme
 
-;; Copyright (C) 2016  Vladimir Polushin
+;; Copyright (C) 2016 Vladimir Polushin
+;; Copyright (C) 2015 - 2016  Sam Halliday
 
 ;; Author: Vladimir Polushin <vovapolu@gmail.com>
 ;; Author of base darcula theme: Sam Halliday <Sam.Halliday@gmail.com>
@@ -64,7 +65,7 @@
      (param . (:foreground "#000000"))
      (class . (:foreground "#20999d"))
      (trait . (:foreground "#20999d" :slant italic))
-     (object . (:foreground "#000000" :slant italic))
+     (object . (:foreground "#5974ab" :slant italic))
      (package . (:foreground "#000000"))
      (deprecated . (:strike-through "#000000"))
      )))
@@ -86,7 +87,7 @@
  ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Faces-for-Font-Lock.html
  '(font-lock-warning-face ((t (:underline (:style wave :color "orange" :inherit 'default)))))
                                         ;for a construct that is peculiar, or that greatly changes the meaning of other text.
- '(font-lock-function-name-face ((t (:foreground "#000000" :inherit 'default))))
+ '(font-lock-function-name-face ((t (:foreground "#000000" :inherit 'default :weight bold))))
                                         ;for the name of a function being defined or declared.
  '(font-lock-variable-name-face ((t (:inherit 'default))))
                                         ;for the name of a variable being defined or declared.
@@ -98,11 +99,11 @@
                                         ;for comments delimiters, like ‘/*’ and ‘*/’ in C.
  '(font-lock-type-face ((t (:foreground "#20999d" :inherit 'default))))
                                         ;for the names of user-defined data types.
- '(font-lock-constant-face ((t (:foreground "#000000" :weight bold :inherit 'font-lock-variable-name-face))))
+ '(font-lock-constant-face ((t (:foreground "#5974ab" :weight bold :inherit 'font-lock-variable-name-face))))
                                         ;for the names of constants, like ‘NULL’ in C.
  '(font-lock-builtin-face ((t (:inherit 'font-lock-keyword-face))))
                                         ;for the names of built-in functions.
- '(font-lock-preprocessor-face ((t (:inherit 'font-lock-builtin-face))))
+ '(font-lock-preprocessor-face ((t (:inherit 'font-lock-builtin-face :foreground "#a57705"))))
                                         ;for preprocessor commands.
  '(font-lock-string-face ((t (:foreground "#008000" :weight bold :inherit 'default))))
                                         ;for string constants.
@@ -187,4 +188,4 @@
 
 (provide-theme 'intellij)
 
-;;; darcula-theme.el ends here
+;;; intellij-theme.el ends here
