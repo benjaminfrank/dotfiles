@@ -9,6 +9,8 @@
 
 (use-package darcula-theme)
 
+(require 'intellij-theme)
+
 ;;(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
 
 (add-to-list 'default-frame-alist
@@ -23,12 +25,15 @@
   "A dark coloured theme for hacking when there is no screen glare."
   (interactive)
   (load-theme 'darcula t))
-(dark-theme)
+;;(dark-theme)
 
 (defun light-theme ()
   "A light coloured theme for hacking when there is lots of screen glare."
   (interactive)
-  (load-theme 'leuven t))
+  (load-theme 'intellij t))
+(light-theme)
+
+(light-theme)
 
 (find-file (expand-file-name "scratch.el" user-emacs-directory))
 

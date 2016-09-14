@@ -114,7 +114,7 @@
  '(flymake-warnline ((t (:inherit 'warning))))
  '(escape-glyph ((((background dark)) (:foreground "cyan")) (((type pc)) (:foreground "magenta")) (t (:foreground "brown"))))
  '(minibuffer-prompt ((t (:weight bold :slant normal :underline nil :inverse-video nil :foreground "#259185"))))
- '(highlight ((t (:background "#5974ab"))))
+ '(highlight ((t (:background "#eeeeee"))))
  '(region ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#5974ab" :background "#ffffff"))))
  '(shadow ((t (:foreground "#465a61"))))
  '(secondary-selection ((t (:background "#0a2832"))))
