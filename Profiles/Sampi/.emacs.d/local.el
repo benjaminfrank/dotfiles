@@ -9,7 +9,7 @@
 
 (use-package darcula-theme)
 
-(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
+;;(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
 
 (add-to-list 'default-frame-alist
              '(font . "Hack-14"))
