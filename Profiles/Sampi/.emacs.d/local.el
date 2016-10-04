@@ -8,8 +8,7 @@
 (require 'use-package)
 
 (use-package darcula-theme)
-
-(require 'intellij-theme)
+(use-package intellij-theme)
 
 ;;(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
 
