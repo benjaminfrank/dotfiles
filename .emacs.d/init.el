@@ -442,6 +442,7 @@ Inspired by `org-combine-plists'."
          ispell-dictionary "british"
          flyspell-prog-text-faces '(font-lock-doc-face))
   :config
+  (bind-key "C-." nil flyspell-mode-map)
   (put 'text-mode
        'flyspell-mode-predicate
        'flyspell-ignore-http-and-https))
