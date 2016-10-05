@@ -8,9 +8,9 @@
 (add-to-list 'default-frame-alist
              '(font . "Hack-14"))
 
+(use-package intellij-theme)
 (use-package darcula-theme)
 
-(require 'intellij-theme)
 
 ;; I'll usually want access to these..
 (find-file (expand-file-name "scratch.el" user-emacs-directory))
