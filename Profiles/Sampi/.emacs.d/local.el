@@ -13,7 +13,7 @@
 ;;(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
 
 (add-to-list 'default-frame-alist
-             '(font . "Hack-14"))
+             '(font . "Hack-16"))
 
 ;; (bind-key "C-c c" 'sbt-hydra:hydra sbt:mode-map)
 ;; (bind-key "C-c c" 'sbt-hydra:hydra java-mode-map)
