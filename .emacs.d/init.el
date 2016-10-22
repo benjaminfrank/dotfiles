@@ -53,6 +53,7 @@
  scroll-error-top-bottom t
  scroll-margin 15
  gc-cons-threshold 20000000
+ large-file-warning-threshold 100000000
  user-full-name "Sam Halliday")
 
 ;; buffer local variables
@@ -306,7 +307,7 @@ Inspired by `org-combine-plists'."
   :init
   (setq projectile-use-git-grep t)
   :config
-  (projectile-global-mode)
+  (projectile-mode)
   (add-hook 'projectile-grep-finished-hook
             ;; not going to the first hit?
             (lambda () (pop-to-buffer next-error-last-buffer)))
@@ -352,7 +353,7 @@ Inspired by `org-combine-plists'."
 (use-package magit
   :commands magit-status magit-blame
   :init (setq
-         magit-revert-buffers nil)
+         git-commit-style-convention-checks nil)
   :bind (("s-g" . magit-status)
          ("s-b" . magit-blame)))
 
