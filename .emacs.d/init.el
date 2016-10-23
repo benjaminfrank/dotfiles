@@ -29,9 +29,12 @@
   ;; don't set gnu/org/melpa if the site-local or local-preinit have
   ;; done so (e.g. firewalled corporate environments)
   (require 'package)
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("org" . "http://orgmode.org/elpa/")
-                           ("melpa" . "http://melpa.org/packages/"))))
+  (setq
+   package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                      ("org" . "http://orgmode.org/elpa/")
+                      ("melpa-stable" . "http://stable.melpa.org/packages/")
+                      ("melpa" . "http://melpa.org/packages/"))
+   package-archive-priorities '("melpa-stable" . 1)))
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents)
