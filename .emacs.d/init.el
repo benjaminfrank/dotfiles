@@ -34,7 +34,7 @@
                       ("org" . "http://orgmode.org/elpa/")
                       ("melpa-stable" . "http://stable.melpa.org/packages/")
                       ("melpa" . "http://melpa.org/packages/"))
-   package-archive-priorities '("melpa-stable" . 1)))
+   package-archive-priorities '(("melpa-stable" . 1))))
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents)
