@@ -412,6 +412,7 @@ Inspired by `org-combine-plists'."
   (define-key yas-minor-mode-map [tab] #'yas-expand))
 
 (use-package yatemplate
+  :pin melpa ;; WORKAROUND https://github.com/mineo/yatemplate/issues/13
   :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
   :config
   (auto-insert-mode t)
@@ -787,6 +788,21 @@ assuming it is in a maven-style project."
 (pcase system-type
   (`gnu/linux
    (load (expand-file-name "init-gnu.el" user-emacs-directory))))
+
+(use-package darcula-theme)
+(use-package intellij-theme)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Themeing
+(defun dark-theme ()
+  "A dark coloured theme for hacking when there is no screen glare."
+  (interactive)
+  (load-theme 'darcula t))
+
+(defun light-theme ()
+  "A light coloured theme for hacking when there is lots of screen glare."
+  (interactive)
+  (load-theme 'intellij t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; User Site Local
