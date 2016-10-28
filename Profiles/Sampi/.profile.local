@@ -19,3 +19,5 @@ export MAKEFLAGS="-j$(nproc)"
 # gcc -march=native -v -Q --help=target
 export CFLAGS="-march=native -O3"
 export CXXFLAGS="$CFLAGS"
+
+export PATH=/opt/emacs25/bin:$PATH

@@ -16,7 +16,8 @@
 ;; (bind-key "C-c c" 'sbt-hydra:hydra java-mode-map)
 ;; (bind-key "C-c c" 'sbt-hydra:hydra dired-mode-map)
 
-(light-theme)
+(dark-theme)
+;;(light-theme)
 
 (find-file (expand-file-name "scratch.el" user-emacs-directory))
 
