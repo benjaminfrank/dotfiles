@@ -310,7 +310,7 @@ Inspired by `org-combine-plists'."
   :init
   (setq projectile-use-git-grep t)
   :config
-  (projectile-mode)
+  (projectile-global-mode)
   (add-hook 'projectile-grep-finished-hook
             ;; not going to the first hit?
             (lambda () (pop-to-buffer next-error-last-buffer)))
@@ -567,9 +567,6 @@ Inspired by `org-combine-plists'."
   :diminish eldoc-mode
   :commands eldoc-mode)
 
-(use-package focus
-  :commands focus-mode)
-
 (use-package pcre2el
   :commands rxt-toggle-elisp-rx
   :init (bind-key "C-c / t" 'rxt-toggle-elisp-rx emacs-lisp-mode-map))
@@ -585,7 +582,6 @@ Inspired by `org-combine-plists'."
 
             (show-paren-mode t)
             (whitespace-mode-with-local-variables)
-            (focus-mode t)
             (rainbow-mode t)
             (prettify-symbols-mode t)
             (eldoc-mode t)
