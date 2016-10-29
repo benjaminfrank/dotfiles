@@ -19,4 +19,5 @@ export MAKEFLAGS="-j$(nproc)"
 export CFLAGS="-march=native -O3"
 export CXXFLAGS="$CFLAGS"
 
-export PATH=/opt/emacs25/bin:$PATH
+# when building emacs25-git use this to use my local repo
+# source=("$pkgname::git+file:///home/fommil/Projects/emacs#branch=emacs-25")
