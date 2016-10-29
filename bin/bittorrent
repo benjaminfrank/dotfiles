@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# because I can never remember the name of this app
-
-exec /usr/bin/transmission-gtk
