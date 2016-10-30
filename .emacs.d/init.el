@@ -529,7 +529,7 @@ Inspired by `org-combine-plists'."
      ("e" smerge-ediff)
      ("a" smerge-keep-mine)
      ("b" smerge-keep-other))))
-(add-hook 'smerge-mode-hook (lambda () (hydra-smerge/body)))
+;;(add-hook 'smerge-mode-hook (lambda () (hydra-smerge/body)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This section is for overriding common emacs keybindings with tweaks.
