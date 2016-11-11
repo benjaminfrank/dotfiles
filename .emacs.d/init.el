@@ -256,6 +256,22 @@ very minimal set."
   "Smartparens restriction on `SYM' for C-derived parenthesis."
   (sp-restrict-to-pairs-interactive "{([" sym))
 
+(defun fommil-sp-wrap-with-brackets (_ action _)
+  "Smartparens ACTION for newlining and indenting a region when wrapping."
+  ;; by Fuco1
+  ;; https://github.com/Fuco1/smartparens/issues/639
+  (when (eq action 'wrap)
+    (sp-get sp-last-wrapped-region
+      (let ((beg :beg-in)
+            (end :end-in))
+        (save-excursion
+          (goto-char end)
+          (newline-and-indent))
+        (save-excursion
+          (goto-char beg)
+          (newline))
+        (indent-region beg end)))))
+
 (defun plist-merge (&rest plists)
   "Create a single property list from all PLISTS.
 Inspired by `org-combine-plists'."
@@ -634,12 +650,15 @@ assuming it is in a maven-style project."
    scala-indent:align-parameters t)
   :config
 
-  ;; prefer smartparens for parents handling
+  ;; prefer smartparens for parens handling
   (remove-hook 'post-self-insert-hook
                'scala-indent:indent-on-parentheses)
 
   (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair 'scala-mode "{" nil :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
+  (sp-local-pair 'scala-mode "{" nil
+               :post-handlers '(("||\n[i]" "RET")
+                                ("| " "SPC")
+                                fommil-sp-wrap-with-brackets))
 
   (bind-key "RET" 'scala-mode-newline-comments scala-mode-map)
   (bind-key "s-<delete>" (sp-restrict-c 'sp-kill-sexp) scala-mode-map)
