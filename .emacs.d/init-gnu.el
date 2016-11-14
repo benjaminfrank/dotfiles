@@ -35,9 +35,7 @@
   :ensure ess
   :mode ("\\.R\\'" . R-mode))
 
-;; BUG: https://github.com/Silex/package-utils/issues/4
-;; (use-package package-utils
-;;   :commands package-utils-upgrade-all)
+(use-package package-utils)
 
 (use-package flycheck-cask
   :commands flycheck-cask-setup
