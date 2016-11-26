@@ -12,3 +12,4 @@ cancelable in Global := true
 //EnsimeKeys.ensimeJavaFlags += "-XX:MaxDirectMemorySize=4g"
 ensimeJavaHome in ThisBuild := file("/usr/lib/jvm/java-8-openjdk")
 ensimeServerVersion in ThisBuild := "2.0.0-SNAPSHOT"
+ensimeIgnoreMissingDirectories in ThisBuild := true
