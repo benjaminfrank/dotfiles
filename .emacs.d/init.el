@@ -687,6 +687,7 @@ assuming it is in a maven-style project."
   :init
   (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
   (setq
+   ensime-startup-notification nil
    ensime-startup-snapshot-notification nil)
   :config
   (require 'ensime-expand-region)
