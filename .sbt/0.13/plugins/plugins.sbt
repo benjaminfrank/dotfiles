@@ -1,4 +1,4 @@
-addSbtPlugin("org.ensime" % "sbt-ensime" % "1.12.4")
+addSbtPlugin("org.ensime" % "sbt-ensime" % "1.12.5")
 
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.2.0")
 

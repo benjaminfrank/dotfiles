@@ -674,11 +674,11 @@ assuming it is in a maven-style project."
   (bind-key "C-c c" 'sbt-command scala-mode-map)
   (bind-key "C-c e" 'next-error scala-mode-map))
 
-(defun ensime-edit-definition-with-fallback ()
+(defun ensime-edit-definition-with-fallback (arg)
   "Variant of `ensime-edit-definition' with ctags if ENSIME is not available."
-  (interactive)
+  (interactive "P")
   (unless (and (ensime-connection-or-nil)
-               (ensime-edit-definition))
+               (ensime-edit-definition arg))
     (projectile-find-tag)))
 
 (use-package ensime
