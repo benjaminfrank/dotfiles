@@ -142,6 +142,7 @@
 (use-package dired
   :ensure nil
   :config
+  (setq dired-dwim-target t)
   ;; a workflow optimisation too far?
   (bind-key "C-c c" 'sbt-command dired-mode-map)
   (bind-key "C-c e" 'next-error dired-mode-map))
