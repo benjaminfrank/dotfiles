@@ -724,7 +724,6 @@ assuming it is in a maven-style project."
     ("=>" . ?⇒)
     ("<=" . ?≤)
     (">=" . ?≥)
-    ("==" . ?≡)
     ("!=" . ?≠)
     ;; implicit https://github.com/chrissimpkins/Hack/issues/214
     ("+-" . ?±))
