@@ -146,11 +146,9 @@
 (add-hook 'org-mode-hook #'flyspell-mode)
 (add-hook 'markdown-mode-hook #'flyspell-mode)
 
-;; (add-hook 'org-mode-hook
-;;           (lambda ()
-;;             ;; TODO: consider spell checking?
-;;             ;; Remember TAB is for expanding sections, not yas
-;;             (setq company-backends (company-backends-for-buffer))))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (setq company-backends '((company-yasnippet company-dabbrev)))))
 
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."

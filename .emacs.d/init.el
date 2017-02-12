@@ -401,9 +401,11 @@ Inspired by `org-combine-plists'."
   :commands company-mode
   :init
   (setq
+   company-dabbrev-other-buffers t
    company-dabbrev-ignore-case nil
    company-dabbrev-code-ignore-case nil
    company-dabbrev-downcase nil
+   company-dabbrev-minimum-length 4
    company-idle-delay 0
    company-minimum-prefix-length 4)
   :config
