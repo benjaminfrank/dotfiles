@@ -42,5 +42,5 @@ alias open="xdg-open"
 alias volume="pavucontrol"
 
 alias ensime="ctags -Re . & sbt clean ';ensimeConfig ;ensimeConfigProject'"
-alias ensime-test-compile="ctags -Re . & sbt clean ';ensimeConfig ;ensimeConfigProject ;test:compile'"
-alias ensime-test-it-compile="ctags -Re . & sbt clean ';ensimeConfig ;ensimeConfigProject ;test:compile ;it:compile'"
+alias ensime-test-compile="ctags -Re . & sbt clean ';ensimeConfig ;ensimeConfigProject ;test:compile' ; sbt ensimeServerIndex"
+alias ensime-test-it-compile="ctags -Re . & sbt clean ';ensimeConfig ;ensimeConfigProject ;test:compile ;it:compile ;ensime/assembly' && sbt ensimeServerIndex && cd testing/cache && sbt ++2.12.1 ensimeConfig ensimeServerIndex && cd ../.."
