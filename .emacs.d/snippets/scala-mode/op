@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+#name: op
+# --
+case class ${1:Request}() extends Ops[${2:Response}]
+$0
