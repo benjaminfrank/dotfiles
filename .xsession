@@ -18,6 +18,14 @@ if [ -f ~/.Xresources.local ] ; then
     xrdb -merge ~/.Xresources.local
 fi
 
+if [ -f ~/.Xmodmap ] ; then
+    xmodmap ~/.Xmodmap
+fi
+
+if [ -f ~/.Xmodmap.local ] ; then
+    xmodmap ~/.Xmodmap.local
+fi
+
 # top right corner stops screen lock
 xautolock -locker "i3lock -c000000" -time 15 -corners +--- &
 
