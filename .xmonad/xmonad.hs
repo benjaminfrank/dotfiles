@@ -17,23 +17,24 @@ myFocusedBorderColor = "#000000"
 
 main = xmonad $ ewmh $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
               $ defaultConfig {
-	      terminal = "urxvt"
+                terminal = "urxvt"
               , startupHook = setWMName "LG3D"
               , logHook = takeTopFocus
               , normalBorderColor  = myNormalBorderColor
               , focusedBorderColor = myFocusedBorderColor
-              , modMask = mod4Mask
+              -- hyper (super is mod4Mask)
+              , modMask = mod3Mask
               , keys = keys'
               , manageHook = manageHook'
               , handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
-	    }
+        }
 
 manageHook' :: ManageHook
 manageHook' = composeAll 
               [ className =? "Xmessage" --> doFloat
               , className =? "Gimp" --> doFloat
               , className =? "Inkscape" --> doFloat
-	      , title     =? "Downloads" --> doFloat
+              , title     =? "Downloads" --> doFloat
               , title     =? "Save As..." --> doFloat
               , title     =? "Open" --> doFloat
               ]
@@ -44,18 +45,18 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- https://hackage.haskell.org/package/X11-1.6.1.1/docs/Graphics-X11-Types.html
   -- https://hackage.haskell.org/package/X11-1.6.1.1/docs/Graphics-X11-ExtraTypes.html
   -- some defaults copied from http://code.haskell.org/xmonad/XMonad/Config.hs
-      ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf) -- %! Launch terminal
-    , ((modMask,               xK_p     ), spawn "dmenu_run") -- %! Launch dmenu
-    , ((modMask .|. shiftMask, xK_c     ), kill) -- %! Close the focused window
-    , ((modMask,               xK_Return), windows W.swapMaster) -- %! Set the focused window as master
-    , ((modMask,               xK_Tab   ), windows W.focusDown) -- %! Move focus to the next window
-    , ((modMask,               xK_minus ), sendMessage Shrink) -- %! Shrink the master area
-    , ((modMask,               xK_equal ), sendMessage Expand) -- %! Expand the master area
-    , ((modMask,               xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
-    , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
-    , ((modMask .|. shiftMask, xK_r     ), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
-    , ((0,                    0x1008ff02), spawn "xbacklight -inc 1")
-    , ((0,                    0x1008ff03), spawn "xbacklight -dec 1")
+      ((modMask, xK_Return), spawn $ XMonad.terminal conf) -- %! Launch terminal
+    , ((modMask, xK_p     ), spawn "dmenu_run") -- %! Launch dmenu
+    , ((modMask, xK_c     ), kill) -- %! Close the focused window
+    , ((modMask, xK_space ), windows W.swapMaster) -- %! Set the focused window as master
+    , ((modMask, xK_Tab   ), windows W.focusDown) -- %! Move focus to the next window
+    , ((modMask, xK_minus ), sendMessage Shrink) -- %! Shrink the master area
+    , ((modMask, xK_equal ), sendMessage Expand) -- %! Expand the master area
+    , ((modMask, xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
+    , ((modMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
+    , ((modMask, xK_r     ), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
+    , ((0,      0x1008ff02), spawn "xbacklight -inc 1")
+    , ((0,      0x1008ff03), spawn "xbacklight -dec 1")
   ]
     ++
     -- workspaces

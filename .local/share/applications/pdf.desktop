@@ -1,0 +1,9 @@
+# don't forget to run this to make the associations:
+# update-desktop-database ~/.local/share/applications
+[Desktop Entry]
+Type=Application
+Name=Portable Document Format
+MimeType=application/pdf
+Exec=/usr/bin/evince
+NoDisplay=true
+Terminal=false
