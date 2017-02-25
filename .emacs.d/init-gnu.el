@@ -133,7 +133,8 @@
 ;; org-mode
 (use-package org
   :ensure org-plus-contrib
-  :defer t)
+  :defer t
+  :bind ("C-c c" . pandoc))
 
 (use-package synosaurus
   :commands synosaurus-choose-and-replace

@@ -787,7 +787,6 @@ assuming it is in a maven-style project."
             (yas-minor-mode t)
             (company-mode t)
             (visual-line-mode t)
-            (local-set-key (kbd "C-c c") 'pandoc)
             (local-set-key (kbd "s-c") 'picture-mode)
             (org-babel-do-load-languages
              'org-babel-load-languages
