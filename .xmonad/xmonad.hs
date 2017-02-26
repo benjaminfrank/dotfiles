@@ -1,4 +1,5 @@
 import XMonad
+import XMonad.Actions.SpawnOn
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ICCCMFocus
 import XMonad.Hooks.EwmhDesktops
@@ -18,7 +19,7 @@ myFocusedBorderColor = "#000000"
 main = xmonad $ ewmh $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
               $ defaultConfig {
                 terminal = "urxvt"
-              , startupHook = setWMName "LG3D"
+              , startupHook = startup
               , logHook = takeTopFocus
               , normalBorderColor  = myNormalBorderColor
               , focusedBorderColor = myFocusedBorderColor
@@ -28,6 +29,14 @@ main = xmonad $ ewmh $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgre
               , manageHook = manageHook'
               , handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
         }
+
+startup :: X ()
+startup = do
+          setWMName "LG3D"
+-- spawnOn doesn't recognise reloads, nor the workspace number
+--          spawnOn "workspace1" "urxvt"
+--          spawnOn "workspace2" "emacs"
+--          spawnOn "workspace3" "chromium"
 
 manageHook' :: ManageHook
 manageHook' = composeAll 
