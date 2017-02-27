@@ -149,7 +149,7 @@
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (setq company-backends '((company-yasnippet company-dabbrev)))))
+            (setq company-backends '(company-yasnippet))))
 
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."

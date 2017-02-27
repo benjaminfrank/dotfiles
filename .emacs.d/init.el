@@ -790,7 +790,8 @@ assuming it is in a maven-style project."
             (local-set-key (kbd "s-c") 'picture-mode)
             (org-babel-do-load-languages
              'org-babel-load-languages
-             '((ditaa . t)))))
+             '((ditaa . t)
+               (dot   . t)))))
 
 (use-package markdown-mode
   :commands markdown-mode)
