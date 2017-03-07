@@ -668,6 +668,7 @@ assuming it is in a maven-style project."
   (bind-key "s-<backspace>" (sp-restrict-c 'sp-backward-kill-sexp) scala-mode-map)
   (bind-key "s-<home>" (sp-restrict-c 'sp-beginning-of-sexp) scala-mode-map)
   (bind-key "s-<end>" (sp-restrict-c 'sp-end-of-sexp) scala-mode-map)
+  (bind-key "s-<tab>" 'yas-expand scala-mode-map)
   ;; BUG https://github.com/Fuco1/smartparens/issues/468
   ;; backwards/next not working particularly well
 
@@ -746,7 +747,7 @@ assuming it is in a maven-style project."
 (add-hook 'ensime-mode-hook
           (lambda ()
             (let ((backends (company-backends-for-buffer)))
-              (setq company-backends (push '(ensime-company company-yasnippet) backends)))))
+              (setq company-backends (cons 'ensime-company backends)))))
 
 ;;..............................................................................
 ;; Java
