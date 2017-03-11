@@ -248,7 +248,7 @@ For small projects, use TAGS for completions, otherwise use a
 very minimal set."
   (projectile-visit-project-tags-table)
   (cl-flet ((size () (buffer-size (get-file-buffer tags-file-name))))
-    (let ((base '(company-keywords company-dabbrev-code company-yasnippet)))
+    (let ((base '(company-keywords company-dabbrev-code)))
       (if (and tags-file-name (<= 20000000 (size)))
           (list (push 'company-etags base))
         (list base)))))
@@ -409,9 +409,9 @@ Inspired by `org-combine-plists'."
    company-idle-delay 0
    company-minimum-prefix-length 4)
   :config
-  ;; dabbrev is too slow, use C-TAB explicitly
+  ;; dabbrev is too slow, use C-TAB explicitly or add back on per-mode basis
   (delete 'company-dabbrev company-backends)
-  ;; disables TAB in company-mode, freeing it for yasnippet
+  ;; disables TAB in company-mode (too many conflicts)
   (define-key company-active-map [tab] nil)
   (define-key company-active-map (kbd "TAB") nil))
 
@@ -426,9 +426,12 @@ Inspired by `org-combine-plists'."
 (use-package yasnippet
   :diminish yas-minor-mode
   :commands yas-minor-mode
+  :bind ("s-<tab>" . yas-expand)
   :config
-  (yas-reload-all)
-  (define-key yas-minor-mode-map [tab] #'yas-expand))
+  ;; TAB conflicts with too many things
+  (define-key yas-minor-mode-map [tab] nil)
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
+  (yas-reload-all))
 
 (use-package yatemplate
   :pin melpa ;; WORKAROUND https://github.com/mineo/yatemplate/issues/13
@@ -437,6 +440,12 @@ Inspired by `org-combine-plists'."
   (auto-insert-mode t)
   (setq auto-insert-alist nil)
   (yatemplate-fill-alist))
+
+(use-package color-moccur
+  :bind (("s-o" . moccur)
+         :map isearch-mode-map
+         ("M-o" . isearch-moccur)
+         ("M-O" . isearch-moccur-all)))
 
 (use-package writeroom-mode
   ;; BUGs to be aware of:
@@ -668,7 +677,6 @@ assuming it is in a maven-style project."
   (bind-key "s-<backspace>" (sp-restrict-c 'sp-backward-kill-sexp) scala-mode-map)
   (bind-key "s-<home>" (sp-restrict-c 'sp-beginning-of-sexp) scala-mode-map)
   (bind-key "s-<end>" (sp-restrict-c 'sp-end-of-sexp) scala-mode-map)
-  (bind-key "s-<tab>" 'yas-expand scala-mode-map)
   ;; BUG https://github.com/Fuco1/smartparens/issues/468
   ;; backwards/next not working particularly well
 
@@ -725,9 +733,9 @@ assuming it is in a maven-style project."
   '(("->" . ?→)
     ("<-" . ?←)
     ("=>" . ?⇒)
-    ("<=" . ?≤)
-    (">=" . ?≥)
-    ("!=" . ?≠)
+    ;; ("<=" . ?≤)
+    ;; (">=" . ?≥)
+    ;; ("!=" . ?≠)
     ;; implicit https://github.com/chrissimpkins/Hack/issues/214
     ("+-" . ?±))
   "Prettify symbols for scala-mode.")
