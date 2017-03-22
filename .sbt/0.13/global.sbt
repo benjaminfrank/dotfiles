@@ -4,9 +4,6 @@ import org.ensime.EnsimeCoursierKeys._
 // WORKAROUND https://github.com/rtimush/sbt-updates/issues/10
 addCommandAlias("dependencyUpdatesProject", "; reload plugins; dependencyUpdates; reload return")
 
-// WORKAROUND http://stackoverflow.com/questions/41966066
-resolvers += "JBoss" at "https://repository.jboss.org/"
-
 net.virtualvoid.sbt.graph.DependencyGraphSettings.graphSettings
 
 cancelable in Global := true
