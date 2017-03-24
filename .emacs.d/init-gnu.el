@@ -143,14 +143,42 @@
   :config
   (bind-key "C-c s r" 'synosaurus-choose-and-replace text-mode-map))
 
-;; seems to be a performance problem in emacs 24.5 in some text modes (e.g. email)
-;;(add-hook 'text-mode-hook #'flyspell-mode)
-(add-hook 'org-mode-hook #'flyspell-mode)
-(add-hook 'markdown-mode-hook #'flyspell-mode)
+(use-package writegood-mode
+  :commands writegood-mode)
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            (setq company-backends '(company-yasnippet))))
+(defun writing-mode-hooks ()
+  "Common hooks for writing modes."
+  (setq company-backends '(company-yasnippet))
+  (flyspell-mode)
+  (writegood-mode)
+  (flyspell-buffer))
+;; performance problems in emacs 24.5 (e.g. email)
+;;(add-hook 'text-mode-hook #'writing-mode-hooks)
+(add-hook 'org-mode-hook #'writing-mode-hooks)
+(add-hook 'markdown-mode-hook #'writing-mode-hooks)
+
+(defun endless/org-ispell ()
+  ;; http://endlessparentheses.com/ispell-and-org-mode.html
+  "Configure `ispell-skip-region-alist' for `org-mode'."
+  (make-local-variable 'ispell-skip-region-alist)
+  (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+  (add-to-list 'ispell-skip-region-alist '("~" "~"))
+  (add-to-list 'ispell-skip-region-alist '("=" "="))
+  (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+(add-hook 'org-mode-hook #'endless/org-ispell)
+
+(defun flyspell-markdown-verify ()
+  "Used for `flyspell-generic-check-word-predicate' in markdown."
+  (let ((f (get-text-property (- (point) 1) 'face)))
+    (not
+     (or (memq f '(markdown-pre-face))
+         (memq f '(markdown-language-keyword-face))))))
+(defun fommil/markdown-spell ()
+  "Configure `ispell-skip-region-alist' for `markdown-mode'."
+  (make-local-variable 'ispell-skip-region-alist)
+  (add-to-list 'ispell-skip-region-alist '("^```[a-Z]*$" . "^```$"))
+  (setq flyspell-generic-check-word-predicate 'flyspell-markdown-verify))
+(add-hook 'markdown-mode-hook #'fommil/markdown-spell)
 
 (defun pandoc ()
   "If a hidden .pandoc file exists for the file, run it."
