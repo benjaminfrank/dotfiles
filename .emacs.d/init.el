@@ -476,18 +476,21 @@ Inspired by `org-combine-plists'."
          flyspell-prog-text-faces '(font-lock-doc-face))
   :config
   (bind-key "C-." nil flyspell-mode-map)
-  (put 'text-mode
-       'flyspell-mode-predicate
-       'flyspell-ignore-http-and-https))
+  ;; the correct way to set flyspell-generic-check-word-predicate
+  (put #'text-mode #'flyspell-mode-predicate #'text-flyspell-predicate))
 
-(defun flyspell-ignore-http-and-https ()
-  ;; http://emacs.stackexchange.com/a/5435
-  "Ignore anything starting with 'http' or 'https'."
+(defun text-flyspell-predicate ()
+  "Ignore acronyms and anything starting with 'http' or 'https'."
   (save-excursion
-    (forward-whitespace -1)
-    (when (looking-at " ")
-      (forward-char)
-      (not (looking-at "https?\\b")))))
+    (let ((case-fold-search nil))
+      (forward-whitespace -1)
+      (when
+          (or
+           (equal (point) (line-beginning-position))
+           (looking-at " "))
+        (forward-char))
+      (not
+       (looking-at "\\([[:upper:]]+\\|https?\\)\\b")))))
 
 (use-package rainbow-delimiters
   :diminish rainbow-delimiters-mode

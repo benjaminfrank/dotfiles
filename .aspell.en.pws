@@ -1,10 +1,11 @@
-personal_ws-1.1 en 9 
+personal_ws-1.1 en 10 
+demangling
 compiletime
-ENSIME
 Halliday
 hoc
 IntelliJ
 runtime
+bytecode
 dimensionality
 dimensionalities
 memoisation
