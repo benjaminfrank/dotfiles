@@ -1,3 +1,4 @@
+import Control.Monad
 import XMonad
 import XMonad.Actions.SpawnOn
 import XMonad.Hooks.DynamicLog
@@ -8,38 +9,41 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Util.EZConfig
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
+import System.Environment
 import System.Exit
-
 
 myNormalBorderColor  = "#7a7a7a"
 myFocusedBorderColor = "#000000"
 
 -- don't forget to follow http://youtrack.jetbrains.com/issue/IDEA-101072
 
-main = xmonad $ ewmh $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
+main = do
+       args <- getArgs
+       xmonad $ ewmh
+              $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
               $ defaultConfig {
-                terminal = "urxvt"
-              , startupHook = startup
-              , logHook = takeTopFocus
-              , normalBorderColor  = myNormalBorderColor
-              , focusedBorderColor = myFocusedBorderColor
-              -- hyper (super is mod4Mask)
-              , modMask = mod3Mask
-              , keys = keys'
-              , manageHook = manageHook'
-              , handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
-        }
+              terminal = "urxvt"
+            , startupHook = startup (null args)
+            , logHook = takeTopFocus
+            , normalBorderColor  = myNormalBorderColor
+            , focusedBorderColor = myFocusedBorderColor
+                                   -- hyper (super is mod4Mask)
+            , modMask = mod3Mask
+            , keys = keys'
+            , manageHook = manageSpawn <+> manageHook'
+            , handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
+       }
 
-startup :: X ()
-startup = do
-          setWMName "LG3D"
--- spawnOn doesn't recognise reloads, nor the workspace number
---          spawnOn "workspace1" "urxvt"
---          spawnOn "workspace2" "emacs"
---          spawnOn "workspace3" "chromium"
+startup :: Bool -> X ()
+startup initial = do
+                  setWMName "LG3D"
+                  when initial $ do
+                    spawnOn "1" "urxvt"
+                    spawnOn "2" "emacs"
+                    spawnOn "3" "chromium"
 
 manageHook' :: ManageHook
-manageHook' = composeAll 
+manageHook' = composeAll
               [ className =? "Xmessage" --> doFloat
               , className =? "Gimp" --> doFloat
               , className =? "Inkscape" --> doFloat
