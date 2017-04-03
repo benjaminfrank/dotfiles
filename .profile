@@ -21,6 +21,7 @@ function source_if_exists {
 
 # place local system fixes in here
 source_if_exists $HOME/.profile.local
+source_if_exists $HOME/.profile.sec
 
 if [ ! -f ~/.inputrc ] && [ -f /etc/inputrc ] ; then
     export INPUTRC=/etc/inputrc

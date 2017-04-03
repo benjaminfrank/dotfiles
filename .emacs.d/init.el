@@ -460,7 +460,8 @@ Inspired by `org-combine-plists'."
   :init
   ;; BUG: https://emacs.stackexchange.com/questions/7743
   (put 'whitespace-line-column 'safe-local-variable #'integerp)
-  (setq whitespace-style '(face trailing tabs lines-tail)
+  (setq whitespace-style '(face trailing tabs)
+        ;; add `lines-tail' to report long lines
         ;; github source code viewer overflows ~120 chars
         whitespace-line-column 120))
 (defun whitespace-mode-with-local-variables ()
