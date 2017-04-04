@@ -1,5 +1,8 @@
-personal_ws-1.1 en 10 
+personal_ws-1.1 en 16 
 demangling
+libre
+Lightbend
+Akka
 compiletime
 Halliday
 hoc
@@ -9,3 +12,6 @@ bytecode
 dimensionality
 dimensionalities
 memoisation
+FP
+Github
+OOP
