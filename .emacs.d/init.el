@@ -710,8 +710,7 @@ assuming it is in a maven-style project."
   (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
 
   (bind-key "s-n" 'ensime-search ensime-mode-map)
-  (bind-key "s-t" 'ensime-print-type-at-point ensime-mode-map)
-  (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map))
+  (bind-key "s-t" 'ensime-print-type-at-point ensime-mode-map))
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
@@ -758,6 +757,8 @@ assuming it is in a maven-style project."
 
 (add-hook 'ensime-mode-hook
           (lambda ()
+            ;; needs to be here to override the default
+            (bind-key "M-." 'ensime-edit-definition-with-fallback ensime-mode-map)
             (let ((backends (company-backends-for-buffer)))
               (setq company-backends (cons 'ensime-company backends)))))
 
