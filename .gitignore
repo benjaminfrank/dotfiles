@@ -7,6 +7,8 @@ ensime.sbt
 .javahome
 .sbtopts
 
+.history
+
 .dir-locals.el
 
 TAGS
