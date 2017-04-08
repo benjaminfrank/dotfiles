@@ -178,8 +178,8 @@
       (shell-command command-file))))
 
 (use-package ox-leanpub
-  :ensure nil
-  :defer t)
+  :commands org-leanpub-export-to-markdown
+  :ensure nil)
 
 ;; https://lakshminp.com/publishing-book-using-org-mode
 (defun leanpub-export ()
