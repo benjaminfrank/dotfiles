@@ -133,7 +133,7 @@
 ;;..............................................................................
 ;; org-mode
 (use-package org
-  :ensure org-plus-contrib
+  ;;:ensure org-plus-contrib
   :defer t
   :bind ("C-c c" . pandoc))
 
@@ -148,7 +148,7 @@
 
 (defun writing-mode-hooks ()
   "Common hooks for writing modes."
-  (setq company-backends '(company-yasnippet))
+  ;;(setq company-backends '(company-yasnippet))
   (flyspell-mode)
   (writegood-mode))
 ;; performance problems in emacs 24.5 (e.g. email)
@@ -176,6 +176,42 @@
                               ".pandoc")))
     (when (file-exists-p command-file)
       (shell-command command-file))))
+
+(use-package ox-leanpub
+  :ensure nil
+  :defer t)
+
+;; https://lakshminp.com/publishing-book-using-org-mode
+(defun leanpub-export ()
+  "Export buffer to a Leanpub book."
+  (interactive)
+  (if (file-exists-p "./Book.txt")
+      (delete-file "./Book.txt"))
+  (if (file-exists-p "./Sample.txt")
+      (delete-file "./Sample.txt"))
+  (org-map-entries
+   (lambda ()
+     (let* ((level (nth 1 (org-heading-components)))
+            (tags (org-get-tags))
+            (title (or (nth 4 (org-heading-components)) ""))
+            (book-slug (org-entry-get (point) "TITLE"))
+            (filename
+             (or (org-entry-get (point) "EXPORT_FILE_NAME")
+                 (concat (replace-regexp-in-string " " "-" (downcase title)) ".md"))))
+       (when (= level 1) ;; export only first level entries
+         ;; add to Sample book if "sample" tag is found.
+         (when (or (member "sample" tags)
+                   (string-prefix-p "frontmatter" filename)
+                   (string-prefix-p "mainmatter" filename))
+           (append-to-file (concat filename "\n\n") nil "./Sample.txt"))
+         (append-to-file (concat filename "\n\n") nil "./Book.txt")
+         ;; set filename only if the property is missing
+         (or (org-entry-get (point) "EXPORT_FILE_NAME")
+             (org-entry-put (point) "EXPORT_FILE_NAME" filename))
+         (org-leanpub-export-to-markdown nil 1 nil))))
+   "-noexport")
+  (org-save-all-org-buffers)
+  nil nil)
 
 ;;..............................................................................
 ;; Chat rooms
