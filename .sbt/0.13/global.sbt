@@ -12,4 +12,4 @@ cancelable in Global := true
 ensimeServerVersion in ThisBuild := "2.0.0-SNAPSHOT"
 ensimeIgnoreMissingDirectories in ThisBuild := true
 
-historyPath := Some((baseDirectory in ThisBuild).value / "project/.history")
+historyPath := Some((baseDirectory in ThisBuild).value / ".history")

@@ -717,7 +717,7 @@ assuming it is in a maven-style project."
   :pin melpa
   :init
   (setq
-   sbt:sbt-history-file "project/.history"
+   sbt:sbt-history-file ".history"
    sbt:ansi-support t
    sbt:prefer-nested-projects t
    sbt:scroll-to-bottom-on-output nil
