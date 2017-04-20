@@ -47,6 +47,7 @@ manageHook' = composeAll
               [ className =? "Xmessage" --> doFloat
               , className =? "Gimp" --> doFloat
               , className =? "Inkscape" --> doFloat
+              , className =? "zoom" --> doFloat
               , title     =? "Downloads" --> doFloat
               , title     =? "Save As..." --> doFloat
               , title     =? "Open" --> doFloat
