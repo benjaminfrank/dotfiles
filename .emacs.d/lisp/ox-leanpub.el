@@ -32,6 +32,7 @@
   :translate-alist '((fixed-width . org-leanpub-fixed-width-block)
                      (example-block . org-leanpub-fixed-width-block)
                      (src-block . org-leanpub-src-block)
+                     (special-block . org-leanpub-special-block)
                      (plain-text . org-leanpub-plain-text)
                      (inner-template . org-leanpub-inner-template)
                      (footnote-reference . org-leanpub-footnote-reference)
@@ -127,6 +128,17 @@ channel."
             lang
             (org-remove-indentation
              (org-element-property :value src-block)))))
+
+;;; A> wibble
+;;; A> wibble
+;;; A> I'm a fish
+(defun org-leanpub-special-block (special-block contents info)
+  (pcase
+      (org-element-property :type special-block)
+    ("ASIDE" (replace-regexp-in-string
+              "^" "A> "
+              (s-trim (org-remove-indentation contents))))
+    (_ (org-html-special-block special-block contents info))))
 
 ;;; A> {linenos=off}
 ;;; A> ~~~~~~~~
