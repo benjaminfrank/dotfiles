@@ -12,4 +12,5 @@ cancelable in Global := true
 ensimeServerVersion in ThisBuild := "2.0.0-SNAPSHOT"
 ensimeIgnoreMissingDirectories in ThisBuild := true
 
-historyPath := Some((baseDirectory in ThisBuild).value / ".history")
+// causes weird problems with clean
+//historyPath := Some((baseDirectory in ThisBuild).value / ".history")
