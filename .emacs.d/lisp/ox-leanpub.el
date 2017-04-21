@@ -16,6 +16,7 @@
 
 (eval-when-compile (require 'cl))
 (require 'ox-md)
+(require 's)
 
 ;;; Define Back-End
 

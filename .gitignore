@@ -1,16 +1,11 @@
 target/
-.idea/
 
 .ensime_cache/
 .ensime
 ensime.sbt
-.javahome
-.sbtopts
 
 .history
-
+.project
 .dir-locals.el
-
 TAGS
 
-EnsimeProjectSettings.scala
