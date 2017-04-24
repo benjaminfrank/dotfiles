@@ -11,6 +11,7 @@ cancelable in Global := true
 // for 2.0-graph
 ensimeServerVersion in ThisBuild := "2.0.0-SNAPSHOT"
 ensimeIgnoreMissingDirectories in ThisBuild := true
+ensimeJavaFlags += "-Xmx4g"
 
 // causes weird problems with clean
 //historyPath := Some((baseDirectory in ThisBuild).value / ".history")

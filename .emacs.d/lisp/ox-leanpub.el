@@ -125,10 +125,13 @@ definitions at the end."
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (let ((lang (org-element-property :language src-block)))
-    (format "{lang=\"%s\"}\n~~~~~~~~\n%s~~~~~~~~"
-            lang
-            (org-remove-indentation
-             (org-element-property :value src-block)))))
+    (format
+     ;;"{lang=\"%s\"}\n~~~~~~~~\n%s~~~~~~~~"
+     ;; colour theme for code is truly awful, looks like a clown!
+     ;; https://groups.google.com/forum/#!topic/leanpub/HmDGC6CgA8w
+     "{lang=\"text\"}\n~~~~~~~~\n%s~~~~~~~~"
+     (org-remove-indentation
+      (org-element-property :value src-block)))))
 
 ;;; A> wibble
 ;;; A> wibble
