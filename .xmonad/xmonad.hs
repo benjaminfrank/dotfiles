@@ -1,9 +1,9 @@
 import Control.Monad
 import XMonad
+import XMonad.Actions.GridSelect
 import XMonad.Actions.SpawnOn
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ICCCMFocus
-import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 import XMonad.Util.EZConfig
@@ -15,12 +15,12 @@ import System.Exit
 myNormalBorderColor  = "#7a7a7a"
 myFocusedBorderColor = "#000000"
 
--- don't forget to follow http://youtrack.jetbrains.com/issue/IDEA-101072
+-- don't forget to set _JAVA_AWT_WM_NONREPARENTING=1 as per
+-- and https://wiki.archlinux.org/index.php/Java#Applications_not_resizing_with_WM.2C_menus_immediately_closing
 
 main = do
        args <- getArgs
-       xmonad $ ewmh
-              $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
+       xmonad $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
               $ defaultConfig {
               terminal = "urxvt"
             , startupHook = startup (null args)
@@ -31,7 +31,6 @@ main = do
             , modMask = mod3Mask
             , keys = keys'
             , manageHook = manageSpawn <+> manageHook'
-            , handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
        }
 
 startup :: Bool -> X ()
@@ -67,6 +66,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask, xK_minus ), sendMessage Shrink) -- %! Shrink the master area
     , ((modMask, xK_equal ), sendMessage Expand) -- %! Expand the master area
     , ((modMask, xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
+    , ((modMask, xK_g),      goToSelected defaultGSConfig)
     , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
     , ((modMask, xK_r     ), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
     , ((0,      0x1008ff02), spawn "xbacklight -inc 1")
@@ -86,7 +86,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     ++
     -- my custom additions
-    [ 
+    [
           ((modMask, xK_l), spawn "i3lock -c000000")
         , ((modMask, xK_Print), spawn "sleep 0.2; scrot -s")
         , ((0, xK_Print), spawn "scrot")

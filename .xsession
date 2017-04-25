@@ -9,6 +9,9 @@
 
 . ~/.profile
 
+# https://wiki.archlinux.org/index.php/Java#Applications_not_resizing_with_WM.2C_menus_immediately_closing
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 if [ -f ~/.Xresources ] ; then
     xrdb -load ~/.Xresources
     echo "URxvt.perl-lib:$HOME/.urxvt" | xrdb -merge -
