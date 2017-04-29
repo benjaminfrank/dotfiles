@@ -130,8 +130,11 @@ channel."
      ;; colour theme for code is truly awful, looks like a clown!
      ;; https://groups.google.com/forum/#!topic/leanpub/HmDGC6CgA8w
      "{lang=\"text\"}\n~~~~~~~~\n%s~~~~~~~~"
-     (org-remove-indentation
-      (org-element-property :value src-block)))))
+     (replace-regexp-in-string
+      "^" "  "
+      (s-trim
+       (org-remove-indentation
+        (org-element-property :value src-block)))))))
 
 ;;; A> wibble
 ;;; A> wibble
