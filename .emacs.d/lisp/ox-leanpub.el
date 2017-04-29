@@ -129,7 +129,7 @@ channel."
      ;;"{lang=\"%s\"}\n~~~~~~~~\n%s~~~~~~~~"
      ;; colour theme for code is truly awful, looks like a clown!
      ;; https://groups.google.com/forum/#!topic/leanpub/HmDGC6CgA8w
-     "{lang=\"text\"}\n~~~~~~~~\n%s~~~~~~~~"
+     "{lang=\"text\"}\n~~~~~~~~\n%s\n~~~~~~~~"
      (replace-regexp-in-string
       "^" "  "
       (s-trim
