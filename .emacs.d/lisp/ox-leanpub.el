@@ -173,7 +173,7 @@ a communication channel."
            (let ((path (let ((raw-path (org-element-property :path link)))
                          (if (not (file-name-absolute-p raw-path)) raw-path
                            (expand-file-name raw-path)))))
-             (format "![%s](%s)"
+             (format "{width=60%%}\n![%s](%s)"
                      (let ((caption (org-export-get-caption
                                      (org-export-get-parent-element link))))
                        (if caption
