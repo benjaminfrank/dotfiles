@@ -248,7 +248,7 @@ For small projects, use TAGS for completions, otherwise use a
 very minimal set."
   (projectile-visit-project-tags-table)
   (cl-flet ((size () (buffer-size (get-file-buffer tags-file-name))))
-    (let ((base '(company-keywords company-dabbrev-code)))
+    (let ((base '(company-keywords company-dabbrev-code company-files)))
       (if (and tags-file-name (<= 20000000 (size)))
           (list (push 'company-etags base))
         (list base)))))

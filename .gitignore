@@ -5,7 +5,7 @@ target/
 ensime.sbt
 
 .history
-.project
+.projectile
 .dir-locals.el
 TAGS
 

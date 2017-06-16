@@ -1,4 +1,5 @@
 -e
+--exclude=.cask
 --exclude=.ensime_cache
 --exclude=.git
 --exclude=target

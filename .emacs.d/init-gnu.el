@@ -125,6 +125,22 @@
 
 (add-hook 'cider-repl-mode-hook #'eldoc-mode)
 
+;;..............................................................................
+;; Python
+(use-package elpy)
+(use-package python-mode
+  :ensure nil
+  :config
+  (bind-key "C-c c" 'projectile-compile-project python-mode-map)
+  (bind-key "C-c e" 'next-error python-mode-map))
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            (smartparens-mode)
+            (elpy-mode)
+            (let ((backends (company-backends-for-buffer)))
+              (setq company-backends (cons 'elpy-company-backend backends)))))
+(put 'pyvenv-activate 'safe-local-variable #'stringp)
 
 ;;..............................................................................
 ;; shell scripts

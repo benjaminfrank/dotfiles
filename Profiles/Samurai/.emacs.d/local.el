@@ -16,7 +16,8 @@
 
 (setq org-ditaa-jar-path (expand-file-name "~/.ditaa.jar"))
 
-;; beta tester
-;;(setq ensime-server-version "2.0.0-graph-SNAPSHOT")
+;; e.g. dir-locals.el
+;;((nil . ((pyvenv-activate . "/home/fommil/Projects/PROJ/.env")
+;;         (compile-command . "./py scratch.py"))))
 
 ;;; local.el ends here

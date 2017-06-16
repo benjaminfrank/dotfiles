@@ -25,7 +25,7 @@ export MAKEFLAGS="-j$(nproc)"
 export CFLAGS="-march=native -O3"
 export CXXFLAGS="$CFLAGS"
 
-export SBT_VOLATILE_TARGET=/tmp
+export SBT_VOLATILE_TARGET=/tmp/$USER-sbt
 
 export EMACS_SOURCE=$HOME/Projects/emacs
 # when building emacs25-git use this to use my local repo
