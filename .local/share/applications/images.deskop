@@ -1,9 +1,0 @@
-# don't forget to run this to make the associations:
-# update-desktop-database ~/.local/share/applications
-[Desktop Entry]
-Type=Application
-Name=Images
-MimeType=image/jpeg;image/png
-Exec=/usr/bin/feh
-NoDisplay=true
-Terminal=false

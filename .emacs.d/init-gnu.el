@@ -130,9 +130,7 @@
 (use-package elpy)
 (use-package python-mode
   :ensure nil
-  :config
-  (bind-key "C-c c" 'projectile-compile-project python-mode-map)
-  (bind-key "C-c e" 'next-error python-mode-map))
+  :bind ("C-c e" . next-error))
 
 (add-hook 'python-mode-hook
           (lambda ()
@@ -147,12 +145,6 @@
 (add-hook 'sh-mode-hook #'electric-indent-local-mode)
 
 ;;..............................................................................
-;; org-mode
-(use-package org
-  ;;:ensure org-plus-contrib
-  :defer t
-  :bind ("C-c c" . pandoc))
-
 (use-package synosaurus
   :commands synosaurus-choose-and-replace
   :init (setq synosaurus-choose-method 'popup)
@@ -216,11 +208,10 @@
                  (concat (replace-regexp-in-string " " "-" (downcase title)) ".md"))))
        (when (= level 1) ;; export only first level entries
          ;; add to Sample book if "sample" tag is found.
-         (when (or (member "sample" tags)
-                   (string-prefix-p "frontmatter" filename)
-                   (string-prefix-p "mainmatter" filename))
+         (when (member "sample" tags)
            (append-to-file (concat filename "\n\n") nil "./Sample.txt"))
-         (append-to-file (concat filename "\n\n") nil "./Book.txt")
+         (when (member "final" tags)
+           (append-to-file (concat filename "\n\n") nil "./Book.txt"))
          ;; set filename only if the property is missing
          (or (org-entry-get (point) "EXPORT_FILE_NAME")
              (org-entry-put (point) "EXPORT_FILE_NAME" filename))

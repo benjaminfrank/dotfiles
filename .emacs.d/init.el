@@ -793,6 +793,12 @@ assuming it is in a maven-style project."
 
 ;;..............................................................................
 ;; org-mode
+(use-package org
+  ;;:ensure org-plus-contrib
+  :defer t
+  :init (setq org-src-fontify-natively t)
+  :bind ("C-c c" . pandoc))
+
 (add-hook 'writeroom-mode-hook
           (lambda ()
             ;; NOTE weird sizing bug in writeroom
