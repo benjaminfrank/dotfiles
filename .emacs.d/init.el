@@ -388,7 +388,8 @@ Inspired by `org-combine-plists'."
 (use-package ag
   :commands ag
   :init
-  (setq ag-reuse-window 't)
+  (setq ag-reuse-window 't
+        ag-ignore-list '("*.js"))
   :config
   (add-hook 'ag-search-finished-hook
             (lambda () (pop-to-buffer next-error-last-buffer))))
