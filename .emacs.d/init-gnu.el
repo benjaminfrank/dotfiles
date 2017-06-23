@@ -231,32 +231,4 @@
   (interactive)
   (erc :server "irc.freenode.net" :port 6667))
 
-;;..............................................................................
-;; WORKAROUND https://github.com/bbatsov/projectile/issues/987
-(defun projectile-ag (search-term &optional arg)
-  "Run an ag search with SEARCH-TERM in the project.
-
-With an optional prefix argument ARG SEARCH-TERM is interpreted as a
-regular expression."
-  (interactive
-   (list (read-from-minibuffer
-          (projectile-prepend-project-name (format "Ag %ssearch for: " (if current-prefix-arg "regexp " "")))
-          (projectile-symbol-or-selection-at-point))
-         current-prefix-arg))
-  (if (require 'ag nil 'noerror)
-      (let ((ag-command (if arg 'ag-regexp 'ag))
-            (ag-ignore-list (cl-union ag-ignore-list
-                                      (projectile--globally-ignored-file-suffixes-glob)
-                                      ;; ag supports git ignore files directly
-                                      (unless (eq (projectile-project-vcs) 'git)
-                                        (append
-                                         (projectile-ignored-files-rel)
-                                         (projectile-ignored-directories-rel)
-                                         grep-find-ignored-files
-                                         grep-find-ignored-directories))))
-            ;; reset the prefix arg, otherwise it will affect the ag-command
-            (current-prefix-arg nil))
-        (funcall ag-command search-term (projectile-project-root)))
-    (error "Package 'ag' is not available")))
-
 ;;; init-linux.el ends here

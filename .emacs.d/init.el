@@ -325,7 +325,8 @@ Inspired by `org-combine-plists'."
   :demand
   ;; nice to have it on the modeline
   :init
-  (setq projectile-use-git-grep t)
+  (setq projectile-use-git-grep t
+        projectile-globally-ignored-files '("TAGS" "*.min.js"))
   :config
   (projectile-global-mode)
   (add-hook 'projectile-grep-finished-hook
@@ -388,8 +389,7 @@ Inspired by `org-combine-plists'."
 (use-package ag
   :commands ag
   :init
-  (setq ag-reuse-window 't
-        ag-ignore-list '("*.js"))
+  (setq ag-reuse-window 't)
   :config
   (add-hook 'ag-search-finished-hook
             (lambda () (pop-to-buffer next-error-last-buffer))))
