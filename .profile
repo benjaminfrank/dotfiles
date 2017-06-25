@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export PATH=$HOME/.fommil/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/.fommil/bin:$PATH
 
 export EDITOR=emacs
 export HISTCONTROL=ignoredups
