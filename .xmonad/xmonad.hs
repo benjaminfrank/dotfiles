@@ -1,9 +1,9 @@
 import Control.Monad
 import XMonad
+import XMonad.Config
 import XMonad.Actions.GridSelect
 import XMonad.Actions.SpawnOn
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ICCCMFocus
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 import XMonad.Util.EZConfig
@@ -21,10 +21,9 @@ myFocusedBorderColor = "#000000"
 main = do
        args <- getArgs
        xmonad $ withUrgencyHook dzenUrgencyHook { args = ["-bg", "darkgreen", "-xs", "1"] }
-              $ defaultConfig {
+              $ def {
               terminal = "urxvt"
             , startupHook = startup (null args)
-            , logHook = takeTopFocus
             , normalBorderColor  = myNormalBorderColor
             , focusedBorderColor = myFocusedBorderColor
                                    -- hyper (super is mod4Mask)
@@ -67,9 +66,9 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask, xK_minus ), sendMessage Shrink) -- %! Shrink the master area
     , ((modMask, xK_equal ), sendMessage Expand) -- %! Expand the master area
     , ((modMask, xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
-    , ((modMask, xK_g),      goToSelected defaultGSConfig)
-    , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
-    , ((modMask, xK_r     ), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
+    , ((modMask, xK_g     ), goToSelected def)
+    , ((modMask .|. shiftMask, xK_q), io (exitWith ExitSuccess)) -- %! Quit xmonad
+    , ((modMask .|. shiftMask, xK_r), spawn "xmonad --recompile && xmonad --restart") -- %! Restart xmonad
     , ((0,      0x1008ff02), spawn "xbacklight -inc 1")
     , ((0,      0x1008ff03), spawn "xbacklight -dec 1")
   ]
