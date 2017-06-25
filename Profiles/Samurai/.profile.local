@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ~/.cache should be a symbolic link to here
-mkdir -m 0770 /tmp/$USER-cache
+mkdir -m 0770 /tmp/$USER-cache 2>/dev/null
 
 # git clone https://github.com/gcuisinier/jenv.git ~/.jenv
 export PATH=$HOME/.jenv/bin:$PATH
