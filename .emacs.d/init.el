@@ -658,6 +658,12 @@ assuming it is in a maven-style project."
   (c-indent-new-comment-line)
   (indent-according-to-mode))
 
+(defun ensime-sbt-do-fmt ()
+  "WORKAROUND https://github.com/ensime/ensime-emacs/issues/635"
+  (interactive)
+  ;; addCommandAlias("fmt", ";scalafmt ;test:scalafmt ;it:scalafmt")
+  (sbt:command "fmt"))
+
 (use-package scala-mode
   :defer t
   :pin melpa
@@ -709,6 +715,8 @@ assuming it is in a maven-style project."
   :config
   (require 'ensime-expand-region)
   (add-hook 'git-timemachine-mode-hook (lambda () (ensime-mode 0)))
+
+  (bind-key "C-c C-v F" 'ensime-sbt-do-fmt scala-mode-map)
 
   (bind-key "s-n" 'ensime-search ensime-mode-map)
   (bind-key "s-t" 'ensime-print-type-at-point ensime-mode-map))

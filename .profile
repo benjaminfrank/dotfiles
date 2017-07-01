@@ -9,6 +9,8 @@ export WINEDEBUG=fixme-all,warn+cursor
 
 export COURSIER_VERBOSITY=-1
 export SCALACTIC_FILL_FILE_PATHNAMES=yes
+# WORKAROUND https://github.com/sbt/sbt-buildinfo/issues/96
+export SBT_IGNORE_BUILDTIME=yes
 export SONATYPE_USERNAME=fommil
 
 export COWPATH=$HOME/.cows:/usr/share/cowsay/cows
