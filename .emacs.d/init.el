@@ -656,8 +656,8 @@ assuming it is in a maven-style project."
   :defer t
   :pin melpa
   :init
-  (setq-default scala-header-skip nil)
-  (put 'scala-header-skip 'safe-local-variable #'booleanp)
+  (setq-default yatemplate-scala-header-skip nil)
+  (put 'yatemplate-scala-header-skip 'safe-local-variable #'booleanp)
   (setq
    scala-indent:use-javadoc-style t
    scala-indent:align-parameters t)

@@ -1,4 +1,4 @@
-`(let ((header (unless scala-header-skip
+`(let ((header (unless yatemplate-scala-header-skip
                 (format
                  "// Copyright: %s %s\n// License: %s\n"
                  (format-time-string "%Y")
