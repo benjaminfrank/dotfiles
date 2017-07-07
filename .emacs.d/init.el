@@ -714,7 +714,8 @@ assuming it is in a maven-style project."
    sbt:ansi-support t
    sbt:prefer-nested-projects t
    sbt:scroll-to-bottom-on-output nil
-   sbt:default-command ";compile ;test:compile ;it:compile")
+   sbt:default-command ";compile ;test:compile")
+  (put 'sbt:default-command 'safe-local-variable #'stringp)
   :config
   ;; WORKAROUND: https://github.com/hvesalai/sbt-mode/issues/31
   ;; allows using SPACE when in the minibuffer
