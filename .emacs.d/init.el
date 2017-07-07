@@ -621,13 +621,17 @@ assuming it is in a maven-style project."
          (root (locate-dominating-file default-directory kind)))
     (when root
       (require 'subr-x) ;; maybe we should just use 's
-      (replace-regexp-in-string
-       (regexp-quote "/") "."
-       (string-remove-suffix "/"
-                             (string-remove-prefix
-                              (expand-file-name (concat root "/" kind "/"))
-                              default-directory))
-       nil 'literal))))
+      (let ((calculated (replace-regexp-in-string
+                         (regexp-quote "/") "."
+                         (string-remove-suffix "/"
+                                               (string-remove-prefix
+                                                (expand-file-name (concat root "/" kind "/"))
+                                                default-directory))
+                         nil 'literal)))
+        (unless (or (null calculated)
+                    (string= "" calculated)
+                    (s-starts-with-p "." calculated))
+          calculated)))))
 
 (defun scala-mode-newline-comments ()
   "Custom newline appropriate for `scala-mode'."
@@ -652,6 +656,8 @@ assuming it is in a maven-style project."
   :defer t
   :pin melpa
   :init
+  (setq-default scala-header-skip nil)
+  (put 'scala-header-skip 'safe-local-variable #'booleanp)
   (setq
    scala-indent:use-javadoc-style t
    scala-indent:align-parameters t)

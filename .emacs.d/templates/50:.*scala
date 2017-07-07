@@ -1,7 +1,10 @@
-// Copyright: `(format-time-string "%Y")` `yatemplate-owner`
-// License: `yatemplate-license`
-`(let ((package (mvn-package-for-buffer)))
-  (when (and package (not (string= "" package)))
-     (concat "package " package)))`
-
-$0
+`(let ((header (unless scala-header-skip
+                (format
+                 "// Copyright: %s %s\n// License: %s\n"
+                 (format-time-string "%Y")
+                 yatemplate-owner
+                 yatemplate-license)))
+      (package (let ((package (mvn-package-for-buffer)))
+                 (when package
+                   (format "package %s\n\n" package)))))
+  (concat header package))`$0
