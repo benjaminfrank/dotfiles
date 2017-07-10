@@ -1,7 +1,0 @@
-resolver: lts-8.21
-flags:
-  xmonad-contrib:
-    use_xft: true
-extra-deps:
-  - xmonad-0.13
-  - xmonad-contrib-0.13
