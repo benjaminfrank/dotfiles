@@ -13,6 +13,7 @@ export SCALACTIC_FILL_FILE_PATHNAMES=yes
 export SBT_IGNORE_BUILDTIME=yes
 export SONATYPE_USERNAME=fommil
 
+export HTML_TIDY=$HOME/.tidyrc
 export COWPATH=$HOME/.cows:/usr/share/cowsay/cows
 
 function source_if_exists {

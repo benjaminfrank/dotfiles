@@ -145,6 +145,27 @@ channel."
     ("ASIDE" (replace-regexp-in-string
               "^" "A> "
               (s-trim (org-remove-indentation contents))))
+    ("TIP" (replace-regexp-in-string
+            "^" "T> "
+            (s-trim (org-remove-indentation contents))))
+    ("WARNING" (replace-regexp-in-string
+                "^" "W> "
+                (s-trim (org-remove-indentation contents))))
+    ("ERROR" (replace-regexp-in-string
+              "^" "E> "
+              (s-trim (org-remove-indentation contents))))
+    ("INFO" (replace-regexp-in-string
+             "^" "I> "
+             (s-trim (org-remove-indentation contents))))
+    ("QUESTION" (replace-regexp-in-string
+                 "^" "Q> "
+                 (s-trim (org-remove-indentation contents))))
+    ("DISCUSS" (replace-regexp-in-string
+                "^" "D> "
+                (s-trim (org-remove-indentation contents))))
+    ("EXERCISE" (replace-regexp-in-string
+                 "^" "X> "
+                 (s-trim (org-remove-indentation contents))))
     (_ (org-html-special-block special-block contents info))))
 
 ;;; A> {linenos=off}
