@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+#name: desnote
+# --
+DESNOTE(`(format-time-string "%Y-%m-%d")`, SHalliday)
+

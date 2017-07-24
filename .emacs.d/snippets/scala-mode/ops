@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-#name: ops
-# --
-object ${1:Algebra} {
-  sealed trait Ops[A]
-  $0
-}

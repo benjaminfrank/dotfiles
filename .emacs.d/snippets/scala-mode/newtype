@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name: newtype
+# --
+case class $1(val v: $2) extends AnyVal
+
+$0
